@@ -1,50 +1,50 @@
-Using Infura with web3j
+Using Infura with webuj
 =======================
 
 Signing up
 ----------
 
 The `Infura <https://infura.io/>`_ service by `ConsenSys <https://consensys.net/>`_, provides
-Ethereum clients running in the cloud, so you don't have to run one yourself to work with Ethereum.
+HappyUC clients running in the cloud, so you don't have to run one yourself to work with HappyUC.
 
 When you sign up to the service you are provided with a token you can use to connect to the
-relevant Ethereum network:
+relevant HappyUC network:
 
-Main Ethereum Network:
+Main HappyUC Network:
   https://mainnet.infura.io/<your-token>
 
-Test Ethereum Network (Rinkeby):
+Test HappyUC Network (Rinkeby):
   https://rinkeby.infura.io/<your-token>
 
-Test Ethereum Network (Kovan):
+Test HappyUC Network (Kovan):
   https://kovan.infura.io/<your-token>
 
-Test Ethereum Network (Ropsten):
+Test HappyUC Network (Ropsten):
   https://ropsten.infura.io/<your-token>
 
 
-For obtaining ether to use in these networks, you can refer to :ref:`ethereum-testnets`
+For obtaining huc to use in these networks, you can refer to :ref:`happyuc-testnets`
 
 
 InfuraHttpClient
 ----------------
 
-The web3j infura module provides an Infura HTTP client
-(`InfuraHttpService <https://github.com/web3j/web3j/blob/master/infura/src/main/java/org/web3j/protocol/infura/InfuraHttpService.java>`_)
-which provides support for the Infura specific *Infura-Ethereum-Preferred-Client* header. This
-allows you to specify whether you want a Geth or Parity client to respond to your request. You
+The webuj infura module provides an Infura HTTP client
+(`InfuraHttpService <https://github.com/happyuc-project/webu.java/blob/master/infura/src/main/java/org/webuj/protocol/infura/InfuraHttpService.java>`_)
+which provides support for the Infura specific *Infura-HappyUC-Preferred-Client* header. This
+allows you to specify whether you want a Ghuc or Parity client to respond to your request. You
 can create the client just like the regular HTTPClient::
 
-   Web3j web3 = Web3j.build(new HttpService("https://rinkeby.infura.io/<your-token>"));
+   webuj web3 = webuj.build(new HttpService("https://rinkeby.infura.io/<your-token>"));
    Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
    System.out.println(web3ClientVersion.getWeb3ClientVersion());
 
 .. code-block:: bash
 
-   Geth/v1.7.2-stable-1db4ecdc/darwin-amd64/go1.9.1
+   Ghuc/v1.7.2-stable-1db4ecdc/darwin-amd64/go1.9.1
 
 If you want to test a number of the JSON-RPC calls against Infura, update the integration test
-`CoreIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/CoreIT.java>`_
+`CoreIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/webuj/protocol/core/CoreIT.java>`_
 with your Infura URL & run it.
 
 For further information, refer to the
@@ -55,7 +55,7 @@ Transactions
 ------------
 
 In order to transact with Infura nodes, you will need to create and sign transactions offline
-before sending them, as Infura nodes have no visibility of your encrypted Ethereum key files, which
-are required to unlock accounts via the Personal Geth/Parity admin commands.
+before sending them, as Infura nodes have no visibility of your encrypted HappyUC key files, which
+are required to unlock accounts via the Personal Ghuc/Parity admin commands.
 
 Refer to the :ref:`offline-signing` and :doc:`management_apis` sections for further details.

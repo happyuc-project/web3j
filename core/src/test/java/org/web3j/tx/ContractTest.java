@@ -1,4 +1,4 @@
-package org.web3j.tx;
+package org.happyuc.webuj.tx;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -14,36 +14,33 @@ import org.junit.Test;
 
 import org.junit.rules.ExpectedException;
 
-import org.web3j.abi.EventEncoder;
-import org.web3j.abi.EventValues;
-import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Event;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.SampleKeys;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.Response;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.core.methods.response.EthGetCode;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.Log;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.tx.gas.ContractGasProvider;
-import org.web3j.tx.gas.DefaultGasProvider;
-import org.web3j.tx.gas.StaticGasProvider;
-import org.web3j.utils.Async;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.abi.EventEncoder;
+import org.happyuc.webuj.abi.EventValues;
+import org.happyuc.webuj.abi.FunctionEncoder;
+import org.happyuc.webuj.abi.TypeReference;
+import org.happyuc.webuj.abi.datatypes.Address;
+import org.happyuc.webuj.abi.datatypes.Event;
+import org.happyuc.webuj.abi.datatypes.Function;
+import org.happyuc.webuj.abi.datatypes.Type;
+import org.happyuc.webuj.abi.datatypes.Utf8String;
+import org.happyuc.webuj.abi.datatypes.generated.Uint256;
+import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.crypto.SampleKeys;
+import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
+import org.happyuc.webuj.protocol.core.RemoteCall;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.Response;
+import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucCall;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.Log;
+import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.exceptions.TransactionException;
+import org.happyuc.webuj.utils.Async;
+import org.happyuc.webuj.utils.Numeric;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -58,7 +55,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ContractTest extends ManagedTransactionTester {
@@ -75,8 +71,8 @@ public class ContractTest extends ManagedTransactionTester {
         super.setUp();
 
         contract = new TestContract(
-                ADDRESS, web3j, SampleKeys.CREDENTIALS,
-                DefaultGasProvider.GAS_PRICE, DefaultGasProvider.GAS_LIMIT);
+                ADDRESS, webuj, SampleKeys.CREDENTIALS,
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
     }
 
     @Test
@@ -120,7 +116,7 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testIsValid() throws Exception {
-        prepareEthGetCode(TEST_CONTRACT_BINARY);
+        prepareHucGetCode(TEST_CONTRACT_BINARY);
 
         Contract contract = deployContract(createTransactionReceipt());
         assertTrue(contract.isValid());
@@ -128,7 +124,7 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testIsValidDifferentCode() throws Exception {
-        prepareEthGetCode(TEST_CONTRACT_BINARY + "0");
+        prepareHucGetCode(TEST_CONTRACT_BINARY + "0");
 
         Contract contract = deployContract(createTransactionReceipt());
         assertFalse(contract.isValid());
@@ -136,7 +132,7 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testIsValidEmptyCode() throws Exception {
-        prepareEthGetCode("");
+        prepareHucGetCode("");
 
         Contract contract = deployContract(createTransactionReceipt());
         assertFalse(contract.isValid());
@@ -154,7 +150,7 @@ public class ContractTest extends ManagedTransactionTester {
 
         try {
             TestContract.deployRemoteCall(
-                    TestContract.class, web3j, SampleKeys.CREDENTIALS,
+                    TestContract.class, webuj, SampleKeys.CREDENTIALS,
                     ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                     "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
         } catch (InterruptedException e) {
@@ -168,10 +164,10 @@ public class ContractTest extends ManagedTransactionTester {
     public void testCallSingleValue() throws Exception {
         // Example taken from FunctionReturnDecoderTest
 
-        EthCall ethCall = new EthCall();
-        ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000020"
+        HucCall hucCall = new HucCall();
+        hucCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000020"
                 + "0000000000000000000000000000000000000000000000000000000000000000");
-        prepareCall(ethCall);
+        prepareCall(hucCall);
 
         assertThat(contract.callSingleValue().send(), equalTo(new Utf8String("")));
     }
@@ -180,19 +176,19 @@ public class ContractTest extends ManagedTransactionTester {
     public void testCallSingleValueEmpty() throws Exception {
         // Example taken from FunctionReturnDecoderTest
 
-        EthCall ethCall = new EthCall();
-        ethCall.setResult("0x");
-        prepareCall(ethCall);
+        HucCall hucCall = new HucCall();
+        hucCall.setResult("0x");
+        prepareCall(hucCall);
 
         assertNull(contract.callSingleValue().send());
     }
 
     @Test
     public void testCallMultipleValue() throws Exception {
-        EthCall ethCall = new EthCall();
-        ethCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000037"
+        HucCall hucCall = new HucCall();
+        hucCall.setResult("0x0000000000000000000000000000000000000000000000000000000000000037"
                 + "0000000000000000000000000000000000000000000000000000000000000007");
-        prepareCall(ethCall);
+        prepareCall(hucCall);
 
         assertThat(contract.callMultipleValue().send(),
                 equalTo(Arrays.asList(
@@ -202,20 +198,20 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testCallMultipleValueEmpty() throws Exception {
-        EthCall ethCall = new EthCall();
-        ethCall.setResult("0x");
-        prepareCall(ethCall);
+        HucCall hucCall = new HucCall();
+        hucCall.setResult("0x");
+        prepareCall(hucCall);
 
         assertThat(contract.callMultipleValue().send(),
                 equalTo(emptyList()));
     }
 
     @SuppressWarnings("unchecked")
-    private void prepareCall(EthCall ethCall) throws IOException {
-        Request<?, EthCall> request = mock(Request.class);
-        when(request.send()).thenReturn(ethCall);
+    private void prepareCall(HucCall hucCall) throws IOException {
+        Request<?, HucCall> request = mock(Request.class);
+        when(request.send()).thenReturn(hucCall);
 
-        when(web3j.ethCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST)))
+        when(webuj.hucCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST)))
                 .thenReturn((Request) request);
     }
 
@@ -276,11 +272,11 @@ public class ContractTest extends ManagedTransactionTester {
         prepareTransaction(null);
 
         TransactionManager transactionManager = new RawTransactionManager(
-                web3j, SampleKeys.CREDENTIALS, 1, 1);
+                webuj, SampleKeys.CREDENTIALS, 1, 1);
 
         contract = new TestContract(
-                ADDRESS, web3j, transactionManager,
-                new DefaultGasProvider());
+                ADDRESS, webuj, transactionManager,
+                ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
 
         testErrorScenario();
     }
@@ -290,12 +286,12 @@ public class ContractTest extends ManagedTransactionTester {
     public void testInvalidTransactionResponse() throws Throwable {
         prepareNonceRequest();
 
-        EthSendTransaction ethSendTransaction = new EthSendTransaction();
-        ethSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
+        HucSendTransaction hucSendTransaction = new HucSendTransaction();
+        hucSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
 
-        Request<?, EthSendTransaction> rawTransactionRequest = mock(Request.class);
-        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> ethSendTransaction));
-        when(web3j.ethSendRawTransaction(any(String.class)))
+        Request<?, HucSendTransaction> rawTransactionRequest = mock(Request.class);
+        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> hucSendTransaction));
+        when(webuj.hucSendRawTransaction(any(String.class)))
                 .thenReturn((Request) rawTransactionRequest);
 
         testErrorScenario();
@@ -318,36 +314,19 @@ public class ContractTest extends ManagedTransactionTester {
         assertEquals(newPrice, contract.getGasPrice());
     }
 
-    @Test
-    public void testStaticGasProvider() throws IOException, TransactionException {
-        StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.TEN, BigInteger.ONE);
-        TransactionManager txManager = mock(TransactionManager.class);
-        when(txManager.executeTransaction(any(), any(), any(), any(), any()))
-                .thenReturn(new TransactionReceipt());
-
-        contract = new TestContract(ADDRESS, web3j, txManager, gasProvider);
-
-        Function func = new Function("test",
-                Arrays.<Type>asList(), Collections.<TypeReference<?>>emptyList());
-        contract.executeTransaction(func);
-
-        verify(txManager).executeTransaction(eq(BigInteger.TEN),
-                eq(BigInteger.ONE), any(), any(), any());
-    }
-
     @Test(expected = RuntimeException.class)
     @SuppressWarnings("unchecked")
     public void testInvalidTransactionReceipt() throws Throwable {
         prepareNonceRequest();
         prepareTransactionRequest();
 
-        EthGetTransactionReceipt ethGetTransactionReceipt = new EthGetTransactionReceipt();
-        ethGetTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
+        HucGetTransactionReceipt hucGetTransactionReceipt = new HucGetTransactionReceipt();
+        hucGetTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
 
-        Request<?, EthGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
+        Request<?, HucGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
         when(getTransactionReceiptRequest.sendAsync())
-                .thenReturn(Async.run(() -> ethGetTransactionReceipt));
-        when(web3j.ethGetTransactionReceipt(TRANSACTION_HASH))
+                .thenReturn(Async.run(() -> hucGetTransactionReceipt));
+        when(webuj.hucGetTransactionReceipt(TRANSACTION_HASH))
                 .thenReturn((Request) getTransactionReceiptRequest);
 
         testErrorScenario();
@@ -424,35 +403,36 @@ public class ContractTest extends ManagedTransactionTester {
                 Arrays.<Type>asList(new Uint256(BigInteger.TEN)));
 
         return TestContract.deployRemoteCall(
-                TestContract.class, web3j, SampleKeys.CREDENTIALS,
+                TestContract.class, webuj, SampleKeys.CREDENTIALS,
                 ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
                 "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
     }
 
     @SuppressWarnings("unchecked")
-    private void prepareEthGetCode(String binary) throws IOException {
-        EthGetCode ethGetCode = new EthGetCode();
-        ethGetCode.setResult(Numeric.prependHexPrefix(binary));
+    private void prepareHucGetCode(String binary) throws IOException {
+        HucGetCode hucGetCode = new HucGetCode();
+        hucGetCode.setResult(Numeric.prependHexPrefix(binary));
 
-        Request<?, EthGetCode> ethGetCodeRequest = mock(Request.class);
-        when(ethGetCodeRequest.send())
-                .thenReturn(ethGetCode);
-        when(web3j.ethGetCode(ADDRESS, DefaultBlockParameterName.LATEST))
-                .thenReturn((Request) ethGetCodeRequest);
+        Request<?, HucGetCode> hucGetCodeRequest = mock(Request.class);
+        when(hucGetCodeRequest.send())
+                .thenReturn(hucGetCode);
+        when(webuj.hucGetCode(ADDRESS, DefaultBlockParameterName.LATEST))
+                .thenReturn((Request) hucGetCodeRequest);
     }
 
     private static class TestContract extends Contract {
         public TestContract(
-                String contractAddress, Web3j web3j, Credentials credentials,
+                String contractAddress, webuj webuj, Credentials credentials,
                 BigInteger gasPrice, BigInteger gasLimit) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+            super(TEST_CONTRACT_BINARY, contractAddress, webuj, credentials, gasPrice, gasLimit);
         }
 
         public TestContract(
                 String contractAddress,
-                Web3j web3j, TransactionManager transactionManager,
-                ContractGasProvider gasProvider) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, transactionManager, gasProvider);
+                webuj webuj, TransactionManager transactionManager,
+                BigInteger gasPrice, BigInteger gasLimit) {
+            super(TEST_CONTRACT_BINARY, contractAddress, webuj, transactionManager, gasPrice,
+                    gasLimit);
         }
 
         public RemoteCall<Utf8String> callSingleValue() {

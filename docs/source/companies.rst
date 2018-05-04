@@ -1,4 +1,4 @@
-Companies using web3j
+Companies using webuj
 =====================
 
 - `Amberdata <https://www.amberdata.io/>`_

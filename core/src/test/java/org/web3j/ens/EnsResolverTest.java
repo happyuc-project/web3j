@@ -1,4 +1,4 @@
-package org.web3j.ens;
+package org.happyuc.webuj.ens;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -6,20 +6,20 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.abi.TypeDecoder;
-import org.web3j.abi.TypeEncoder;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.JsonRpc2_0Web3j;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.core.methods.response.EthSyncing;
-import org.web3j.protocol.core.methods.response.NetVersion;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.ChainId;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.abi.TypeDecoder;
+import org.happyuc.webuj.abi.TypeEncoder;
+import org.happyuc.webuj.abi.datatypes.Utf8String;
+import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.webujService;
+import org.happyuc.webuj.protocol.core.JsonRpc2_0webuj;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
+import org.happyuc.webuj.protocol.core.methods.response.HucCall;
+import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
+import org.happyuc.webuj.protocol.core.methods.response.NetVersion;
+import org.happyuc.webuj.protocol.http.HttpService;
+import org.happyuc.webuj.tx.ChainId;
+import org.happyuc.webuj.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
@@ -29,20 +29,20 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.web3j.ens.EnsResolver.DEFAULT_SYNC_THRESHOLD;
-import static org.web3j.ens.EnsResolver.isValidEnsName;
+import static org.happyuc.webuj.ens.EnsResolver.DEFAULT_SYNC_THRESHOLD;
+import static org.happyuc.webuj.ens.EnsResolver.isValidEnsName;
 
 public class EnsResolverTest {
 
-    private Web3j web3j;
-    private Web3jService web3jService;
+    private webuj webuj;
+    private webujService webujService;
     private EnsResolver ensResolver;
 
     @Before
     public void setUp() {
-        web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService);
-        ensResolver = new EnsResolver(web3j);
+        webujService = mock(webujService.class);
+        webuj = webuj.build(webujService);
+        ensResolver = new EnsResolver(webuj);
     }
 
     @Test
@@ -58,20 +58,20 @@ public class EnsResolverTest {
         String contractAddress =
                 "0x00000000000000000000000019e03255f667bdfd50a32722df860b1eeaf4d635";
 
-        EthCall resolverAddressResponse = new EthCall();
+        HucCall resolverAddressResponse = new HucCall();
         resolverAddressResponse.setResult(resolverAddress);
 
-        EthCall contractAddressResponse = new EthCall();
+        HucCall contractAddressResponse = new HucCall();
         contractAddressResponse.setResult(contractAddress);
 
-        when(web3jService.send(any(Request.class), eq(NetVersion.class)))
+        when(webujService.send(any(Request.class), eq(NetVersion.class)))
                 .thenReturn(netVersion);
-        when(web3jService.send(any(Request.class), eq(EthCall.class)))
+        when(webujService.send(any(Request.class), eq(HucCall.class)))
                 .thenReturn(resolverAddressResponse);
-        when(web3jService.send(any(Request.class), eq(EthCall.class)))
+        when(webujService.send(any(Request.class), eq(HucCall.class)))
                 .thenReturn(contractAddressResponse);
 
-        assertThat(ensResolver.resolve("web3j.eth"),
+        assertThat(ensResolver.resolve("webuj.huc"),
                 is("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
     }
 
@@ -87,24 +87,24 @@ public class EnsResolverTest {
                 "0x0000000000000000000000004c641fb9bad9b60ef180c31f56051ce826d21a9a";
         String contractName =
                 "0x0000000000000000000000000000000000000000000000000000000000000020"
-                + TypeEncoder.encode(new Utf8String("web3j.eth"));
+                + TypeEncoder.encode(new Utf8String("webuj.huc"));
         System.err.println(contractName);
 
-        EthCall resolverAddressResponse = new EthCall();
+        HucCall resolverAddressResponse = new HucCall();
         resolverAddressResponse.setResult(resolverAddress);
 
-        EthCall contractNameResponse = new EthCall();
+        HucCall contractNameResponse = new HucCall();
         contractNameResponse.setResult(contractName);
 
-        when(web3jService.send(any(Request.class), eq(NetVersion.class)))
+        when(webujService.send(any(Request.class), eq(NetVersion.class)))
                 .thenReturn(netVersion);
-        when(web3jService.send(any(Request.class), eq(EthCall.class)))
+        when(webujService.send(any(Request.class), eq(HucCall.class)))
                 .thenReturn(resolverAddressResponse);
-        when(web3jService.send(any(Request.class), eq(EthCall.class)))
+        when(webujService.send(any(Request.class), eq(HucCall.class)))
                 .thenReturn(contractNameResponse);
 
         assertThat(ensResolver.reverseResolve("0x19e03255f667bdfd50a32722df860b1eeaf4d635"),
-                is("web3j.eth"));
+                is("webuj.huc"));
     }
 
     @Test
@@ -131,30 +131,30 @@ public class EnsResolverTest {
     }
 
     private void configureSyncing(boolean isSyncing) throws IOException {
-        EthSyncing ethSyncing = new EthSyncing();
-        EthSyncing.Result result = new EthSyncing.Result();
+        HucSyncing hucSyncing = new HucSyncing();
+        HucSyncing.Result result = new HucSyncing.Result();
         result.setSyncing(isSyncing);
-        ethSyncing.setResult(result);
+        hucSyncing.setResult(result);
 
-        when(web3jService.send(any(Request.class), eq(EthSyncing.class)))
-                .thenReturn(ethSyncing);
+        when(webujService.send(any(Request.class), eq(HucSyncing.class)))
+                .thenReturn(hucSyncing);
     }
 
     private void configureLatestBlock(long timestamp) throws IOException {
-        EthBlock.Block block = new EthBlock.Block();
+        HucBlock.Block block = new HucBlock.Block();
         block.setTimestamp(Numeric.encodeQuantity(BigInteger.valueOf(timestamp)));
-        EthBlock ethBlock = new EthBlock();
-        ethBlock.setResult(block);
+        HucBlock hucBlock = new HucBlock();
+        hucBlock.setResult(block);
 
-        when(web3jService.send(any(Request.class), eq(EthBlock.class)))
-                .thenReturn(ethBlock);
+        when(webujService.send(any(Request.class), eq(HucBlock.class)))
+                .thenReturn(hucBlock);
     }
 
     @Test
     public void testIsEnsName() {
-        assertTrue(isValidEnsName("eth"));
-        assertTrue(isValidEnsName("web3.eth"));
-        assertTrue(isValidEnsName("0x19e03255f667bdfd50a32722df860b1eeaf4d635.eth"));
+        assertTrue(isValidEnsName("huc"));
+        assertTrue(isValidEnsName("web3.huc"));
+        assertTrue(isValidEnsName("0x19e03255f667bdfd50a32722df860b1eeaf4d635.huc"));
 
         assertFalse(isValidEnsName("0x19e03255f667bdfd50a32722df860b1eeaf4d635"));
         assertFalse(isValidEnsName("19e03255f667bdfd50a32722df860b1eeaf4d635"));

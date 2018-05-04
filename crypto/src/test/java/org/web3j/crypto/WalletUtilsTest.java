@@ -1,4 +1,4 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -8,19 +8,19 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.web3j.crypto.Hash.sha256;
-import static org.web3j.crypto.SampleKeys.CREDENTIALS;
-import static org.web3j.crypto.SampleKeys.KEY_PAIR;
-import static org.web3j.crypto.SampleKeys.PASSWORD;
-import static org.web3j.crypto.WalletUtils.isValidAddress;
-import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
+import static org.happyuc.webuj.crypto.Hash.sha256;
+import static org.happyuc.webuj.crypto.SampleKeys.CREDENTIALS;
+import static org.happyuc.webuj.crypto.SampleKeys.KEY_PAIR;
+import static org.happyuc.webuj.crypto.SampleKeys.PASSWORD;
+import static org.happyuc.webuj.crypto.WalletUtils.isValidAddress;
+import static org.happyuc.webuj.crypto.WalletUtils.isValidPrivateKey;
 
 public class WalletUtilsTest {
 
@@ -108,9 +108,9 @@ public class WalletUtilsTest {
         assertThat(credentials, equalTo(CREDENTIALS));
     }
 
-    @Ignore  // enable if users need to work with MyEtherWallet
+    @Ignore  // enable if users need to work with MyHucWallet
     @Test
-    public void testLoadCredentialsMyEtherWallet() throws Exception {
+    public void testLoadCredentialsMyHucWallet() throws Exception {
         Credentials credentials = WalletUtils.loadCredentials(
                 PASSWORD,
                 new File(WalletUtilsTest.class.getResource(
@@ -126,11 +126,11 @@ public class WalletUtilsTest {
     @Test
     public void testGetDefaultKeyDirectory() {
         assertTrue(WalletUtils.getDefaultKeyDirectory("Mac OS X")
-                .endsWith(String.format("%sLibrary%sEthereum", File.separator, File.separator)));
+                .endsWith(String.format("%sLibrary%sHappyUC", File.separator, File.separator)));
         assertTrue(WalletUtils.getDefaultKeyDirectory("Windows")
-                .endsWith(String.format("%sEthereum", File.separator)));
+                .endsWith(String.format("%sHappyUC", File.separator)));
         assertTrue(WalletUtils.getDefaultKeyDirectory("Linux")
-                .endsWith(String.format("%s.ethereum", File.separator)));
+                .endsWith(String.format("%s.happyuc", File.separator)));
     }
 
     @Test

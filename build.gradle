@@ -36,15 +36,15 @@ apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'jacoco'
 
-description 'web3j base project'
+description 'webuj base project'
 
 allprojects {
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    group 'org.web3j'
-    version '3.4.0'
+    group 'org.webuj'
+    version '3.3.1'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -157,14 +157,14 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
                 }
 
                 pom.project {
-                    name 'web3j'
+                    name 'webuj'
                     packaging 'jar'
                     description project.description
-                    url 'https://web3j.io'
+                    url 'https://webuj.io'
 
                     scm {
-                        connection 'scm:git:https://github.com/web3j/web3j.git'
-                        url 'https://github.com/web3j/web3j.git'
+                        connection 'scm:git:https://github.com/webuj/webuj.git'
+                        url 'https://github.com/webuj/webuj.git'
                     }
 
                     licenses {
@@ -198,13 +198,13 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         publish = true
         pkg {
             repo = 'maven'
-            name = 'org.web3j'
+            name = 'org.webuj'
             desc = project.description
-            userOrg = 'web3j'
+            userOrg = 'webuj'
             licenses = ['Apache-2.0']
-            issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
-            vcsUrl = 'https://github.com/web3j/web3j.git'
-            websiteUrl = 'https://web3j.io'
+            issueTrackerUrl = 'https://github.com/happyuc-project/webu.java/issues'
+            vcsUrl = 'https://github.com/webuj/webuj.git'
+            websiteUrl = 'https://webuj.io'
             publicDownloadNumbers = true
         }
     }
@@ -245,9 +245,9 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: [
-                            'org/web3j/abi/datatypes/generated/**',
-                            'org/web3j/tuples/generated/**',
-                            'org/web3j/ens/contracts/generated/**'
+                            'org/webuj/abi/datatypes/generated/**',
+                            'org/webuj/tuples/generated/**',
+                            'org/webuj/ens/contracts/generated/**'
                     ])
         })
     }

@@ -1,25 +1,25 @@
-package org.web3j.protocol.admin;
+package org.happyuc.webuj.protocol.admin;
 
 import java.math.BigInteger;
 
 import org.junit.Test;
 
-import org.web3j.protocol.RequestTester;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.http.HttpService;
+import org.happyuc.webuj.protocol.RequestTester;
+import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.http.HttpService;
 
 public class RequestTest extends RequestTester {
     
-    private Admin web3j;
+    private Admin webuj;
 
     @Override
     protected void initWeb3Client(HttpService httpService) {
-        web3j = Admin.build(httpService);
+        webuj = Admin.build(httpService);
     }
     
     @Test
     public void testPersonalListAccounts() throws Exception {
-        web3j.personalListAccounts().send();
+        webuj.personalListAccounts().send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_listAccounts\","
                 + "\"params\":[],\"id\":1}");
@@ -27,7 +27,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalNewAccount() throws Exception {
-        web3j.personalNewAccount("password").send();
+        webuj.personalNewAccount("password").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_newAccount\","
                 + "\"params\":[\"password\"],\"id\":1}");
@@ -35,7 +35,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalSendTransaction() throws Exception {
-        web3j.personalSendTransaction(
+        webuj.personalSendTransaction(
                 new Transaction(
                         "FROM",
                         BigInteger.ONE,
@@ -55,7 +55,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalUnlockAccount() throws Exception {
-        web3j.personalUnlockAccount(
+        webuj.personalUnlockAccount(
                 "0xfc390d8a8ddb591b010fda52f4db4945742c3809", "hunter2", BigInteger.ONE).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_unlockAccount\","
@@ -65,7 +65,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalUnlockAccountNoDuration() throws Exception {
-        web3j.personalUnlockAccount("0xfc390d8a8ddb591b010fda52f4db4945742c3809", "hunter2").send();
+        webuj.personalUnlockAccount("0xfc390d8a8ddb591b010fda52f4db4945742c3809", "hunter2").send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_unlockAccount\","
                 + "\"params\":[\"0xfc390d8a8ddb591b010fda52f4db4945742c3809\",\"hunter2\",null],"

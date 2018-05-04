@@ -1,5 +1,5 @@
 
-description 'web3j integration tests'
+description 'webuj integration tests'
 
 dependencies {
     compile project(':core'),

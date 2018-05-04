@@ -1,11 +1,11 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import java.math.BigInteger;
 import java.security.SignatureException;
 
 import org.junit.Test;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;

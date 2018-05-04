@@ -1,15 +1,15 @@
-package org.web3j.protocol.admin;
+package org.happyuc.webuj.protocol.admin;
 
 import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.admin.methods.response.BooleanResponse;
-import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
-import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
-import org.web3j.protocol.admin.methods.response.PersonalSign;
-import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
+import org.happyuc.webuj.protocol.ResponseTester;
+import org.happyuc.webuj.protocol.admin.methods.response.BooleanResponse;
+import org.happyuc.webuj.protocol.admin.methods.response.NewAccountIdentifier;
+import org.happyuc.webuj.protocol.admin.methods.response.PersonalListAccounts;
+import org.happyuc.webuj.protocol.admin.methods.response.PersonalSign;
+import org.happyuc.webuj.protocol.admin.methods.response.PersonalUnlockAccount;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Parity/Geth Shared Protocol Response tests.
+ * Parity/Ghuc Shared Protocol Response tests.
  */
 public class ResponseTest extends ResponseTester {
 

@@ -1,12 +1,12 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import java.math.BigInteger;
 import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.web3j.crypto.Sign.SignatureData;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.crypto.Sign.SignatureData;
+import org.happyuc.webuj.utils.Numeric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ECRecoverTest {
 
-    public static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
+    public static final String PERSONAL_MESSAGE_PREFIX = "\u0019HappyUC Signed Message:\n";
 
     @Test
     public void testRecoverAddressFromSignature() {

@@ -1,4 +1,4 @@
-package org.web3j.protocol.core.filters;
+package org.happyuc.webuj.protocol.core.filters;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,13 +15,13 @@ import org.junit.Before;
 import rx.Observable;
 import rx.Subscription;
 
-import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthFilter;
-import org.web3j.protocol.core.methods.response.EthLog;
-import org.web3j.protocol.core.methods.response.EthUninstallFilter;
+import org.happyuc.webuj.protocol.ObjectMapperFactory;
+import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.webujService;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucLog;
+import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -34,8 +34,8 @@ import static org.mockito.Mockito.when;
 
 public abstract class FilterTester {
 
-    private Web3jService web3jService;
-    Web3j web3j;
+    private webujService webujService;
+    webuj webuj;
 
     final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
     final ScheduledExecutorService scheduledExecutorService =
@@ -43,35 +43,35 @@ public abstract class FilterTester {
 
     @Before
     public void setUp() {
-        web3jService = mock(Web3jService.class);
-        web3j = Web3j.build(web3jService, 1000, scheduledExecutorService);
+        webujService = mock(webujService.class);
+        webuj = webuj.build(webujService, 1000, scheduledExecutorService);
     }
 
-    <T> void runTest(EthLog ethLog, Observable<T> observable) throws Exception {
-        EthFilter ethFilter = objectMapper.readValue(
+    <T> void runTest(HucLog hucLog, Observable<T> observable) throws Exception {
+        HucFilter hucFilter = objectMapper.readValue(
                 "{\n"
                         + "  \"id\":1,\n"
                         + "  \"jsonrpc\": \"2.0\",\n"
                         + "  \"result\": \"0x1\"\n"
-                        + "}", EthFilter.class);
+                        + "}", HucFilter.class);
 
-        EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
+        HucUninstallFilter hucUninstallFilter = objectMapper.readValue(
+                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", HucUninstallFilter.class);
 
         @SuppressWarnings("unchecked")
-        List<T> expected = createExpected(ethLog);
+        List<T> expected = createExpected(hucLog);
         Set<T> results = Collections.synchronizedSet(new HashSet<T>());
 
         CountDownLatch transactionLatch = new CountDownLatch(expected.size());
 
         CountDownLatch completedLatch = new CountDownLatch(1);
 
-        when(web3jService.send(any(Request.class), eq(EthFilter.class)))
-                .thenReturn(ethFilter);
-        when(web3jService.send(any(Request.class), eq(EthLog.class)))
-                .thenReturn(ethLog);
-        when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
-                .thenReturn(ethUninstallFilter);
+        when(webujService.send(any(Request.class), eq(HucFilter.class)))
+                .thenReturn(hucFilter);
+        when(webujService.send(any(Request.class), eq(HucLog.class)))
+                .thenReturn(hucLog);
+        when(webujService.send(any(Request.class), eq(HucUninstallFilter.class)))
+                .thenReturn(hucUninstallFilter);
 
         Subscription subscription = observable.subscribe(
                 result -> {
@@ -90,13 +90,13 @@ public abstract class FilterTester {
         assertTrue(subscription.isUnsubscribed());
     }
 
-    List createExpected(EthLog ethLog) {
-        List<EthLog.LogResult> logResults = ethLog.getLogs();
+    List createExpected(HucLog hucLog) {
+        List<HucLog.LogResult> logResults = hucLog.getLogs();
         if (logResults.isEmpty()) {
             fail("Results cannot be empty");
         }
 
-        return ethLog.getLogs().stream()
+        return hucLog.getLogs().stream()
                 .map(t -> t.get()).collect(Collectors.toList());
     }
 }

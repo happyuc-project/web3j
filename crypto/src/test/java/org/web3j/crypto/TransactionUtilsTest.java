@@ -1,10 +1,10 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.crypto.TransactionUtils.generateTransactionHashHexEncoded;
+import static org.happyuc.webuj.crypto.TransactionUtils.generateTransactionHashHexEncoded;
 
 public class TransactionUtilsTest {
 

@@ -1,26 +1,26 @@
-package org.web3j.protocol.core;
+package org.happyuc.webuj.protocol.core;
 
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.junit.Test;
 
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jService;
+import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.webujService;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class JsonRpc2_0Web3jTest {
+public class JsonRpc2_0webujTest {
 
     @Test
     public void testStopExecutorOnShutdown() {
         ScheduledExecutorService scheduledExecutorService = mock(ScheduledExecutorService.class);
 
-        Web3j web3j = Web3j.build(
-                mock(Web3jService.class), 10, scheduledExecutorService
+        webuj webuj = webuj.build(
+                mock(webujService.class), 10, scheduledExecutorService
         );
 
-        web3j.shutdown();
+        webuj.shutdown();
 
         verify(scheduledExecutorService).shutdown();
     }

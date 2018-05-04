@@ -1,11 +1,11 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;

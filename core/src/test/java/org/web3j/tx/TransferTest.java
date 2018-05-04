@@ -1,4 +1,4 @@
-package org.web3j.tx;
+package org.happyuc.webuj.tx;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -6,11 +6,11 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.crypto.SampleKeys;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthGasPrice;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.utils.Convert;
+import org.happyuc.webuj.crypto.SampleKeys;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
+import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.utils.Convert;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -30,21 +30,21 @@ public class TransferTest extends ManagedTransactionTester {
 
     @Test
     public void testSendFunds() throws Exception {
-        assertThat(Transfer.sendFunds(web3j, SampleKeys.CREDENTIALS, ADDRESS,
-                BigDecimal.TEN, Convert.Unit.ETHER).send(),
+        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS,
+                BigDecimal.TEN, Convert.Unit.HUC).send(),
                 is(transactionReceipt));
     }
 
     @Test
     public void testSendFundsAsync() throws  Exception {
-        assertThat(Transfer.sendFunds(web3j, SampleKeys.CREDENTIALS, ADDRESS,
-                BigDecimal.TEN, Convert.Unit.ETHER).send(),
+        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS,
+                BigDecimal.TEN, Convert.Unit.HUC).send(),
                 is(transactionReceipt));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testTransferInvalidValue() throws Exception {
-        Transfer.sendFunds(web3j, SampleKeys.CREDENTIALS, ADDRESS,
+        Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS,
                 new BigDecimal(0.1), Convert.Unit.WEI).send();
     }
 
@@ -55,12 +55,12 @@ public class TransferTest extends ManagedTransactionTester {
         transactionReceipt.setStatus("0x1");
         prepareTransaction(transactionReceipt);
 
-        EthGasPrice ethGasPrice = new EthGasPrice();
-        ethGasPrice.setResult("0x1");
+        HucGasPrice hucGasPrice = new HucGasPrice();
+        hucGasPrice.setResult("0x1");
 
-        Request<?, EthGasPrice> gasPriceRequest = mock(Request.class);
-        when(gasPriceRequest.send()).thenReturn(ethGasPrice);
-        when(web3j.ethGasPrice()).thenReturn((Request) gasPriceRequest);
+        Request<?, HucGasPrice> gasPriceRequest = mock(Request.class);
+        when(gasPriceRequest.send()).thenReturn(hucGasPrice);
+        when(webuj.hucGasPrice()).thenReturn((Request) gasPriceRequest);
 
         return transactionReceipt;
     }

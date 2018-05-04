@@ -1,41 +1,41 @@
-.. web3j documentation master file
+.. webuj documentation master file
 
-web3j
+webuj
 =====
 
-web3j is a highly modular, reactive, type safe Java and Android library for working with
-Smart Contracts and integrating with clients (nodes) on the Ethereum network:
+webuj is a highly modular, reactive, type safe Java and Android library for working with
+Smart Contracts and integrating with clients (nodes) on the HappyUC network:
 
-.. image:: /images/web3j_network.png
+.. image:: /images/webuj_network.png
 
-This allows you to work with the `Ethereum <https://www.ethereum.org/>`_ blockchain, without the
+This allows you to work with the `HappyUC <https://www.happyuc.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
 
 The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
-overview of blockchain, Ethereum and web3j.
+overview of blockchain, HappyUC and webuj.
 
 
 Features
 ========
 
-- Complete implementation of Ethereum's `JSON-RPC <https://github.com/ethereum/wiki/wiki/JSON-RPC>`_
+- Complete implementation of HappyUC's `JSON-RPC <https://github.com/happyuc-project/wiki/wiki/JSON-RPC>`_
   client API over HTTP and IPC
-- Ethereum wallet support
+- HappyUC wallet support
 - Auto-generation of Java smart contract wrappers to create, deploy, transact with and call smart
   contracts from native Java code
   (`Solidity <http://solidity.readthedocs.io/en/latest/using-the-compiler.html#using-the-commandline-compiler>`_
   and
   `Truffle <https://github.com/trufflesuite/truffle-contract-schema>`_ definition formats supported)
 - Reactive-functional API for working with filters
-- `Ethereum Name Service (ENS) <https://ens.domains/>`_ support
+- `HappyUC Name Service (ENS) <https://ens.domains/>`_ support
 - Support for Parity's
-  `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Geth's
-  `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs
-- Support for `Infura <https://infura.io/>`_, so you don't have to run an Ethereum client yourself
+  `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__, and Ghuc's
+  `Personal <https://github.com/happyuc-project/go-happyuc/wiki/Management-APIs#personal>`__ client APIs
+- Support for `Infura <https://infura.io/>`_, so you don't have to run an HappyUC client yourself
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
-- Support for JP Morgan's Quorum via `web3j-quorum <https://github.com/web3j/quorum>`_
+- Support for JP Morgan's Quorum via `webuj-quorum <https://github.com/webuj/quorum>`_
 
 
 Dependencies
@@ -59,10 +59,10 @@ wrappers
 Donate
 ======
 
-You can help fund the development of web3j by donating to the following wallet addresses:
+You can help fund the development of webuj by donating to the following wallet addresses:
 
 +----------+--------------------------------------------+
-| Ethereum | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
+| HappyUC | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
 +----------+--------------------------------------------+
 | Bitcoin  | 1DfUeRWUy4VjekPmmZUNqCjcJBMwsyp61G         |
 +----------+--------------------------------------------+

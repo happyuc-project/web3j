@@ -1,6 +1,6 @@
 
-description 'Ethereum Recursive Length Prefix (RLP) encoding for serializing objects'
+description 'HappyUC Recursive Length Prefix (RLP) encoding for serializing objects'
 
 dependencies {
-    compile project(':utils')
+    testCompile project(':utils')
 }

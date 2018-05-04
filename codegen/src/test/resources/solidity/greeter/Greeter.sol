@@ -1,7 +1,7 @@
 pragma solidity ^0.4.2;
 
-// Example taken from https://www.ethereum.org/greeter, also used in
-// https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial#your-first-citizen-the-greeter
+// Example taken from https://www.happyuc.org/greeter, also used in
+// https://github.com/happyuc-project/go-happyuc/wiki/Contract-Tutorial#your-first-citizen-the-greeter
 
 contract mortal {
     /* Define variable owner of the type address*/

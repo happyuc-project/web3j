@@ -1,10 +1,10 @@
-package org.web3j.protocol.core;
+package org.happyuc.webuj.protocol.core;
 
 import org.junit.Test;
 
-import org.web3j.protocol.ResponseTester;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.happyuc.webuj.protocol.ResponseTester;
+import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
+import org.happyuc.webuj.protocol.core.methods.response.Web3ClientVersion;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -38,9 +38,9 @@ public class RawResponseTest extends ResponseTester {
 
         buildResponse(LARGE_RAW_RESPONSE);
 
-        EthBlock ethBlock = deserialiseResponse(EthBlock.class);
+        HucBlock hucBlock = deserialiseResponse(HucBlock.class);
 
-        assertThat(ethBlock.getRawResponse(), is(LARGE_RAW_RESPONSE));
+        assertThat(hucBlock.getRawResponse(), is(LARGE_RAW_RESPONSE));
     }
 
     @Test

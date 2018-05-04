@@ -1,4 +1,4 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import org.junit.Test;
 

@@ -1,12 +1,12 @@
-package org.web3j.protocol.ipc;
+package org.happyuc.webuj.protocol.ipc;
 
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.methods.response.Web3ClientVersion;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -20,19 +20,14 @@ public class IpcServiceTest {
     @Before
     public void setUp() {
         ioFacade = mock(IOFacade.class);
-        ipcService = new IpcService() {
-            @Override
-            protected IOFacade getIO() {
-                return ioFacade;
-            }
-        };
+        ipcService = new IpcService(ioFacade);
     }
 
     @Test
     public void testSend() throws IOException {
         when(ioFacade.read()).thenReturn(
                 "{\"jsonrpc\":\"2.0\",\"id\":1,"
-                        + "\"result\":\"Geth/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n");
+                        + "\"result\":\"Ghuc/v1.5.4-stable-b70acf3c/darwin/go1.7.3\"}\n");
 
         ipcService.send(new Request(), Web3ClientVersion.class);
 

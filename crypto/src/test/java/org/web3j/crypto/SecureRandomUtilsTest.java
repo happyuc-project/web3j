@@ -1,10 +1,10 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
-import static org.web3j.crypto.SecureRandomUtils.isAndroidRuntime;
-import static org.web3j.crypto.SecureRandomUtils.secureRandom;
+import static org.happyuc.webuj.crypto.SecureRandomUtils.isAndroidRuntime;
+import static org.happyuc.webuj.crypto.SecureRandomUtils.secureRandom;
 
 public class SecureRandomUtilsTest {
 

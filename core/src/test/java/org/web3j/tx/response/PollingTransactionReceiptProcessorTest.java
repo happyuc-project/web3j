@@ -1,16 +1,16 @@
-package org.web3j.tx.response;
+package org.happyuc.webuj.tx.response;
 
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.Response;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
+import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.Response;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.exceptions.TransactionException;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
@@ -21,24 +21,24 @@ import static org.mockito.Mockito.when;
 
 public class PollingTransactionReceiptProcessorTest {
     private static final String TRANSACTION_HASH = "0x00";
-    private Web3j web3j;
+    private webuj webuj;
     private long sleepDuration;
     private int attemps;
     private PollingTransactionReceiptProcessor processor;
 
     @Before
     public void setUp() {
-        web3j = mock(Web3j.class);
+        webuj = mock(webuj.class);
         sleepDuration = 100;
         attemps = 3;
-        processor = new PollingTransactionReceiptProcessor(web3j, sleepDuration, attemps);
+        processor = new PollingTransactionReceiptProcessor(webuj, sleepDuration, attemps);
     }
 
     @Test
     public void returnsTransactionReceiptWhenItIsAvailableInstantly() throws Exception {
         TransactionReceipt transactionReceipt = new TransactionReceipt();
         doReturn(requestReturning(response(transactionReceipt)))
-                .when(web3j).ethGetTransactionReceipt(TRANSACTION_HASH);
+                .when(webuj).hucGetTransactionReceipt(TRANSACTION_HASH);
 
         TransactionReceipt receipt = processor.waitForTransactionReceipt(TRANSACTION_HASH);
 
@@ -48,7 +48,7 @@ public class PollingTransactionReceiptProcessorTest {
     @Test
     public void throwsTransactionExceptionWhenReceiptIsNotAvailableInTime() throws Exception {
         doReturn(requestReturning(response(null)))
-                .when(web3j).ethGetTransactionReceipt(TRANSACTION_HASH);
+                .when(webuj).hucGetTransactionReceipt(TRANSACTION_HASH);
 
         try {
             processor.waitForTransactionReceipt(TRANSACTION_HASH);
@@ -68,8 +68,8 @@ public class PollingTransactionReceiptProcessorTest {
         return request;
     }
 
-    private static EthGetTransactionReceipt response(TransactionReceipt transactionReceipt) {
-        EthGetTransactionReceipt response = new EthGetTransactionReceipt();
+    private static HucGetTransactionReceipt response(TransactionReceipt transactionReceipt) {
+        HucGetTransactionReceipt response = new HucGetTransactionReceipt();
         response.setResult(transactionReceipt);
         return response;
     }

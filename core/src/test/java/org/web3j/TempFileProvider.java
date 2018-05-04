@@ -1,4 +1,4 @@
-package org.web3j;
+package org.webuj;
 
 import java.io.File;
 import java.nio.file.Files;

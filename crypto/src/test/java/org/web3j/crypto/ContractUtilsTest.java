@@ -1,4 +1,4 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import java.math.BigInteger;
 
@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.crypto.ContractUtils.generateContractAddress;
+import static org.happyuc.webuj.crypto.ContractUtils.generateContractAddress;
 
 public class ContractUtilsTest {
 

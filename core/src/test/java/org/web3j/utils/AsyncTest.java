@@ -1,10 +1,10 @@
-package org.web3j.utils;
+package org.happyuc.webuj.utils;
 
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 
-import org.web3j.utils.Async;
+import org.happyuc.webuj.utils.Async;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

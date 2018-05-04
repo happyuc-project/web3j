@@ -1,8 +1,8 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import java.math.BigInteger;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Keys generated for unit testing purposes.

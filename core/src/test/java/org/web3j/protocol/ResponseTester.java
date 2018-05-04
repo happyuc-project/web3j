@@ -1,4 +1,4 @@
-package org.web3j.protocol;
+package org.happyuc.webuj.protocol;
 
 import java.io.IOException;
 
@@ -8,19 +8,19 @@ import okhttp3.Protocol;
 import okhttp3.ResponseBody;
 import org.junit.Before;
 
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.Response;
-import org.web3j.protocol.http.HttpService;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.Response;
+import org.happyuc.webuj.protocol.http.HttpService;
 
 import static org.junit.Assert.fail;
-import static org.web3j.protocol.http.HttpService.JSON_MEDIA_TYPE;
+import static org.happyuc.webuj.protocol.http.HttpService.JSON_MEDIA_TYPE;
 
 /**
  * Protocol Response tests.
  */
 public abstract class ResponseTester {
 
-    private HttpService web3jService;
+    private HttpService webujService;
     private OkHttpClient okHttpClient;
     private ResponseInterceptor responseInterceptor;
 
@@ -38,13 +38,13 @@ public abstract class ResponseTester {
     }
 
     protected void configureWeb3Service(boolean includeRawResponses) {
-        web3jService = new HttpService(okHttpClient, includeRawResponses);
+        webujService = new HttpService(okHttpClient, includeRawResponses);
     }
 
     protected <T extends Response> T deserialiseResponse(Class<T> type) {
         T response = null;
         try {
-            response = web3jService.send(new Request(), type);
+            response = webujService.send(new Request(), type);
         } catch (IOException e) {
             fail(e.getMessage());
         }

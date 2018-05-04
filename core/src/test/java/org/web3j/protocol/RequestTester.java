@@ -1,4 +1,4 @@
-package org.web3j.protocol;
+package org.happyuc.webuj.protocol;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import okhttp3.RequestBody;
 import okio.Buffer;
 import org.junit.Before;
 
-import org.web3j.protocol.http.HttpService;
+import org.happyuc.webuj.protocol.http.HttpService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

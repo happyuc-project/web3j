@@ -1,4 +1,4 @@
-package org.web3j.crypto;
+package org.happyuc.webuj.crypto;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -8,8 +8,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import org.web3j.utils.Numeric;
-import org.web3j.utils.Strings;
+import org.happyuc.webuj.utils.Numeric;
+import org.happyuc.webuj.utils.Strings;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -91,7 +91,7 @@ public class KeysTest {
 
     @Test
     public void testToChecksumAddress() {
-        // Test cases as per https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md#test-cases
+        // Test cases as per https://github.com/happyuc-project/EIPs/blob/master/EIPS/eip-55.md#test-cases
 
         assertThat(Keys.toChecksumAddress("0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359"),
                 is("0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"));
