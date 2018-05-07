@@ -8,7 +8,7 @@ import org.happyuc.webuj.protocol.core.methods.request.Transaction;
  * Common values used by integration tests.
  */
 public interface IntegrationTestConfig {
-    
+
     String validBlockHash();
 
     BigInteger validBlock();

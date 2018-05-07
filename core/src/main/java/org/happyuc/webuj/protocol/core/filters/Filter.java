@@ -9,10 +9,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.happyuc.webuj.protocol.Webuj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.happyuc.webuj.protocol.webuj;
 
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.Response;
@@ -28,14 +27,14 @@ public abstract class Filter<T> {
 
     private static final Logger log = LoggerFactory.getLogger(Filter.class);
 
-    final webuj webuj;
+    final Webuj webuj;
     final Callback<T> callback;
 
     private volatile BigInteger filterId;
 
     private ScheduledFuture<?> schedule;
 
-    public Filter(webuj webuj, Callback<T> callback) {
+    public Filter(Webuj webuj, Callback<T> callback) {
         this.webuj = webuj;
         this.callback = callback;
     }
@@ -43,8 +42,8 @@ public abstract class Filter<T> {
     public void run(ScheduledExecutorService scheduledExecutorService, long blockTime) {
         try {
             HucFilter hucFilter = sendRequest();
-            if (ethFilter.hasError()) {
-                throwException(ethFilter.getError());
+            if (hucFilter.hasError()) {
+                throwException(hucFilter.getError());
             }
 
             filterId = hucFilter.getFilterId();
@@ -69,17 +68,15 @@ public abstract class Filter<T> {
             caller. However, the user would then be required to recreate subscriptions manually
             which isn't ideal given the aforementioned issues.
             */
-            schedule = scheduledExecutorService.scheduleAtFixedRate(
-                    () -> {
-                        try {
-                            this.pollFilter(ethFilter);
-                        } catch (Throwable e) {
-                            // All exceptions must be caught, otherwise our job terminates without
-                            // any notification
-                            log.error("Error sending request", e);
-                        }
-                    },
-                    0, blockTime, TimeUnit.MILLISECONDS);
+            schedule = scheduledExecutorService.scheduleAtFixedRate(() -> {
+                try {
+                    this.pollFilter(hucFilter);
+                } catch (Throwable e) {
+                    // All exceptions must be caught, otherwise our job terminates without
+                    // any notification
+                    log.error("Error sending request", e);
+                }
+            }, 0, blockTime, TimeUnit.MILLISECONDS);
         } catch (IOException e) {
             throwException(e);
         }
@@ -88,14 +85,14 @@ public abstract class Filter<T> {
     private void getInitialFilterLogs() {
         try {
             Optional<Request<?, HucLog>> maybeRequest = this.getFilterLogs(this.filterId);
-            HucLog hucLog = null;
+            HucLog hucLog;
             if (maybeRequest.isPresent()) {
                 hucLog = maybeRequest.get().send();
             } else {
                 hucLog = new HucLog();
                 hucLog.setResult(Collections.emptyList());
             }
-            process(ethLog.getLogs());
+            process(hucLog.getLogs());
 
         } catch (IOException e) {
             throwException(e);
@@ -109,10 +106,11 @@ public abstract class Filter<T> {
         } catch (IOException e) {
             throwException(e);
         }
-        if (ethLog.hasError()) {
-            throwException(ethLog.getError());
+        assert hucLog != null;
+        if (hucLog.hasError()) {
+            throwException(hucLog.getError());
         } else {
-            process(ethLog.getLogs());
+            process(hucLog.getLogs());
         }
     }
 
@@ -125,11 +123,11 @@ public abstract class Filter<T> {
 
         try {
             HucUninstallFilter hucUninstallFilter = webuj.hucUninstallFilter(filterId).send();
-            if (ethUninstallFilter.hasError()) {
-                throwException(ethUninstallFilter.getError());
+            if (hucUninstallFilter.hasError()) {
+                throwException(hucUninstallFilter.getError());
             }
 
-            if (!ethUninstallFilter.isUninstalled()) {
+            if (!hucUninstallFilter.isUninstalled()) {
                 throw new FilterException("Filter with id '" + filterId + "' failed to uninstall");
             }
         } catch (IOException e) {
@@ -148,8 +146,7 @@ public abstract class Filter<T> {
     protected abstract Optional<Request<?, HucLog>> getFilterLogs(BigInteger filterId);
 
     void throwException(Response.Error error) {
-        throw new FilterException("Invalid request: "
-                + (error == null ? "Unknown Error" : error.getMessage()));
+        throw new FilterException("Invalid request: " + (error == null ? "Unknown Error" : error.getMessage()));
     }
 
     void throwException(Throwable cause) {

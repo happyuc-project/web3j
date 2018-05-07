@@ -39,7 +39,7 @@ public class IpcService extends Service {
         // to be consistent with the HTTPService API.
         return new ByteArrayInputStream(result.getBytes());
     }
-    
+
     public void close() throws IOException {
         ioFacade.close();
     }

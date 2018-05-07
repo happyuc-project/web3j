@@ -1,4 +1,4 @@
-Projects using webuj
+Projects using Webuj
 ====================
 
 - `Huc Wallet <https://play.google.com/store/apps/details?id=org.vikulin.hucwallet>`_ by
@@ -7,5 +7,5 @@ Projects using webuj
   `@adridadou <https://github.com/adridadou>`_
 - `HappyUC Paper Wallet <https://github.com/matthiaszimmermann/happyuc-paper-wallet>`_ by
   `@matthiaszimmermann <https://github.com/matthiaszimmermann>`_
-- `webuj-scala <https://github.com/mslinn/webuj-scala>`_ by
+- `Webuj-scala <https://github.com/mslinn/Webuj-scala>`_ by
   `@mslinn <https://github.com/mslinn>`_

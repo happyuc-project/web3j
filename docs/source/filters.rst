@@ -20,7 +20,7 @@ if there are any updates to your filters due to the synchronous nature of HTTP a
 Additionally the block and transaction filters only provide the transaction or block hash, so a
 further request is required to obtain the actual transaction or block referred to by the hash.
 
-webuj's managed `Filter <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/core/filters/Filter.java>`_
+Webuj's managed `Filter <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/filters/Filter.java>`_
 implementation address these issues, so you have a fully asynchronous event based API for working
 with filters. It uses `RxJava <https://github.com/ReactiveX/RxJava>`_'s
 `Observables <http://reactivex.io/documentation/observable.html>`_ which provides a consistent API
@@ -36,20 +36,20 @@ Block and transaction filters
 To receive all new blocks as they are added to the blockchain (the false parameter specifies that
 we only want the blocks, not the embedded transactions too)::
 
-   Subscription subscription = webuj.blockObservable(false).subscribe(block -> {
+   Subscription subscription = Webuj.blockObservable(false).subscribe(block -> {
        ...
    });
 
 To receive all new transactions as they are added to the blockchain::
 
-   Subscription subscription = webuj.transactionObservable().subscribe(tx -> {
+   Subscription subscription = Webuj.transactionObservable().subscribe(tx -> {
        ...
    });
 
 To receive all pending transactions as they are submitted to the network (i.e. before they have
 been grouped into a block together)::
 
-   Subscription subscription = webuj.pendingTransactionObservable().subscribe(tx -> {
+   Subscription subscription = Webuj.pendingTransactionObservable().subscribe(tx -> {
        ...
    });
 
@@ -59,18 +59,18 @@ Subscriptions should always be cancelled when no longer required via *unsubscrib
 
 Other callbacks are also provided which provide simply the block or transaction hashes,
 for details of these refer to the
-`webujRx <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/rx/webujRx.java>`_
+`webujRx <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/rx/webujRx.java>`_
 interface.
 
 
 Replay filters
 --------------
 
-webuj also provides filters for replaying block and transaction history.
+Webuj also provides filters for replaying block and transaction history.
 
 To replay a range of blocks from the blockchain::
 
-   Subscription subscription = webuj.replayBlocksObservable(
+   Subscription subscription = Webuj.replayBlocksObservable(
            <startBlockNumber>, <endBlockNumber>, <fullTxObjects>)
            .subscribe(block -> {
                ...
@@ -78,16 +78,16 @@ To replay a range of blocks from the blockchain::
 
 To replay the individual transactions contained within a range of blocks::
 
-   Subscription subscription = webuj.replayTransactionsObservable(
+   Subscription subscription = Webuj.replayTransactionsObservable(
            <startBlockNumber>, <endBlockNumber>)
            .subscribe(tx -> {
                ...
    });
 
-You can also get webuj to replay all blocks up to the most current, and provide notification
+You can also get Webuj to replay all blocks up to the most current, and provide notification
 (via the submitted Observable) once you've caught up::
 
-   Subscription subscription = webuj.catchUpToLatestBlockObservable(
+   Subscription subscription = Webuj.catchUpToLatestBlockObservable(
            <startBlockNumber>, <fullTxObjects>, <onCompleteObservable>)
            .subscribe(block -> {
                ...
@@ -96,7 +96,7 @@ You can also get webuj to replay all blocks up to the most current, and provide 
 Or, if you'd rather replay all blocks to the most current, then be notified of new subsequent
 blocks being created::
 
-   Subscription subscription = webuj.catchUpToLatestAndSubscribeToNewBlocksObservable(
+   Subscription subscription = Webuj.catchUpToLatestAndSubscribeToNewBlocksObservable(
            <startBlockNumber>, <fullTxObjects>)
            .subscribe(block -> {
                ...
@@ -104,14 +104,14 @@ blocks being created::
 
 As above, but with transactions contained within blocks::
 
-   Subscription subscription = webuj.catchUpToLatestAndSubscribeToNewTransactionsObservable(
+   Subscription subscription = Webuj.catchUpToLatestAndSubscribeToNewTransactionsObservable(
            <startBlockNumber>)
            .subscribe(tx -> {
                ...
    });
 
 All of the above filters are exported via the
-`webujRx <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/rx/webujRx.java>`_
+`webujRx <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/rx/webujRx.java>`_
 interface.
 
 
@@ -128,7 +128,7 @@ The `Solidity documentation <http://solidity.readthedocs.io/en/develop/contracts
 provides a good overview of EVM events.
 
 You use the
-`HucFilter <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/core/methods/request/HucFilter.java>`_
+`HucFilter <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/methods/request/HucFilter.java>`_
 type to specify the topics that you wish to apply to the filter. This can include the address of
 the smart contract you wish to apply the filter to. You can also provide specific topics to filter
 on. Where the individual topics represent indexed parameters on the smart contract::
@@ -139,7 +139,7 @@ on. Where the individual topics represent indexed parameters on the smart contra
 
 This filter can then be created using a similar syntax to the block and transaction filters above::
 
-   webuj.hucLogObservable(filter).subscribe(log -> {
+   Webuj.hucLogObservable(filter).subscribe(log -> {
        ...
    });
 
@@ -155,19 +155,19 @@ the network will be captured by the filter.
 A note on functional composition
 --------------------------------
 
-In addition to *send()* and *sendAsync*, all JSON-RPC method implementations in webuj support the
+In addition to *send()* and *sendAsync*, all JSON-RPC method implementations in Webuj support the
 *observable()* method to create an Observable to execute the request asynchronously. This makes it
 very straight forwards to compose JSON-RPC calls together into new functions.
 
 For instance, the
-`blockObservable <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/rx/JsonRpc2_0Rx.java>`_ is
+`blockObservable <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/rx/JsonRpc2_0Rx.java>`_ is
 itself composed of a number of separate JSON-RPC calls::
 
    public Observable<HucBlock> blockObservable(
            boolean fullTransactionObjects, long pollingInterval) {
        return this.hucBlockHashObservable(pollingInterval)
                .flatMap(blockHash ->
-                       webuj.hucGetBlockByHash(blockHash, fullTransactionObjects).observable());
+                       Webuj.hucGetBlockByHash(blockHash, fullTransactionObjects).observable());
    }
 
 Here we first create an observable that provides notifications of the block hash of each newly
@@ -179,8 +179,8 @@ Further examples
 ----------------
 
 Please refer to the integration test
-`ObservableIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/webuj/protocol/core/ObservableIT.java>`_
+`ObservableIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/core/ObservableIT.java>`_
 for further examples.
 
 For a demonstration of using the manual filter API, you can take a look at the test
-`EventFilterIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/EventFilterIT.java>`_..
+`EventFilterIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/scenarios/EventFilterIT.java>`_..

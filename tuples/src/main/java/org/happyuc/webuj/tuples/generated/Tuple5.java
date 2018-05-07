@@ -5,7 +5,7 @@ import org.happyuc.webuj.tuples.Tuple;
 /**
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
- * <p>Please use org.happyuc.webuj.codegen.TupleGenerator in the 
+ * <p>Please use org.happyuc.webuj.codegen.TupleGenerator in the
  * <a href="https://github.com/happyuc-project/webu.java/tree/master/codegen">codegen module</a> to update.
  */
 public final class Tuple5<T1, T2, T3, T4, T5> implements Tuple {
@@ -90,12 +90,6 @@ public final class Tuple5<T1, T2, T3, T4, T5> implements Tuple {
 
     @Override
     public String toString() {
-        return "Tuple5{" +
-                "value1=" + value1 +
-                ", value2=" + value2 +
-                ", value3=" + value3 +
-                ", value4=" + value4 +
-                ", value5=" + value5 +
-                "}";
+        return "Tuple5{" + "value1=" + value1 + ", value2=" + value2 + ", value3=" + value3 + ", value4=" + value4 + ", value5=" + value5 + "}";
     }
 }

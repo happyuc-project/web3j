@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
@@ -18,9 +18,7 @@ public class LogFilter extends Filter<Log> {
 
     private final org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter;
 
-    public LogFilter(
-            webuj webuj, Callback<Log> callback,
-            org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter) {
+    public LogFilter(Webuj webuj, Callback<Log> callback, org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter) {
         super(webuj, callback);
         this.hucFilter = hucFilter;
     }
@@ -28,7 +26,7 @@ public class LogFilter extends Filter<Log> {
 
     @Override
     HucFilter sendRequest() throws IOException {
-        return webuj.hucNewFilter(ethFilter).send();
+        return webuj.hucNewFilter(hucFilter).send();
     }
 
     @Override
@@ -38,8 +36,7 @@ public class LogFilter extends Filter<Log> {
                 Log log = ((HucLog.LogObject) logResult).get();
                 callback.onEvent(log);
             } else {
-                throw new FilterException(
-                        "Unexpected result type: " + logResult.get() + " required LogObject");
+                throw new FilterException("Unexpected result type: " + logResult.get() + " required LogObject");
             }
         }
     }

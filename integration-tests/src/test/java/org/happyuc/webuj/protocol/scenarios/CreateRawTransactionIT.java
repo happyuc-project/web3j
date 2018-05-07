@@ -25,20 +25,17 @@ public class CreateRawTransactionIT extends Scenario {
     @Test
     public void testTransferHuc() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
-        RawTransaction rawTransaction = createHucTransaction(
-                nonce, BOB.getAddress());
+        RawTransaction rawTransaction = createHucTransaction(nonce, BOB.getAddress());
 
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        HucSendTransaction hucSendTransaction =
-                webuj.hucSendRawTransaction(hexValue).sendAsync().get();
+        HucSendTransaction hucSendTransaction = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
         String transactionHash = hucSendTransaction.getTransactionHash();
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
     }
@@ -51,37 +48,30 @@ public class CreateRawTransactionIT extends Scenario {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        HucSendTransaction hucSendTransaction =
-                webuj.hucSendRawTransaction(hexValue).sendAsync().get();
+        HucSendTransaction hucSendTransaction = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
         String transactionHash = hucSendTransaction.getTransactionHash();
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
         assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
 
-        assertFalse("Contract execution ran out of gas",
-                rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
+        assertFalse("Contract execution ran out of gas", rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
     }
 
     private static RawTransaction createHucTransaction(BigInteger nonce, String toAddress) {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.HUC).toBigInteger();
 
-        return RawTransaction.createHucTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
+        return RawTransaction.createHucTransaction(nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
     }
 
-    private static RawTransaction createSmartContractTransaction(BigInteger nonce)
-            throws Exception {
-        return RawTransaction.createContractTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
+    private static RawTransaction createSmartContractTransaction(BigInteger nonce) throws Exception {
+        return RawTransaction.createContractTransaction(nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
     }
 
     BigInteger getNonce(String address) throws Exception {
-        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(
-                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return hucGetTransactionCount.getTransactionCount();
     }

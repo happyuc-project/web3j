@@ -1,4 +1,3 @@
-
 buildscript {
     ext.bouncycastleVersion = '1.54'
     ext.jacksonVersion = '2.8.5'
@@ -40,11 +39,12 @@ description 'webuj base project'
 
 allprojects {
 
+    // JDK Version
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    group 'org.webuj'
-    version '3.3.1'
+    group 'org.happyuc.webuj'
+    version '0.0.1'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -77,7 +77,7 @@ allprojects {
     }
 
     tasks.withType(Test) {
-        reports.html.destination = file("${reporting.baseDir}/${name}")
+        reports.html.setDestination(file("${reporting.baseDir}/${name}"))
     }
 
     checkstyle {
@@ -91,11 +91,11 @@ subprojects {
 
     dependencies {
         testCompile "junit:junit:$junitVersion",
-                    "org.mockito:mockito-core:$mockitoVersion"
+                "org.mockito:mockito-core:$mockitoVersion"
     }
 }
 
-configure(subprojects.findAll {it.name != 'integration-tests'}) {
+configure(subprojects.findAll { it.name != 'integration-tests' }) {
     // Required for Maven Nexus repository
     apply plugin: 'maven'
     apply plugin: 'signing'
@@ -131,6 +131,9 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
     publishing {
         publications {
             mavenJava(MavenPublication) {
+                groupId 'org.happyuc.webuj'
+                artifactId 'webuj'
+                version '0.0.1'
                 from components.java
 
                 artifact sourcesJar {
@@ -150,6 +153,7 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
                 repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+
                     authentication(
                             userName: ossrhUsername,
                             password: ossrhPassword
@@ -163,8 +167,8 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
                     url 'https://webuj.io'
 
                     scm {
-                        connection 'scm:git:https://github.com/webuj/webuj.git'
-                        url 'https://github.com/webuj/webuj.git'
+                        connection 'scm:git:https://github.com/happyuc-project/webuj.git'
+                        url 'https://github.com/happyuc-porject/webuj.git'
                     }
 
                     licenses {
@@ -198,12 +202,12 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         publish = true
         pkg {
             repo = 'maven'
-            name = 'org.webuj'
+            name = 'org.happyuc.webuj'
             desc = project.description
             userOrg = 'webuj'
             licenses = ['Apache-2.0']
             issueTrackerUrl = 'https://github.com/happyuc-project/webu.java/issues'
-            vcsUrl = 'https://github.com/webuj/webuj.git'
+            vcsUrl = 'https://github.com/happyuc-project/webuj.git'
             websiteUrl = 'https://webuj.io'
             publicDownloadNumbers = true
         }
@@ -221,11 +225,11 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
 }
 
 
-task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+task jacocoRootTestReport(type: JacocoReport) {
     dependsOn = subprojects.test
     additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories =  files(subprojects.sourceSets.main.output)
+    classDirectories = files(subprojects.sourceSets.main.output)
     executionData = files(subprojects.jacocoTestReport.executionData)
     reports {
         xml.enabled = true

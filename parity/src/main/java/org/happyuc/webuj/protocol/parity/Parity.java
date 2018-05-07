@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.happyuc.webuj.crypto.WalletFile;
-import org.happyuc.webuj.protocol.webujService;
+import org.happyuc.webuj.protocol.WebujService;
 import org.happyuc.webuj.protocol.admin.Admin;
 import org.happyuc.webuj.protocol.admin.methods.response.BooleanResponse;
 import org.happyuc.webuj.protocol.admin.methods.response.NewAccountIdentifier;
@@ -25,67 +25,59 @@ import org.happyuc.webuj.protocol.parity.methods.response.ParityListRecentDapps;
  * JSON-RPC Request object building factory for Parity.
  */
 public interface Parity extends Admin, Trace {
-    static Parity build(webujService webujService) {
+    static Parity build(WebujService webujService) {
         return new JsonRpc2_0Parity(webujService);
     }
 
     Request<?, ParityAllAccountsInfo> parityAllAccountsInfo();
-    
-    Request<?, BooleanResponse> parityChangePassword(
-            String accountId, String oldPassword, String newPassword);
-    
-    Request<?, ParityDeriveAddress> parityDeriveAddressHash(
-            String accountId, String password, Derivation hashType, boolean toSave);
-    
-    Request<?, ParityDeriveAddress> parityDeriveAddressIndex(
-            String accountId, String password, List<Derivation> indicesType, boolean toSave);
-    
+
+    Request<?, BooleanResponse> parityChangePassword(String accountId, String oldPassword, String newPassword);
+
+    Request<?, ParityDeriveAddress> parityDeriveAddressHash(String accountId, String password, Derivation hashType, boolean toSave);
+
+    Request<?, ParityDeriveAddress> parityDeriveAddressIndex(String accountId, String password, List<Derivation> indicesType, boolean toSave);
+
     Request<?, ParityExportAccount> parityExportAccount(String accountId, String password);
-    
+
     Request<?, ParityAddressesResponse> parityGetDappAddresses(String dAppId);
-    
+
     Request<?, ParityDefaultAddressResponse> parityGetDappDefaultAddress(String dAppId);
-    
+
     Request<?, ParityAddressesResponse> parityGetNewDappsAddresses();
-    
+
     Request<?, ParityDefaultAddressResponse> parityGetNewDappsDefaultAddress();
-    
+
     Request<?, ParityAddressesResponse> parityImportGhucAccounts(ArrayList<String> ghucAddresses);
-    
+
     Request<?, BooleanResponse> parityKillAccount(String accountId, String password);
 
-    Request<?, ParityAddressesResponse> parityListAccounts(
-            BigInteger quantity, String accountId, DefaultBlockParameter blockParameter);
+    Request<?, ParityAddressesResponse> parityListAccounts(BigInteger quantity, String accountId, DefaultBlockParameter blockParameter);
 
     Request<?, ParityAddressesResponse> parityListGhucAccounts();
-    
+
     Request<?, ParityListRecentDapps> parityListRecentDapps();
-    
+
     Request<?, NewAccountIdentifier> parityNewAccountFromPhrase(String phrase, String password);
-    
+
     Request<?, NewAccountIdentifier> parityNewAccountFromSecret(String secret, String password);
-    
-    Request<?, NewAccountIdentifier> parityNewAccountFromWallet(
-            WalletFile walletFile, String password);
-    
+
+    Request<?, NewAccountIdentifier> parityNewAccountFromWallet(WalletFile walletFile, String password);
+
     Request<?, BooleanResponse> parityRemoveAddress(String accountId);
-    
-    Request<?, BooleanResponse> paritySetAccountMeta(
-            String accountId, Map<String, Object> metadata);
-    
+
+    Request<?, BooleanResponse> paritySetAccountMeta(String accountId, Map<String, Object> metadata);
+
     Request<?, BooleanResponse> paritySetAccountName(String address, String name);
-    
-    Request<?, BooleanResponse> paritySetDappAddresses(
-            String dAppId, ArrayList<String> availableAccountIds);
-    
+
+    Request<?, BooleanResponse> paritySetDappAddresses(String dAppId, ArrayList<String> availableAccountIds);
+
     Request<?, BooleanResponse> paritySetDappDefaultAddress(String dAppId, String defaultAddress);
-    
+
     Request<?, BooleanResponse> paritySetNewDappsAddresses(ArrayList<String> availableAccountIds);
-    
+
     Request<?, BooleanResponse> paritySetNewDappsDefaultAddress(String defaultAddress);
-    
+
     Request<?, BooleanResponse> parityTestPassword(String accountId, String password);
-    
-    Request<?, PersonalSign> paritySignMessage(
-            String accountId, String password, String hexMessage);
+
+    Request<?, PersonalSign> paritySignMessage(String accountId, String password, String hexMessage);
 }

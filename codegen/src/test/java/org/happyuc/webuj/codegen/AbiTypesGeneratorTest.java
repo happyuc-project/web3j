@@ -1,12 +1,11 @@
 package org.happyuc.webuj.codegen;
 
-import org.junit.Test;
-
 import org.happyuc.webuj.TempFileProvider;
+
+import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-
 
 public class AbiTypesGeneratorTest extends TempFileProvider {
 
@@ -22,6 +21,6 @@ public class AbiTypesGeneratorTest extends TempFileProvider {
 
     @Test
     public void testGeneration() throws Exception {
-        AbiTypesGenerator.main(new String[] { tempDirPath });
+        AbiTypesGenerator.main(new String[]{tempDirPath});
     }
 }

@@ -4,12 +4,12 @@ import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.happyuc.webuj.protocol.Webuj;
 import org.junit.Before;
 import org.junit.Test;
 import rx.Observable;
 import rx.Subscription;
 
-import org.happyuc.webuj.protocol.webuj;
 import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
 import org.happyuc.webuj.protocol.http.HttpService;
@@ -24,11 +24,11 @@ public class ObservableIT {
     private static final int EVENT_COUNT = 5;
     private static final int TIMEOUT_MINUTES = 5;
 
-    private webuj webuj;
+    private Webuj webuj;
 
     @Before
     public void setUp() {
-        this.webuj = webuj.build(new HttpService());
+        this.webuj = Webuj.build(new HttpService());
     }
 
     @Test
@@ -53,30 +53,21 @@ public class ObservableIT {
 
     @Test
     public void testReplayObservable() throws Exception {
-        run(webuj.replayBlocksObservable(
-                new DefaultBlockParameterNumber(0),
-                new DefaultBlockParameterNumber(EVENT_COUNT), true));
+        run(webuj.replayBlocksObservable(new DefaultBlockParameterNumber(0), new DefaultBlockParameterNumber(EVENT_COUNT), true));
     }
 
     @Test
     public void testCatchUpToLatestAndSubscribeToNewBlocksObservable() throws Exception {
-        HucBlock hucBlock = webuj.hucGetBlockByNumber(DefaultBlockParameterName.LATEST, false)
-                .send();
+        HucBlock hucBlock = webuj.hucGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
         BigInteger latestBlockNumber = hucBlock.getBlock().getNumber();
-        run(webuj.catchUpToLatestAndSubscribeToNewBlocksObservable(
-                new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)),
-                false));
+        run(webuj.catchUpToLatestAndSubscribeToNewBlocksObservable(new DefaultBlockParameterNumber(latestBlockNumber.subtract(BigInteger.ONE)), false));
     }
 
     private <T> void run(Observable<T> observable) throws Exception {
         CountDownLatch countDownLatch = new CountDownLatch(EVENT_COUNT);
         CountDownLatch completedLatch = new CountDownLatch(EVENT_COUNT);
 
-        Subscription subscription = observable.subscribe(
-                x -> countDownLatch.countDown(),
-                Throwable::printStackTrace,
-                completedLatch::countDown
-        );
+        Subscription subscription = observable.subscribe(x -> countDownLatch.countDown(), Throwable::printStackTrace, completedLatch::countDown);
 
         countDownLatch.await(TIMEOUT_MINUTES, TimeUnit.MINUTES);
         subscription.unsubscribe();

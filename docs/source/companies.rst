@@ -1,4 +1,4 @@
-Companies using webuj
+Companies using Webuj
 =====================
 
 - `Amberdata <https://www.amberdata.io/>`_

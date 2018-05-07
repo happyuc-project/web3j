@@ -72,5 +72,5 @@ public class StringsTest {
         assertTrue(isEmpty(""));
         assertFalse(isEmpty("hello world"));
     }
-    
+
 }

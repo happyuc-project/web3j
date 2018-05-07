@@ -1,7 +1,7 @@
 Modules
 =======
 
-To provide greater flexibility for developers wishing to work with webuj, the project is made up
+To provide greater flexibility for developers wishing to work with Webuj, the project is made up
 of a number of modules.
 
 In dependency order, they are as follows:
@@ -11,7 +11,7 @@ In dependency order, they are as follows:
 * abi - Application Binary Interface (ABI) encoders
 * crypto - cryptographic library for for transaction signing and key/wallet management in HappyUC
 * tuples - Simple tuples library
-* core - Much like the previous webuj core artifact without the code generators
+* core - Much like the previous Webuj core artifact without the code generators
 * codegen - code generators
 * console - command-line tools
 
@@ -30,7 +30,7 @@ All modules are published to both Maven Central and Bintray, with the published 
 using the names listed above, i.e.:
 
 For Java:
-  org.webuj:<module-name>:<version>
+  org.Webuj:<module-name>:<version>
 
 For Android:
-  org.webuj:<module-name>:<version>-android
+  org.Webuj:<module-name>:<version>-android

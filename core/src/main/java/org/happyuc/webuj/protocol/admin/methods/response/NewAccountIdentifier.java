@@ -11,5 +11,5 @@ import org.happyuc.webuj.protocol.core.Response;
 public class NewAccountIdentifier extends Response<String> {
     public String getAccountId() {
         return getResult();
-    }    
+    }
 }

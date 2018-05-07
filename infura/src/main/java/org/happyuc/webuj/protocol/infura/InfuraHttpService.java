@@ -10,8 +10,7 @@ import org.happyuc.webuj.protocol.http.HttpService;
  */
 public class InfuraHttpService extends HttpService {
 
-    private static final String INFURA_happyuc_PREFERRED_CLIENT =
-            "Infura-HappyUC-Preferred-Client";
+    private static final String INFURA_happyuc_PREFERRED_CLIENT = "Infura-HappyUC-Preferred-Client";
 
     private final Map<String, String> clientVersionHeader;
 
@@ -37,8 +36,7 @@ public class InfuraHttpService extends HttpService {
         if (required) {
             return Collections.singletonMap(INFURA_happyuc_PREFERRED_CLIENT, clientVersion);
         } else {
-            return Collections.singletonMap(
-                    INFURA_happyuc_PREFERRED_CLIENT, clientVersion + "; required=false");
+            return Collections.singletonMap(INFURA_happyuc_PREFERRED_CLIENT, clientVersion + "; required=false");
         }
     }
 }

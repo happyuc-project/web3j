@@ -18,11 +18,11 @@ for target in ${targets}; do
     solc --bin --abi --optimize --overwrite ${fileName}.sol -o build/
     echo "Complete"
 
-    echo "Generating webuj bindings"
-    webuj solidity generate \
+    echo "Generating Webuj bindings"
+    Webuj solidity generate \
         build/${fileName}.bin \
         build/${fileName}.abi \
-        -p org.happyuc.webuj.generated \
+        -p org.happyuc.Webuj.generated \
         -o ../../../../../../integration-tests/src/test/java/ > /dev/null
     echo "Complete"
 

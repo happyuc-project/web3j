@@ -47,11 +47,9 @@ public class EventFilterIT extends Scenario {
         BigInteger gas = estimateGas(encodedFunction);
         String transactionHash = sendTransaction(ALICE, CONTRACT_ADDRESS, gas, encodedFunction);
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertFalse("Transaction execution ran out of gas",
-                gas.equals(transactionReceipt.getGasUsed()));
+        assertFalse("Transaction execution ran out of gas", gas.equals(transactionReceipt.getGasUsed()));
 
         List<Log> logs = transactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
@@ -61,60 +59,42 @@ public class EventFilterIT extends Scenario {
         List<String> topics = log.getTopics();
         assertThat(topics.size(), is(1));
 
-        Event event = new Event("Notify",
-                Collections.emptyList(),
-                Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+        Event event = new Event("Notify", Collections.emptyList(), Arrays.asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
 
         // check function signature - we only have a single topic our event signature,
         // there are no indexed parameters in this example
         String encodedEventSignature = EventEncoder.encode(event);
-        assertThat(topics.get(0),
-                is(encodedEventSignature));
+        assertThat(topics.get(0), is(encodedEventSignature));
 
         // verify our two event parameters
-        List<Type> results = FunctionReturnDecoder.decode(
-                log.getData(), event.getNonIndexedParameters());
-        assertThat(results, equalTo(Arrays.asList(
-                new Uint256(BigInteger.valueOf(7)), new Uint256(BigInteger.valueOf(13)))));
+        List<Type> results = FunctionReturnDecoder.decode(log.getData(), event.getNonIndexedParameters());
+        assertThat(results, equalTo(Arrays.asList(new Uint256(BigInteger.valueOf(7)), new Uint256(BigInteger.valueOf(13)))));
 
         // finally check it shows up in the event filter
-        List<HucLog.LogResult> filterLogs = createFilterForEvent(
-                encodedEventSignature, CONTRACT_ADDRESS);
+        List<HucLog.LogResult> filterLogs = createFilterForEvent(encodedEventSignature, CONTRACT_ADDRESS);
         assertFalse(filterLogs.isEmpty());
     }
 
     private BigInteger estimateGas(String encodedFunction) throws Exception {
-        HucEstimateGas hucEstimateGas = webuj.hucEstimateGas(
-                Transaction.createHucCallTransaction(ALICE.getAddress(), null, encodedFunction))
-                .sendAsync().get();
+        HucEstimateGas hucEstimateGas = webuj.hucEstimateGas(Transaction.createHucCallTransaction(ALICE.getAddress(), null, encodedFunction)).sendAsync().get();
         // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388
         // see huc.getBlock("latest")
         return hucEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
     }
 
-    private String sendTransaction(
-            Credentials credentials, String contractAddress, BigInteger gas,
-            String encodedFunction) throws Exception {
+    private String sendTransaction(Credentials credentials, String contractAddress, BigInteger gas, String encodedFunction) throws Exception {
         BigInteger nonce = getNonce(credentials.getAddress());
-        Transaction transaction = Transaction.createFunctionCallTransaction(
-                credentials.getAddress(), nonce, Transaction.DEFAULT_GAS, gas, contractAddress,
-                encodedFunction);
+        Transaction transaction = Transaction.createFunctionCallTransaction(credentials.getAddress(), nonce, Transaction.DEFAULT_GAS, gas, contractAddress, encodedFunction);
 
-        org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction transactionResponse =
-                webuj.hucSendTransaction(transaction).sendAsync().get();
+        org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction transactionResponse = webuj.hucSendTransaction(transaction).sendAsync().get();
 
         assertFalse(transactionResponse.hasError());
 
         return transactionResponse.getTransactionHash();
     }
 
-    private List<HucLog.LogResult> createFilterForEvent(
-            String encodedEventSignature, String contractAddress) throws Exception {
-        HucFilter hucFilter = new HucFilter(
-                DefaultBlockParameterName.EARLIEST,
-                DefaultBlockParameterName.LATEST,
-                contractAddress
-        );
+    private List<HucLog.LogResult> createFilterForEvent(String encodedEventSignature, String contractAddress) throws Exception {
+        HucFilter hucFilter = new HucFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST, contractAddress);
 
         hucFilter.addSingleTopic(encodedEventSignature);
 

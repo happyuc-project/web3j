@@ -1,8 +1,8 @@
 Quickstart
 ==========
 
-A `webuj sample project <https://github.com/webuj/sample-project-gradle>`_ is available that
-demonstrates a number of core features of HappyUC with webuj, including:
+A `Webuj sample project <https://github.com/Webuj/sample-project-gradle>`_ is available that
+demonstrates a number of core features of HappyUC with Webuj, including:
 
 - Connecting to a node on the HappyUC network
 - Loading an HappyUC wallet file

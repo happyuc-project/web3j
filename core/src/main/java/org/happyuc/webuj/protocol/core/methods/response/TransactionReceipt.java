@@ -1,4 +1,3 @@
-
 package org.happyuc.webuj.protocol.core.methods.response;
 
 import java.math.BigInteger;
@@ -29,10 +28,7 @@ public class TransactionReceipt {
     public TransactionReceipt() {
     }
 
-    public TransactionReceipt(String transactionHash, String transactionIndex,
-                              String blockHash, String blockNumber, String cumulativeGasUsed,
-                              String gasUsed, String contractAddress, String root, String status,
-                              String from, String to, List<Log> logs, String logsBloom) {
+    public TransactionReceipt(String transactionHash, String transactionIndex, String blockHash, String blockNumber, String cumulativeGasUsed, String gasUsed, String contractAddress, String root, String status, String from, String to, List<Log> logs, String logsBloom) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -179,44 +175,31 @@ public class TransactionReceipt {
 
         TransactionReceipt that = (TransactionReceipt) o;
 
-        if (getTransactionHash() != null
-                ? !getTransactionHash().equals(that.getTransactionHash())
-                : that.getTransactionHash() != null) {
+        if (getTransactionHash() != null ? !getTransactionHash().equals(that.getTransactionHash()) : that.getTransactionHash() != null) {
             return false;
         }
-        if (transactionIndex != null
-                ? !transactionIndex.equals(that.transactionIndex)
-                : that.transactionIndex != null) {
+        if (transactionIndex != null ? !transactionIndex.equals(that.transactionIndex) : that.transactionIndex != null) {
             return false;
         }
-        if (getBlockHash() != null
-                ? !getBlockHash().equals(that.getBlockHash())
-                : that.getBlockHash() != null) {
+        if (getBlockHash() != null ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
             return false;
         }
-        if (blockNumber != null
-                ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
+        if (blockNumber != null ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
             return false;
         }
-        if (cumulativeGasUsed != null
-                ? !cumulativeGasUsed.equals(that.cumulativeGasUsed)
-                : that.cumulativeGasUsed != null) {
+        if (cumulativeGasUsed != null ? !cumulativeGasUsed.equals(that.cumulativeGasUsed) : that.cumulativeGasUsed != null) {
             return false;
         }
         if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null) {
             return false;
         }
-        if (getContractAddress() != null
-                ? !getContractAddress().equals(that.getContractAddress())
-                : that.getContractAddress() != null) {
+        if (getContractAddress() != null ? !getContractAddress().equals(that.getContractAddress()) : that.getContractAddress() != null) {
             return false;
         }
-        if (getRoot() != null
-                ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
+        if (getRoot() != null ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
             return false;
         }
-        if (getStatus() != null
-                ? !getStatus().equals(that.getStatus()) : that.getStatus() != null) {
+        if (getStatus() != null ? !getStatus().equals(that.getStatus()) : that.getStatus() != null) {
             return false;
         }
         if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
@@ -228,8 +211,7 @@ public class TransactionReceipt {
         if (getLogs() != null ? !getLogs().equals(that.getLogs()) : that.getLogs() != null) {
             return false;
         }
-        return getLogsBloom() != null
-                ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
+        return getLogsBloom() != null ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
     }
 
     @Override
@@ -252,20 +234,6 @@ public class TransactionReceipt {
 
     @Override
     public String toString() {
-        return "TransactionReceipt{"
-                + "transactionHash='" + transactionHash + '\''
-                + ", transactionIndex='" + transactionIndex + '\''
-                + ", blockHash='" + blockHash + '\''
-                + ", blockNumber='" + blockNumber + '\''
-                + ", cumulativeGasUsed='" + cumulativeGasUsed + '\''
-                + ", gasUsed='" + gasUsed + '\''
-                + ", contractAddress='" + contractAddress + '\''
-                + ", root='" + root + '\''
-                + ", status='" + status + '\''
-                + ", from='" + from + '\''
-                + ", to='" + to + '\''
-                + ", logs=" + logs
-                + ", logsBloom='" + logsBloom + '\''
-                + '}';
+        return "TransactionReceipt{" + "transactionHash='" + transactionHash + '\'' + ", transactionIndex='" + transactionIndex + '\'' + ", blockHash='" + blockHash + '\'' + ", blockNumber='" + blockNumber + '\'' + ", cumulativeGasUsed='" + cumulativeGasUsed + '\'' + ", gasUsed='" + gasUsed + '\'' + ", contractAddress='" + contractAddress + '\'' + ", root='" + root + '\'' + ", status='" + status + '\'' + ", from='" + from + '\'' + ", to='" + to + '\'' + ", logs=" + logs + ", logsBloom='" + logsBloom + '\'' + '}';
     }
 }

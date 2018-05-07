@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.RawTransaction;
 import org.happyuc.webuj.crypto.TransactionEncoder;
-import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionCount;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
@@ -22,12 +22,12 @@ import org.happyuc.webuj.utils.Numeric;
  */
 public class RawTransactionManager extends TransactionManager {
 
-    private final webuj webuj;
+    private final Webuj webuj;
     final Credentials credentials;
 
     private final byte chainId;
 
-    public RawTransactionManager(webuj webuj, Credentials credentials, byte chainId) {
+    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId) {
         super(webuj, credentials.getAddress());
 
         this.webuj = webuj;
@@ -36,9 +36,7 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(
-            webuj webuj, Credentials credentials, byte chainId,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
+    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId, TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
         this.webuj = webuj;
@@ -47,8 +45,7 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(
-            webuj webuj, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
+    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
         super(webuj, attempts, sleepDuration, credentials.getAddress());
 
         this.webuj = webuj;
@@ -57,42 +54,31 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(webuj webuj, Credentials credentials) {
+    public RawTransactionManager(Webuj webuj, Credentials credentials) {
         this(webuj, credentials, ChainId.NONE);
     }
 
-    public RawTransactionManager(
-            webuj webuj, Credentials credentials, int attempts, int sleepDuration) {
+    public RawTransactionManager(Webuj webuj, Credentials credentials, int attempts, int sleepDuration) {
         this(webuj, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
     protected BigInteger getNonce() throws IOException {
-        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(
-                credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
 
         return hucGetTransactionCount.getTransactionCount();
     }
 
     @Override
-    public HucSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value) throws IOException {
+    public HucSendTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
 
         BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction = RawTransaction.createTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                to,
-                value,
-                data);
+        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
 
         return signAndSend(rawTransaction);
     }
 
-    public HucSendTransaction signAndSend(RawTransaction rawTransaction)
-            throws IOException {
+    public HucSendTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
 
         byte[] signedMessage;
 

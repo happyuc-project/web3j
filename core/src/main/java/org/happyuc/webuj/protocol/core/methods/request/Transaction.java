@@ -9,9 +9,9 @@ import org.happyuc.webuj.utils.Numeric;
 /**
  * Transaction request object used the below methods.
  * <ol>
- *     <li>eth_call</li>
- *     <li>eth_sendTransaction</li>
- *     <li>eth_estimateGas</li>
+ * <li>eth_call</li>
+ * <li>eth_sendTransaction</li>
+ * <li>eth_estimateGas</li>
  * </ol>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,8 +27,7 @@ public class Transaction {
     private String data;
     private BigInteger nonce;  // nonce field is not present on huc_call/eth_estimateGas
 
-    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-                       String to, BigInteger value, String data) {
+    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String data) {
         this.from = from;
         this.to = to;
         this.gas = gasLimit;
@@ -42,36 +41,27 @@ public class Transaction {
         this.nonce = nonce;
     }
 
-    public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-            BigInteger value, String init) {
+    public static Transaction createContractTransaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value, String init) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, null, value, init);
     }
 
-    public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, String init) {
+    public static Transaction createContractTransaction(String from, BigInteger nonce, BigInteger gasPrice, String init) {
 
         return createContractTransaction(from, nonce, gasPrice, null, null, init);
     }
 
-    public static Transaction createHucTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value) {
+    public static Transaction createHucTransaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, value, null);
     }
 
-    public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value, String data) {
+    public static Transaction createFunctionCallTransaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String data) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, value, data);
     }
 
-    public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data) {
+    public static Transaction createFunctionCallTransaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, String data) {
 
         return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data);
     }

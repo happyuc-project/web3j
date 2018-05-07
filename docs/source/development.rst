@@ -1,10 +1,10 @@
 Developer Guide
 ===============
 
-Building webuj
+Building Webuj
 --------------
 
-webuj includes integration tests for running against a live HappyUC client. If you do not have a
+Webuj includes integration tests for running against a live HappyUC client. If you do not have a
 client running, you can exclude their execution as per the below instructions.
 
 To run a full build (excluding integration tests):
@@ -24,7 +24,7 @@ To run the integration tests:
 Generating documentation
 ------------------------
 
-webuj uses the `Sphinx <http://www.sphinx-doc.org/en/stable/>`_ documentation generator.
+Webuj uses the `Sphinx <http://www.sphinx-doc.org/en/stable/>`_ documentation generator.
 
 All documentation (apart from the project README.md) resides under the
 `/docs <https://github.com/happyuc-project/webu.java/tree/master/docs>`_ directory.

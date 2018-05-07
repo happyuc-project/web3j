@@ -41,11 +41,11 @@
             <property name="allowByTailComment" value="true"/>
             <property name="allowNonPrintableEscapes" value="true"/>
         </module>
-        <module name="LineLength">
-            <property name="max" value="100"/>
-            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
-        </module>
-        <module name="AvoidStarImport"/>
+        <!--<module name="LineLength">-->
+            <!--<property name="max" value="100"/>-->
+            <!--<property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>-->
+        <!--</module>-->
+        <!--<module name="AvoidStarImport"/>-->
         <module name="OneTopLevelClass"/>
         <module name="NoLineWrap"/>
         <module name="EmptyBlock">
@@ -172,12 +172,12 @@
         </module>
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="VariableDeclarationUsageDistance"/>
-        <module name="CustomImportOrder">
-            <property name="sortImportsInGroupAlphabetically" value="true"/>
-            <property name="separateLineBetweenGroups" value="true"/>
-            <property name="specialImportsRegExp" value="^org.webuj\."/>
-            <property name="customImportOrderRules" value="STANDARD_JAVA_PACKAGE###THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STATIC"/>
-        </module>
+        <!--<module name="CustomImportOrder">-->
+            <!--<property name="sortImportsInGroupAlphabetically" value="true"/>-->
+            <!--<property name="separateLineBetweenGroups" value="true"/>-->
+            <!--<property name="specialImportsRegExp" value="^org.Webuj\."/>-->
+            <!--<property name="customImportOrderRules" value="STANDARD_JAVA_PACKAGE###THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STATIC"/>-->
+        <!--</module>-->
         <module name="MethodParamPad"/>
         <module name="ParenPad"/>
         <module name="OperatorWrap">
@@ -232,6 +232,6 @@
     <module name="SuppressionCommentFilter"/>
 
     <module name="SuppressionFilter">
-        <property name="file" value="config/checkstyle/suppressions.xml"/>
+        <property name="file" value="${basedir}/config/checkstyle/suppressions.xml"/>
     </module>
 </module>

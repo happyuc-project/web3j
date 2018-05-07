@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# webuj documentation build configuration file, created by
+# Webuj documentation build configuration file, created by
 # sphinx-quickstart on Fri Oct 14 10:44:04 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -45,7 +45,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'webuj'
+project = u'Webuj'
 copyright = u'2016-2017, Conor Svensson'
 author = u'Conor Svensson'
 
@@ -113,16 +113,16 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'logo': 'webuj.png',
+    'logo': 'Webuj.png',
     'logo_name': 'true',
-    'github_user': 'webuj',
-    'github_repo': 'webuj',
+    'github_user': 'Webuj',
+    'github_repo': 'Webuj',
     'github_type': 'star',
     'github_banner': 'true',
     'travis_button': 'true',
     'codecov_button': 'true',
     'description': 'Lightweight Java library for integration with HappyUC clients',
-    'canonical_url': 'https://webuj.readthedocs.io/',
+    'canonical_url': 'https://Webuj.readthedocs.io/',
     'analytics_id': 'UA-85710619-1',
 }
 
@@ -241,7 +241,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'webuj.tex', u'webuj Documentation',
+    (master_doc, 'Webuj.tex', u'Webuj Documentation',
      u'Conor Svensson', 'manual'),
 ]
 
@@ -271,7 +271,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'webuj', u'webuj Documentation',
+    (master_doc, 'Webuj', u'Webuj Documentation',
      [author], 1)
 ]
 
@@ -285,8 +285,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'webuj', u'webuj Documentation',
-     author, 'webuj', 'Lightweight Java library for integration with HappyUC clients.',
+    (master_doc, 'Webuj', u'Webuj Documentation',
+     author, 'Webuj', 'Lightweight Java library for integration with HappyUC clients.',
      'Miscellaneous'),
 ]
 

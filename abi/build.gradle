@@ -1,4 +1,3 @@
-
 description 'HappyUC Application Binary Interface (ABI) for working with smart contracts'
 
 dependencies {

@@ -11,10 +11,10 @@ simplestorage/build/SimpleStorage
 
 for target in ${targets}; do
 
-    webuj solidity generate \
+    Webuj solidity generate \
         ../../codegen/src/test/resources/solidity/${target}.bin \
         ../../codegen/src/test/resources/solidity/${target}.abi \
-        -o /Users/Conor/code/java/webuj/integration-tests/src/test/java \
-        -p org.happyuc.webuj.generated
+        -o /Users/Conor/code/java/Webuj/integration-tests/src/test/java \
+        -p org.happyuc.Webuj.generated
 
 done

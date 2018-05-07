@@ -1,35 +1,35 @@
 .. To build this file locally ensure docutils Python package is installed and run:
    $ rst2html.py README.rst README.html
 
-webuj: Web3 Java HappyUC Ðapp API
+Webuj: Web3 Java HappyUC Ðapp API
 ==================================
 
-.. image:: https://readthedocs.org/projects/webuj/badge/?version=latest
-   :target: http://docs.webuj.io
+.. image:: https://readthedocs.org/projects/Webuj/badge/?version=latest
+   :target: http://docs.Webuj.io
    :alt: Documentation Status
 
-.. image:: https://travis-ci.org/webuj/webuj.svg?branch=master
-   :target: https://travis-ci.org/webuj/webuj
+.. image:: https://travis-ci.org/Webuj/Webuj.svg?branch=master
+   :target: https://travis-ci.org/Webuj/Webuj
    :alt: Build Status
 
-.. image:: https://codecov.io/gh/webuj/webuj/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/webuj/webuj
+.. image:: https://codecov.io/gh/Webuj/Webuj/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/Webuj/Webuj
    :alt: codecov
 
-.. image:: https://badges.gitter.im/webuj/webuj.svg
-   :target: https://gitter.im/webuj/webuj?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-   :alt: Join the chat at https://gitter.im/webuj/webuj
+.. image:: https://badges.gitter.im/Webuj/Webuj.svg
+   :target: https://gitter.im/Webuj/Webuj?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+   :alt: Join the chat at https://gitter.im/Webuj/Webuj
 
-webuj is a lightweight, highly modular, reactive, type safe Java and Android library for working with
+Webuj is a lightweight, highly modular, reactive, type safe Java and Android library for working with
 Smart Contracts and integrating with clients (nodes) on the HappyUC network:
 
-.. image:: https://raw.githubusercontent.com/webuj/webuj/master/docs/source/images/webuj_network.png
+.. image:: https://raw.githubusercontent.com/Webuj/Webuj/master/docs/source/images/webuj_network.png
 
 This allows you to work with the `HappyUC <https://www.happyuc.org/>`_ blockchain, without the
 additional overhead of having to write your own integration code for the platform.
 
 The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
-overview of blockchain, HappyUC and webuj.
+overview of blockchain, HappyUC and Webuj.
 
 
 Features
@@ -52,7 +52,7 @@ Features
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
-- Support for JP Morgan's Quorum via `webuj-quorum <https://github.com/webuj/quorum>`_
+- Support for JP Morgan's Quorum via `Webuj-quorum <https://github.com/Webuj/quorum>`_
 
 
 It has five runtime dependencies:
@@ -70,13 +70,13 @@ It also uses `JavaPoet <https://github.com/square/javapoet>`_ for generating sma
 wrappers.
 
 Full project documentation is available at
-`docs.webuj.io <http://docs.webuj.io>`_.
+`docs.Webuj.io <http://docs.Webuj.io>`_.
 
 
 Donate
 ------
 
-You can help fund the development of webuj by donating to the following wallet addresses:
+You can help fund the development of Webuj by donating to the following wallet addresses:
 
 +----------+--------------------------------------------+
 | HappyUC | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |
@@ -94,8 +94,8 @@ Commercial support and training is available from `blk.io <https://blk.io>`_.
 Quickstart
 ----------
 
-A `webuj sample project <https://github.com/webuj/sample-project-gradle>`_ is available that
-demonstrates a number of core features of HappyUC with webuj, including:
+A `Webuj sample project <https://github.com/Webuj/sample-project-gradle>`_ is available that
+demonstrates a number of core features of HappyUC with Webuj, including:
 
 - Connecting to a node on the HappyUC network
 - Loading an HappyUC wallet file
@@ -119,7 +119,7 @@ Java 8:
 .. code-block:: xml
 
    <dependency>
-     <groupId>org.webuj</groupId>
+     <groupId>org.Webuj</groupId>
      <artifactId>core</artifactId>
      <version>3.3.1</version>
    </dependency>
@@ -129,7 +129,7 @@ Android:
 .. code-block:: xml
 
    <dependency>
-     <groupId>org.webuj</groupId>
+     <groupId>org.Webuj</groupId>
      <artifactId>core</artifactId>
      <version>3.3.1-android</version>
    </dependency>
@@ -141,13 +141,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.webuj:core:3.3.1')
+   compile ('org.Webuj:core:3.3.1')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.webuj:core:3.3.1-android')
+   compile ('org.Webuj:core:3.3.1-android')
 
 
 Start a client
@@ -170,13 +170,13 @@ Or use `Infura <https://infura.io/>`_, which provides **free clients** running i
 
 .. code-block:: java
 
-   webuj web3 = webuj.build(new HttpService("https://ropsten.infura.io/your-token"));
+   Webuj web3 = Webuj.build(new HttpService("https://ropsten.infura.io/your-token"));
 
 For further information refer to
-`Using Infura with webuj <https://webuj.github.io/webuj/infura.html>`_
+`Using Infura with Webuj <https://Webuj.github.io/Webuj/infura.html>`_
 
 Instructions on obtaining Huc to transact on the network can be found in the
-`testnet section of the docs <http://docs.webuj.io/transactions.html#happyuc-testnets>`_.
+`testnet section of the docs <http://docs.Webuj.io/transactions.html#happyuc-testnets>`_.
 
 
 Start sending requests
@@ -186,25 +186,25 @@ To send synchronous requests:
 
 .. code-block:: java
 
-   webuj web3 = webuj.build(new HttpService());  // defaults to http://localhost:8545/
-   Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
-   String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+   Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
+   Web3ClientVersion webuClientVersion = web3.webuClientVersion().send();
+   String clientVersion = webuClientVersion.getWeb3ClientVersion();
 
 
 To send asynchronous requests using a CompletableFuture (Future on Android):
 
 .. code-block:: java
 
-   webuj web3 = webuj.build(new HttpService());  // defaults to http://localhost:8545/
-   Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
-   String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+   Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
+   Web3ClientVersion webuClientVersion = web3.webuClientVersion().sendAsync().get();
+   String clientVersion = webuClientVersion.getWeb3ClientVersion();
 
 To use an RxJava Observable:
 
 .. code-block:: java
 
-   webuj web3 = webuj.build(new HttpService());  // defaults to http://localhost:8545/
-   web3.web3ClientVersion().observable().subscribe(x -> {
+   Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
+   web3.webuClientVersion().observable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -213,34 +213,34 @@ To use an RxJava Observable:
 
 .. code-block:: java
 
-   webuj web3 = webujFactory.build(new HttpService());  // defaults to http://localhost:8545/
+   Webuj web3 = webujFactory.build(new HttpService());  // defaults to http://localhost:8545/
    ...
 
 
 IPC
 ---
 
-webuj also supports fast inter-process communication (IPC) via file sockets to clients running on
-the same host as webuj. To connect simply use the relevant *IpcService* implementation instead of
+Webuj also supports fast inter-process communication (IPC) via file sockets to clients running on
+the same host as Webuj. To connect simply use the relevant *IpcService* implementation instead of
 *HttpService* when you create your service:
 
 .. code-block:: java
 
    // OS X/Linux/Unix:
-   webuj web3 = webuj.build(new UnixIpcService("/path/to/socketfile"));
+   Webuj web3 = Webuj.build(new UnixIpcService("/path/to/socketfile"));
    ...
 
    // Windows
-   webuj web3 = webuj.build(new WindowsIpcService("/path/to/namedpipefile"));
+   Webuj web3 = Webuj.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
 
-**Note:** IPC is not currently available on webuj-android.
+**Note:** IPC is not currently available on Webuj-android.
 
 
 Working with smart contracts with Java smart contract wrappers
 --------------------------------------------------------------
 
-webuj can auto-generate smart contract wrapper code to deploy and interact with smart contracts
+Webuj can auto-generate smart contract wrapper code to deploy and interact with smart contracts
 without leaving the JVM.
 
 To generate the wrapper code, compile your smart contract:
@@ -249,21 +249,21 @@ To generate the wrapper code, compile your smart contract:
 
    $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
 
-Then generate the wrapper code using webuj's `Command line tools`_:
+Then generate the wrapper code using Webuj's `Command line tools`_:
 
 .. code-block:: bash
 
-   webuj solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   Webuj solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Now you can create and deploy your smart contract:
 
 .. code-block:: java
 
-   webuj web3 = webuj.build(new HttpService());  // defaults to http://localhost:8545/
+   Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
 
    YourSmartContract contract = YourSmartContract.deploy(
-           <webuj>, <credentials>,
+           <Webuj>, <credentials>,
            GAS_PRICE, GAS_LIMIT,
            <param1>, ..., <paramN>).send();  // constructor params
 
@@ -275,12 +275,12 @@ Alternatively, if you use `Truffle <http://truffleframework.com/>`_, you can mak
    $ truffle compile
    $ truffle deploy
 
-Then generate the wrapper code using webuj's `Command line tools`_:
+Then generate the wrapper code using Webuj's `Command line tools`_:
 
 .. code-block:: bash
 
-   $ cd /path/to/your/webuj/java/project
-   $ webuj truffle generate /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+   $ cd /path/to/your/Webuj/java/project
+   $ Webuj truffle generate /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
 
 Whether using `Truffle` or `solc` directly, either way you get a ready-to-use Java wrapper for your contract.
 
@@ -289,7 +289,7 @@ So, to use an existing contract:
 .. code-block:: java
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>|<ensName>", <webuj>, <credentials>, GAS_PRICE, GAS_LIMIT);
+           "0x<address>|<ensName>", <Webuj>, <credentials>, GAS_PRICE, GAS_LIMIT);
 
 To transact with a smart contract:
 
@@ -305,20 +305,20 @@ To call a smart contract:
 
    Type result = contract.someMethod(<param1>, ...).send();
 
-For more information refer to `Smart Contracts <http://docs.webuj.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
+For more information refer to `Smart Contracts <http://docs.Webuj.io/smart_contracts.html#solidity-smart-contract-wrappers>`_.
 
 
 Filters
 -------
 
-webuj functional-reactive nature makes it really simple to setup observers that notify subscribers
+Webuj functional-reactive nature makes it really simple to setup observers that notify subscribers
 of events taking place on the blockchain.
 
 To receive all new blocks as they are added to the blockchain:
 
 .. code-block:: java
 
-   Subscription subscription = webuj.blockObservable(false).subscribe(block -> {
+   Subscription subscription = Webuj.blockObservable(false).subscribe(block -> {
        ...
    });
 
@@ -326,7 +326,7 @@ To receive all new transactions as they are added to the blockchain:
 
 .. code-block:: java
 
-   Subscription subscription = webuj.transactionObservable().subscribe(tx -> {
+   Subscription subscription = Webuj.transactionObservable().subscribe(tx -> {
        ...
    });
 
@@ -335,7 +335,7 @@ been grouped into a block together):
 
 .. code-block:: java
 
-   Subscription subscription = webuj.pendingTransactionObservable().subscribe(tx -> {
+   Subscription subscription = Webuj.pendingTransactionObservable().subscribe(tx -> {
        ...
    });
 
@@ -350,7 +350,7 @@ blocks being created:
    });
 
 There are a number of other transaction and block replay Observables described in the
-`docs <http://docs.webuj.io/filters.html>`_.
+`docs <http://docs.Webuj.io/filters.html>`_.
 
 Topic filters are also supported:
 
@@ -359,7 +359,7 @@ Topic filters are also supported:
    HucFilter filter = new HucFilter(DefaultBlockParameterName.EARLIEST,
            DefaultBlockParameterName.LATEST, <contract-address>)
                 .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
-   webuj.hucLogObservable(filter).subscribe(log -> {
+   Webuj.hucLogObservable(filter).subscribe(log -> {
        ...
    });
 
@@ -371,22 +371,22 @@ Subscriptions should always be cancelled when no longer required:
 
 **Note:** filters are not supported on Infura.
 
-For further information refer to `Filters and Events <http://docs.webuj.io/filters.html>`_ and the
-`webujRx <https://github.com/happyuc-project/webu.java/blob/master/src/core/main/java/org/webuj/protocol/rx/webujRx.java>`_
+For further information refer to `Filters and Events <http://docs.Webuj.io/filters.html>`_ and the
+`webujRx <https://github.com/happyuc-project/webu.java/blob/master/src/core/main/java/org/Webuj/protocol/rx/webujRx.java>`_
 interface.
 
 
 Transactions
 ------------
 
-webuj provides support for both working with HappyUC wallet files (recommended) and HappyUC
+Webuj provides support for both working with HappyUC wallet files (recommended) and HappyUC
 client admin commands for sending transactions.
 
 To send Huc to another party using your HappyUC wallet file:
 
 .. code-block:: java
 		
-   webuj web3 = webuj.build(new HttpService());  // defaults to http://localhost:8545/
+   Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
            web3, credentials, "0x<address>|<ensName>",
@@ -397,11 +397,11 @@ Or if you wish to create your own custom transaction:
 
 .. code-block:: java
 
-   webuj web3 = webuj.build(new HttpService());  // defaults to http://localhost:8545/
+   Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
 
    // get the next available nonce
-   HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(
+   HucGetTransactionCount hucGetTransactionCount = Webuj.hucGetTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
    BigInteger nonce = hucGetTransactionCount.getTransactionCount();
 
@@ -412,10 +412,10 @@ Or if you wish to create your own custom transaction:
    // sign & send our transaction
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
    String hexValue = Hex.toHexString(signedMessage);
-   HucSendTransaction hucSendTransaction = webuj.hucSendRawTransaction(hexValue).send();
+   HucSendTransaction hucSendTransaction = Webuj.hucSendRawTransaction(hexValue).send();
    // ...
 
-Although it's far simpler using webuj's `Transfer <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/tx/Transfer.java>`_
+Although it's far simpler using Webuj's `Transfer <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/Transfer.java>`_
 for transacting with Huc.
 
 Using an HappyUC client's admin commands (make sure you have your wallet in the client's
@@ -423,8 +423,8 @@ keystore):
 
 .. code-block:: java
   		
-   Admin webuj = Admin.build(new HttpService());  // defaults to http://localhost:8545/
-   PersonalUnlockAccount personalUnlockAccount = webuj.personalUnlockAccount("0x000...", "a password").sendAsync().get();
+   Admin Webuj = Admin.build(new HttpService());  // defaults to http://localhost:8545/
+   PersonalUnlockAccount personalUnlockAccount = Webuj.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
        // send a transaction
    }
@@ -433,21 +433,21 @@ If you want to make use of Parity's
 `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__ or
 `Trace <https://github.com/paritytech/parity/wiki/JSONRPC-trace-module>`_, or Ghuc's
 `Personal <https://github.com/happyuc-project/go-happyuc/wiki/Management-APIs#personal>`__ client APIs,
-you can use the *org.webuj:parity* and *org.webuj:ghuc* modules respectively.
+you can use the *org.Webuj:parity* and *org.Webuj:ghuc* modules respectively.
 
 
 Command line tools
 ------------------
 
-A webuj fat jar is distributed with each release providing command line tools. The command line
-tools allow you to use some of the functionality of webuj from the command line:
+A Webuj fat jar is distributed with each release providing command line tools. The command line
+tools allow you to use some of the functionality of Webuj from the command line:
 
 - Wallet creation
 - Wallet password management
 - Transfer of funds from one wallet to another
 - Generate Solidity smart contract function wrappers
 
-Please refer to the `documentation <http://docs.webuj.io/command_line.html>`_ for further
+Please refer to the `documentation <http://docs.Webuj.io/command_line.html>`_ for further
 information.
 
 
@@ -456,28 +456,28 @@ Further details
 
 In the Java 8 build:
 
-- webuj provides type safe access to all responses. Optional or null responses
+- Webuj provides type safe access to all responses. Optional or null responses
   are wrapped in Java 8's
   `Optional <https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html>`_ type.
 - Asynchronous requests are wrapped in a Java 8
   `CompletableFutures <https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>`_.
-  webuj provides a wrapper around all async requests to ensure that any exceptions during
+  Webuj provides a wrapper around all async requests to ensure that any exceptions during
   execution will be captured rather then silently discarded. This is due to the lack of support
   in *CompletableFutures* for checked exceptions, which are often rethrown as unchecked exception
   causing problems with detection. See the
-  `Async.run() <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/utils/Async.java>`_ and its associated
-  `test <https://github.com/happyuc-project/webu.java/blob/master/core/src/test/java/org/webuj/utils/AsyncTest.java>`_ for details.
+  `Async.run() <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/utils/Async.java>`_ and its associated
+  `test <https://github.com/happyuc-project/webu.java/blob/master/core/src/test/java/org/Webuj/utils/AsyncTest.java>`_ for details.
 
 In both the Java 8 and Android builds:
 
 - Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
   For simple results, you can obtain the quantity as a String via
-  `Response <https://github.com/happyuc-project/webu.java/blob/master/src/main/java/org/webuj/protocol/core/Response.java>`_.getResult().
+  `Response <https://github.com/happyuc-project/webu.java/blob/master/src/main/java/org/Webuj/protocol/core/Response.java>`_.getResult().
 - It's also possible to include the raw JSON payload in responses via the *includeRawResponse*
   parameter, present in the
-  `HttpService <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/http/HttpService.java>`_
+  `HttpService <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/http/HttpService.java>`_
   and
-  `IpcService <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/ipc/IpcService.java>`_
+  `IpcService <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/ipc/IpcService.java>`_
   classes.
 
 
@@ -488,7 +488,7 @@ Tested clients
 - Parity
 
 You can run the integration test class
-`CoreIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/webuj/protocol/core/CoreIT.java>`_
+`CoreIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/core/CoreIT.java>`_
 to verify clients.
 
 
@@ -502,7 +502,7 @@ For a pure Java implementation of the HappyUC client, check out
 `HappyUC Harmony <https://github.com/huc-camp/happyuc-harmony>`_.
 
 
-Projects using webuj
+Projects using Webuj
 --------------------
 
 Please submit a pull request if you wish to include your project on the list:
@@ -519,7 +519,7 @@ Please submit a pull request if you wish to include your project on the list:
 - `Kundera-HappyUC data importer and sync utility <https://github.com/impetus-opensource/Kundera/tree/trunk/src/kundera-happyuc>`_ by `@impetus-opensource <https://github.com/impetus-opensource>`_
 
 
-Companies using webuj
+Companies using Webuj
 ---------------------
 
 Please submit a pull request if you wish to include your company on the list:
@@ -538,7 +538,7 @@ Please submit a pull request if you wish to include your company on the list:
 Build instructions
 ------------------
 
-webuj includes integration tests for running against a live HappyUC client. If you do not have a
+Webuj includes integration tests for running against a live HappyUC client. If you do not have a
 client running, you can exclude their execution as per the below instructions.
 
 To run a full build (excluding integration tests):

@@ -17,14 +17,8 @@ public class InfuraHttpServiceTest {
         assertTrue(buildClientVersionHeader("", false).isEmpty());
         assertTrue(buildClientVersionHeader(null, false).isEmpty());
 
-        assertThat(buildClientVersionHeader("ghuc 1.4.19", true),
-                equalTo(Collections.singletonMap(
-                        "Infura-HappyUC-Preferred-Client",
-                        "ghuc 1.4.19")));
+        assertThat(buildClientVersionHeader("ghuc 1.4.19", true), equalTo(Collections.singletonMap("Infura-HappyUC-Preferred-Client", "ghuc 1.4.19")));
 
-        assertThat(buildClientVersionHeader("ghuc 1.4.19", false),
-                is(Collections.singletonMap(
-                        "Infura-HappyUC-Preferred-Client",
-                        "ghuc 1.4.19; required=false")));
+        assertThat(buildClientVersionHeader("ghuc 1.4.19", false), is(Collections.singletonMap("Infura-HappyUC-Preferred-Client", "ghuc 1.4.19; required=false")));
     }
 }

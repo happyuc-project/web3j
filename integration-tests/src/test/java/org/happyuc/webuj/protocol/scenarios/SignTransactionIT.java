@@ -30,8 +30,7 @@ public class SignTransactionIT extends Scenario {
         byte[] encoded = TransactionEncoder.encode(rawTransaction);
         byte[] hashed = Hash.sha3(encoded);
 
-        HucSign hucSign = webuj.hucSign(ALICE.getAddress(), Numeric.toHexString(hashed))
-                .sendAsync().get();
+        HucSign hucSign = webuj.hucSign(ALICE.getAddress(), Numeric.toHexString(hashed)).sendAsync().get();
 
         String signature = hucSign.getSignature();
         assertNotNull(signature);
@@ -41,9 +40,6 @@ public class SignTransactionIT extends Scenario {
     private static RawTransaction createTransaction() {
         BigInteger value = Convert.toWei("1", Convert.Unit.HUC).toBigInteger();
 
-        return RawTransaction.createHucTransaction(
-                BigInteger.valueOf(1048587), BigInteger.valueOf(500000), BigInteger.valueOf(500000),
-                "0x9C98E381Edc5Fe1Ac514935F3Cc3eDAA764cf004",
-                value);
+        return RawTransaction.createHucTransaction(BigInteger.valueOf(1048587), BigInteger.valueOf(500000), BigInteger.valueOf(500000), "0x9C98E381Edc5Fe1Ac514935F3Cc3eDAA764cf004", value);
     }
 }

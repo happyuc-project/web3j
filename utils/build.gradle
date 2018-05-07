@@ -1,5 +1,5 @@
 
-description 'Minimal set of webuj utility classes'
+description 'Minimal set of Webuj utility classes'
 
 dependencies {
     compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"

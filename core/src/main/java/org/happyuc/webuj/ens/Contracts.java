@@ -20,8 +20,7 @@ public class Contracts {
             case ChainId.RINKEBY:
                 return RINKEBY;
             default:
-                throw new EnsResolutionException(
-                        "Unable to resolve ENS registry contract for network id: " + chainId);
+                throw new EnsResolutionException("Unable to resolve ENS registry contract for network id: " + chainId);
         }
     }
 }

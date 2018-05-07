@@ -17,8 +17,7 @@ import org.happyuc.webuj.protocol.core.Response;
 /**
  * A jackson deserializer that sets the rawResponse variable of Response objects.
  */
-public class RawResponseDeserializer
-        extends StdDeserializer<Response> implements ResolvableDeserializer {
+public class RawResponseDeserializer extends StdDeserializer<Response> implements ResolvableDeserializer {
 
     private final JsonDeserializer<?> defaultDeserializer;
 

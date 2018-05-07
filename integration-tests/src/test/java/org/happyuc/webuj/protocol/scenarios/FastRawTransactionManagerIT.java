@@ -40,26 +40,20 @@ public class FastRawTransactionManagerIT extends Scenario {
     public void testTransactionPolling() throws Exception {
 
         List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
-        FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                webuj, ALICE,
-                new PollingTransactionReceiptProcessor(
-                        webuj, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
+        FastRawTransactionManager transactionManager = new FastRawTransactionManager(webuj, ALICE, new PollingTransactionReceiptProcessor(webuj, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
 
         Transfer transfer = new Transfer(webuj, transactionManager);
         BigInteger gasPrice = transfer.requestCurrentGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
 
-            Future<TransactionReceipt> transactionReceiptFuture =
-                    createTransaction(transfer, gasPrice).sendAsync();
+            Future<TransactionReceipt> transactionReceiptFuture = createTransaction(transfer, gasPrice).sendAsync();
             transactionReceipts.add(transactionReceiptFuture);
         }
 
-        for (int i = 0; i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH
-                && !transactionReceipts.isEmpty(); i++) {
+        for (int i = 0; i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !transactionReceipts.isEmpty(); i++) {
 
-            for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator();
-                    iterator.hasNext(); ) {
+            for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator(); iterator.hasNext(); ) {
                 Future<TransactionReceipt> transactionReceiptFuture = iterator.next();
 
                 if (transactionReceiptFuture.isDone()) {
@@ -79,22 +73,19 @@ public class FastRawTransactionManagerIT extends Scenario {
     public void testTransactionQueuing() throws Exception {
 
         Map<String, Object> pendingTransactions = new ConcurrentHashMap<>();
-        ConcurrentLinkedQueue<TransactionReceipt> transactionReceipts =
-                new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<TransactionReceipt> transactionReceipts = new ConcurrentLinkedQueue<>();
 
-        FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                webuj, ALICE,
-                new QueuingTransactionReceiptProcessor(webuj, new Callback() {
-                    @Override
-                    public void accept(TransactionReceipt transactionReceipt) {
-                        transactionReceipts.add(transactionReceipt);
-                    }
+        FastRawTransactionManager transactionManager = new FastRawTransactionManager(webuj, ALICE, new QueuingTransactionReceiptProcessor(webuj, new Callback() {
+            @Override
+            public void accept(TransactionReceipt transactionReceipt) {
+                transactionReceipts.add(transactionReceipt);
+            }
 
-                    @Override
-                    public void exception(Exception exception) {
+            @Override
+            public void exception(Exception exception) {
 
-                    }
-                }, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH, POLLING_FREQUENCY));
+            }
+        }, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH, POLLING_FREQUENCY));
 
         Transfer transfer = new Transfer(webuj, transactionManager);
 
@@ -105,8 +96,7 @@ public class FastRawTransactionManagerIT extends Scenario {
             pendingTransactions.put(transactionReceipt.getTransactionHash(), new Object());
         }
 
-        for (int i = 0; i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH
-                && !pendingTransactions.isEmpty(); i++) {
+        for (int i = 0; i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !pendingTransactions.isEmpty(); i++) {
             for (TransactionReceipt transactionReceipt : transactionReceipts) {
                 assertFalse(transactionReceipt.getBlockHash().isEmpty());
                 pendingTransactions.remove(transactionReceipt.getTransactionHash());
@@ -120,10 +110,7 @@ public class FastRawTransactionManagerIT extends Scenario {
     }
 
 
-    private RemoteCall<TransactionReceipt> createTransaction(
-            Transfer transfer, BigInteger gasPrice) {
-        return transfer.sendFunds(
-                BOB.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI,
-                gasPrice, Transfer.GAS_LIMIT);
+    private RemoteCall<TransactionReceipt> createTransaction(Transfer transfer, BigInteger gasPrice) {
+        return transfer.sendFunds(BOB.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI, gasPrice, Transfer.GAS_LIMIT);
     }
 }

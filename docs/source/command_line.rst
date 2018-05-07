@@ -1,8 +1,8 @@
 Command Line Tools
 ==================
 
-A webuj fat jar is distributed with each release providing command line tools. The command line
-allow you to use some of the functionality of webuj from your terminal:
+A Webuj fat jar is distributed with each release providing command line tools. The command line
+allow you to use some of the functionality of Webuj from your terminal:
 
 These tools provide:
 
@@ -14,25 +14,25 @@ These tools provide:
 The command line tools can be obtained as a zipfile/tarball from the
 `releases <https://github.com/happyuc-project/webu.java/releases/latest>`_ page of the project repository, under
 the **Downloads** section, or for OS X users via
-`Homebrew <https://github.com/webuj/homebrew-webuj>`_, or for Arch linux users via the
-`AUR <https://aur.archlinux.org/packages/webuj/>`_.
+`Homebrew <https://github.com/Webuj/homebrew-Webuj>`_, or for Arch linux users via the
+`AUR <https://aur.archlinux.org/packages/Webuj/>`_.
 
 .. code-block:: bash
 
-   brew tap webuj/webuj
-   brew install webuj
+   brew tap Webuj/Webuj
+   brew install Webuj
 
 To run via the zipfile, simply extract the zipfile and run the binary:
 
 .. code-block:: bash
 
-   $ unzip webuj-<version>.zip
-      creating: webuj-3.0.0/lib/
-     inflating: webuj-3.0.0/lib/core-1.0.2-all.jar
-      creating: webuj-3.0.0/bin/
-     inflating: webuj-3.0.0/bin/webuj
-     inflating: webuj-3.0.0/bin/webuj.bat
-   $ ./webuj-<version>/bin/webuj
+   $ unzip Webuj-<version>.zip
+      creating: Webuj-3.0.0/lib/
+     inflating: Webuj-3.0.0/lib/core-1.0.2-all.jar
+      creating: Webuj-3.0.0/bin/
+     inflating: Webuj-3.0.0/bin/Webuj
+     inflating: Webuj-3.0.0/bin/Webuj.bat
+   $ ./Webuj-<version>/bin/Webuj
 
                  _      _____ _     _
                 | |    |____ (_)   (_)
@@ -43,7 +43,7 @@ To run via the zipfile, simply extract the zipfile and run the binary:
                             _/ |
                            |__/
 
-   Usage: webuj version|wallet|solidity ...
+   Usage: Webuj version|wallet|solidity ...
 
 
 Wallet tools
@@ -53,28 +53,28 @@ To generate a new HappyUC wallet:
 
 .. code-block:: bash
 
-   $ webuj wallet create
+   $ Webuj wallet create
 
 To update the password for an existing wallet:
 
 .. code-block:: bash
 
-   $ webuj wallet update <walletfile>
+   $ Webuj wallet update <walletfile>
 
 To send Huc to another address:
 
 .. code-block:: bash
 
-   $ webuj wallet send <walletfile> 0x<address>|<ensName>
+   $ Webuj wallet send <walletfile> 0x<address>|<ensName>
 
 When sending Huc to another address you will be asked a series of questions before the
 transaction takes place. See the below for a full example
 
-The following example demonstrates using webuj to send Huc to another wallet.
+The following example demonstrates using Webuj to send Huc to another wallet.
 
 .. code-block:: bash
 
-   $ ./webuj-<version>/bin/webuj wallet send <walletfile> 0x<address>|<ensName>
+   $ ./Webuj-<version>/bin/Webuj wallet send <walletfile> 0x<address>|<ensName>
 
                  _      _____ _     _
                 | |    |____ (_)   (_)

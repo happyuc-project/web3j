@@ -3,7 +3,7 @@ package org.happyuc.webuj.ens;
 import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.ens.contracts.generated.ENS;
 import org.happyuc.webuj.ens.contracts.generated.PublicResolver;
-import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
 import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
 import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
@@ -21,17 +21,17 @@ public class EnsResolver {
     static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
     static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
 
-    private final webuj webuj;
+    private final Webuj webuj;
     private final TransactionManager transactionManager;
     private long syncThreshold;  // non-final in case this value needs to be tweaked
 
-    public EnsResolver(webuj webuj, long syncThreshold) {
+    public EnsResolver(Webuj webuj, long syncThreshold) {
         this.webuj = webuj;
         transactionManager = new ClientTransactionManager(webuj, null);  // don't use empty string
         this.syncThreshold = syncThreshold;
     }
 
-    public EnsResolver(webuj webuj) {
+    public EnsResolver(Webuj webuj) {
         this(webuj, DEFAULT_SYNC_THRESHOLD);
     }
 
@@ -45,6 +45,7 @@ public class EnsResolver {
 
     /**
      * Provides an access to a valid public resolver in order to access other API methods.
+     *
      * @param ensName our user input ENS name
      * @return PublicResolver
      */
@@ -70,7 +71,7 @@ public class EnsResolver {
             PublicResolver resolver = obtainPublicResolver(contractId);
 
             byte[] nameHash = NameHash.nameHashAsBytes(contractId);
-            String contractAddress = null;
+            String contractAddress;
             try {
                 contractAddress = resolver.addr(nameHash).send();
             } catch (Exception e) {
@@ -90,6 +91,7 @@ public class EnsResolver {
     /**
      * Reverse name resolution as documented in the
      * <a href="https://docs.ens.domains/en/latest/userguide.html#reverse-name-resolution">specification</a>.
+     *
      * @param address an happyuc address, example: "0x314159265dd8dbb310642f98f50c066173c1259b"
      * @return a EnsName registered for provided address
      */
@@ -120,27 +122,22 @@ public class EnsResolver {
         NetVersion netVersion = webuj.netVersion().send();
         String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
-        ENS ensRegistry = ENS.load(
-                registryContract, webuj, transactionManager,
-                ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
+        ENS ensRegistry = ENS.load(registryContract, webuj, transactionManager, ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
 
         String resolverAddress = ensRegistry.resolver(nameHash).send();
-        PublicResolver resolver = PublicResolver.load(
-                resolverAddress, webuj, transactionManager,
-                ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
+        PublicResolver resolver = PublicResolver.load(resolverAddress, webuj, transactionManager, ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
 
         return resolver;
     }
 
     boolean isSynced() throws Exception {
         HucSyncing hucSyncing = webuj.hucSyncing().send();
-        if (ethSyncing.isSyncing()) {
+        if (hucSyncing.isSyncing()) {
             return false;
         } else {
-            HucBlock hucBlock =
-                    webuj.hucGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
+            HucBlock hucBlock = webuj.hucGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
             long timestamp = hucBlock.getBlock().getTimestamp().longValueExact() * 1000;
 
             return System.currentTimeMillis() - syncThreshold < timestamp;

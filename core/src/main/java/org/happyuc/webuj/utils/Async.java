@@ -44,8 +44,7 @@ public class Async {
      * @return new ScheduledExecutorService
      */
     public static ScheduledExecutorService defaultExecutorService() {
-        ScheduledExecutorService scheduledExecutorService =
-                Executors.newScheduledThreadPool(getCpuCount());
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(getCpuCount());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown(scheduledExecutorService)));
 

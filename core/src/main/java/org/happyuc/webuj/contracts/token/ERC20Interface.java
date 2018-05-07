@@ -3,17 +3,17 @@ package org.happyuc.webuj.contracts.token;
 import java.math.BigInteger;
 import java.util.List;
 
-import rx.Observable;
-
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
 import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
 
+import rx.Observable;
+
 /**
  * The HappyUC ERC-20 token standard.
  * <p>
- *     Implementations should provide the concrete <code>ApprovalEventResponse</code> and
- *     <code>TransferEventResponse</code> from their token as the generic types "R" amd "T".
+ * Implementations should provide the concrete <code>ApprovalEventResponse</code> and
+ * <code>TransferEventResponse</code> from their token as the generic types "R" amd "T".
  * </p>
  *
  * @see <a href="https://github.com/happyuc-project/EIPs/blob/master/EIPS/eip-20-token-standard.md">EIPs/EIPS/eip-20-token-standard.md</a>
@@ -30,7 +30,6 @@ public interface ERC20Interface<R, T> extends ERC20BasicInterface<T> {
 
     List<R> getApprovalEvents(TransactionReceipt transactionReceipt);
 
-    Observable<R> approvalEventObservable(DefaultBlockParameter startBlock,
-            DefaultBlockParameter endBlock);
+    Observable<R> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
 
 }

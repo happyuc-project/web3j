@@ -28,7 +28,6 @@ public class Ufixed extends FixedPointType {
 
     @Override
     boolean valid(int mBitSize, int nBitSize, BigInteger value) {
-        return super.valid(mBitSize, nBitSize, value)
-                && value.signum() != -1;
+        return super.valid(mBitSize, nBitSize, value) && value.signum() != -1;
     }
 }

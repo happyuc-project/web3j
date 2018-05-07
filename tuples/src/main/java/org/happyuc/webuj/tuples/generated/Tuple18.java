@@ -5,7 +5,7 @@ import org.happyuc.webuj.tuples.Tuple;
 /**
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
- * <p>Please use org.happyuc.webuj.codegen.TupleGenerator in the 
+ * <p>Please use org.happyuc.webuj.codegen.TupleGenerator in the
  * <a href="https://github.com/happyuc-project/webu.java/tree/master/codegen">codegen module</a> to update.
  */
 public final class Tuple18<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> implements Tuple {
@@ -233,25 +233,6 @@ public final class Tuple18<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T1
 
     @Override
     public String toString() {
-        return "Tuple18{" +
-                "value1=" + value1 +
-                ", value2=" + value2 +
-                ", value3=" + value3 +
-                ", value4=" + value4 +
-                ", value5=" + value5 +
-                ", value6=" + value6 +
-                ", value7=" + value7 +
-                ", value8=" + value8 +
-                ", value9=" + value9 +
-                ", value10=" + value10 +
-                ", value11=" + value11 +
-                ", value12=" + value12 +
-                ", value13=" + value13 +
-                ", value14=" + value14 +
-                ", value15=" + value15 +
-                ", value16=" + value16 +
-                ", value17=" + value17 +
-                ", value18=" + value18 +
-                "}";
+        return "Tuple18{" + "value1=" + value1 + ", value2=" + value2 + ", value3=" + value3 + ", value4=" + value4 + ", value5=" + value5 + ", value6=" + value6 + ", value7=" + value7 + ", value8=" + value8 + ", value9=" + value9 + ", value10=" + value10 + ", value11=" + value11 + ", value12=" + value12 + ", value13=" + value13 + ", value14=" + value14 + ", value15=" + value15 + ", value16=" + value16 + ", value17=" + value17 + ", value18=" + value18 + "}";
     }
 }
