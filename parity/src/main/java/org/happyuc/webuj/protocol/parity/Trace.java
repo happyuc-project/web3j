@@ -15,15 +15,11 @@ import org.happyuc.webuj.protocol.parity.methods.response.ParityTracesResponse;
  * * JSON-RPC Parity traces API request object building factory.
  */
 public interface Trace {
-    Request<?, ParityFullTraceResponse> traceCall(
-            Transaction transaction,
-            List<String> traceTypes,
-            DefaultBlockParameter blockParameter);
+    Request<?, ParityFullTraceResponse> traceCall(Transaction transaction, List<String> traceTypes, DefaultBlockParameter blockParameter);
 
     Request<?, ParityFullTraceResponse> traceRawTransaction(String data, List<String> traceTypes);
 
-    Request<?, ParityFullTraceResponse> traceReplayTransaction(
-            String hash, List<String> traceTypes);
+    Request<?, ParityFullTraceResponse> traceReplayTransaction(String hash, List<String> traceTypes);
 
     Request<?, ParityTracesResponse> traceBlock(DefaultBlockParameter blockParameter);
 

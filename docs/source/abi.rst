@@ -6,7 +6,7 @@ smart contracts. The types defined in the ABI are the same as those you encounte
 :doc:`smart_contracts` with Solidity - i.e. *uint8, ..., uint256, int8, ..., int256, bool, string,*
 etc.
 
-The `ABI module <https://github.com/happyuc-project/webu.java/tree/master/abi>`_ in webuj provides full support
+The `ABI module <https://github.com/happyuc-project/webu.java/tree/master/abi>`_ in Webuj provides full support
 for the ABI specification, and includes:
 
 - Java implementations of all ABI types, including conversion from and to native Java types
@@ -16,7 +16,7 @@ for the ABI specification, and includes:
 Type mappings
 -------------
 
-The native Java to ABI type mappings used within webuj are as follows:
+The native Java to ABI type mappings used within Webuj are as follows:
 
 - boolean -> bool
 - BigInteger -> uint/int
@@ -30,8 +30,8 @@ integer values.
 `Fixed point types <http://solidity.readthedocs.io/en/develop/abi-spec.html#types>`_
 have been defined for HappyUC, but are
 `not currently implemented in Solidity <https://github.com/happyuc-project/solidity/issues/409>`_,
-hence webuj does not currently support them (they were provided in versions prior to
-3.x). Once available in Solidity, they will be reintroduced back into the webuj ABI module.
+hence Webuj does not currently support them (they were provided in versions prior to
+3.x). Once available in Solidity, they will be reintroduced back into the Webuj ABI module.
 
 For more information on using ABI types in Java, refer to :ref:`smart-contract-wrappers`.
 
@@ -39,7 +39,7 @@ Further details
 ---------------
 
 Please refer to the various
-`ABI unit tests <https://github.com/happyuc-project/webu.java/tree/master/abi/src/test/java/org/webuj/abi>`_
+`ABI unit tests <https://github.com/happyuc-project/webu.java/tree/master/abi/src/test/java/org/Webuj/abi>`_
 for encoding/decoding examples.
 
 A full ABI specification is maintained with the

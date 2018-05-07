@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Collection {
 
-    static String[] EMPTY_STRING_ARRAY = { };
+    static String[] EMPTY_STRING_ARRAY = {};
 
     private Collection() { }
 

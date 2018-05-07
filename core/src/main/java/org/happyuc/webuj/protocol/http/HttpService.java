@@ -25,8 +25,7 @@ import org.happyuc.webuj.protocol.exceptions.ClientConnectionException;
  */
 public class HttpService extends Service {
 
-    public static final MediaType JSON_MEDIA_TYPE
-            = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     public static final String DEFAULT_URL = "http://localhost:8545/";
 
@@ -95,11 +94,7 @@ public class HttpService extends Service {
         RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, request);
         Headers headers = buildHeaders();
 
-        okhttp3.Request httpRequest = new okhttp3.Request.Builder()
-                .url(url)
-                .headers(headers)
-                .post(requestBody)
-                .build();
+        okhttp3.Request httpRequest = new okhttp3.Request.Builder().url(url).headers(headers).post(requestBody).build();
 
         okhttp3.Response response = httpClient.newCall(httpRequest).execute();
         if (response.isSuccessful()) {
@@ -110,8 +105,7 @@ public class HttpService extends Service {
                 return null;
             }
         } else {
-            throw new ClientConnectionException(
-                    "Invalid response received: " + response.body());
+            throw new ClientConnectionException("Invalid response received: " + response.body());
         }
     }
 
@@ -128,13 +122,11 @@ public class HttpService extends Service {
 
             long size = buffer.size();
             if (size > Integer.MAX_VALUE) {
-                throw new UnsupportedOperationException(
-                        "Non-integer input buffer size specified: " + size);
+                throw new UnsupportedOperationException("Non-integer input buffer size specified: " + size);
             }
 
             int bufferSize = (int) size;
-            BufferedInputStream bufferedinputStream =
-                    new BufferedInputStream(inputStream, bufferSize);
+            BufferedInputStream bufferedinputStream = new BufferedInputStream(inputStream, bufferSize);
 
             bufferedinputStream.mark(inputStream.available());
             return bufferedinputStream;

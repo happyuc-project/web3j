@@ -45,16 +45,13 @@ public class WalletUpdater extends WalletManager {
         File destination = createDir(destinationDir);
 
         try {
-            String walletFileName = WalletUtils.generateWalletFile(
-                    newPassword, credentials.getEcKeyPair(), destination, true);
-            console.printf("New wallet file " + walletFileName
-                    + " successfully created in: " + destinationDir + "\n");
+            String walletFileName = WalletUtils.generateWalletFile(newPassword, credentials.getEcKeyPair(), destination, true);
+            console.printf("New wallet file " + walletFileName + " successfully created in: " + destinationDir + "\n");
         } catch (CipherException | IOException e) {
             exitError(e);
         }
 
-        String delete = console.readLine(
-                "Would you like to delete your existing wallet file (Y/N)? [N]: ");
+        String delete = console.readLine("Would you like to delete your existing wallet file (Y/N)? [N]: ");
         if (delete.toUpperCase().equals("Y")) {
             if (!walletFile.delete()) {
                 exitError("Unable to remove wallet file\n");

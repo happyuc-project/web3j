@@ -15,8 +15,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
     @SafeVarargs
     Array(String type, T... values) {
         if (!valid(values, type)) {
-            throw new UnsupportedOperationException(
-                    "If empty list is provided, use empty array instance");
+            throw new UnsupportedOperationException("If empty list is provided, use empty array instance");
         }
 
         this.type = type;
@@ -25,8 +24,7 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
 
     Array(String type, List<T> values) {
         if (!valid(values, type)) {
-            throw new UnsupportedOperationException(
-                    "If empty list is provided, use empty array instance");
+            throw new UnsupportedOperationException("If empty list is provided, use empty array instance");
         }
 
         this.type = type;

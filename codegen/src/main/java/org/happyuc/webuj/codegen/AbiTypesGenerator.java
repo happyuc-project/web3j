@@ -53,45 +53,26 @@ public class AbiTypesGenerator extends Generator {
         generateStaticArrayTypes(StaticArray.class, destinationDir);
     }
 
-    private <T extends Type> void generateIntTypes(
-            Class<T> superclass, String path) throws IOException {
+    private <T extends Type> void generateIntTypes(Class<T> superclass, String path) throws IOException {
         String packageName = createPackageName(superclass);
         ClassName className;
 
         for (int bitSize = 8; bitSize <= Type.MAX_BIT_LENGTH; bitSize += 8) {
             className = ClassName.get(packageName, superclass.getSimpleName() + bitSize);
 
-            MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-                    .addModifiers(Modifier.PUBLIC)
-                    .addParameter(BigInteger.class, "value")
-                    .addStatement("super($L, $N)", bitSize, "value")
-                    .build();
+            MethodSpec constructorSpec = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addParameter(BigInteger.class, "value").addStatement("super($L, $N)", bitSize, "value").build();
 
-            MethodSpec overideConstructorSpec = MethodSpec.constructorBuilder()
-                    .addModifiers(Modifier.PUBLIC)
-                    .addParameter(long.class, "value")
-                    .addStatement("this(BigInteger.valueOf(value))")
-                    .build();
+            MethodSpec overideConstructorSpec = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addParameter(long.class, "value").addStatement("this(BigInteger.valueOf(value))").build();
 
-            FieldSpec defaultFieldSpec = FieldSpec
-                    .builder(className, DEFAULT, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("new $T(BigInteger.ZERO)", className)
-                    .build();
+            FieldSpec defaultFieldSpec = FieldSpec.builder(className, DEFAULT, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).initializer("new $T(BigInteger.ZERO)", className).build();
 
-            TypeSpec intType = TypeSpec.classBuilder(className.simpleName())
-                    .addJavadoc(CODEGEN_WARNING)
-                    .superclass(superclass)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addField(defaultFieldSpec)
-                    .addMethods(Arrays.asList(constructorSpec, overideConstructorSpec))
-                    .build();
+            TypeSpec intType = TypeSpec.classBuilder(className.simpleName()).addJavadoc(CODEGEN_WARNING).superclass(superclass).addModifiers(Modifier.PUBLIC).addField(defaultFieldSpec).addMethods(Arrays.asList(constructorSpec, overideConstructorSpec)).build();
 
             write(packageName, intType, path);
         }
     }
 
-    private <T extends Type> void generateFixedTypes(
-            Class<T> superclass, String path) throws IOException {
+    private <T extends Type> void generateFixedTypes(Class<T> superclass, String path) throws IOException {
         String packageName = createPackageName(superclass);
         ClassName className;
 
@@ -103,83 +84,40 @@ public class AbiTypesGenerator extends Generator {
                     break inner;
                 }
 
-                MethodSpec constructorSpec1 = MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PUBLIC)
-                        .addParameter(BigInteger.class, "value")
-                        .addStatement("super($L, $L, $N)", mBitSize, nBitSize, "value")
-                        .build();
+                MethodSpec constructorSpec1 = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addParameter(BigInteger.class, "value").addStatement("super($L, $L, $N)", mBitSize, nBitSize, "value").build();
 
-                MethodSpec constructorSpec2 = MethodSpec.constructorBuilder()
-                        .addModifiers(Modifier.PUBLIC)
-                        .addParameter(int.class, "mBitSize")
-                        .addParameter(int.class, "nBitSize")
-                        .addParameter(BigInteger.class, "m")
-                        .addParameter(BigInteger.class, "n")
-                        .addStatement("super($L, $L, $N, $N)", mBitSize, nBitSize, "m", "n")
-                        .build();
+                MethodSpec constructorSpec2 = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addParameter(int.class, "mBitSize").addParameter(int.class, "nBitSize").addParameter(BigInteger.class, "m").addParameter(BigInteger.class, "n").addStatement("super($L, $L, $N, $N)", mBitSize, nBitSize, "m", "n").build();
 
-                className = ClassName.get(packageName,
-                                          superclass.getSimpleName() + mBitSize + "x" + nBitSize);
+                className = ClassName.get(packageName, superclass.getSimpleName() + mBitSize + "x" + nBitSize);
 
-                FieldSpec defaultFieldSpec = FieldSpec
-                        .builder(className,
-                                 DEFAULT,
-                                 Modifier.PUBLIC,
-                                 Modifier.STATIC,
-                                 Modifier.FINAL)
-                        .initializer("new $T(BigInteger.ZERO)", className)
-                        .build();
+                FieldSpec defaultFieldSpec = FieldSpec.builder(className, DEFAULT, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).initializer("new $T(BigInteger.ZERO)", className).build();
 
-                TypeSpec fixedType = TypeSpec
-                        .classBuilder(className.simpleName())
-                        .addJavadoc(CODEGEN_WARNING)
-                        .superclass(superclass)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addField(defaultFieldSpec)
-                        .addMethod(constructorSpec1)
-                        .addMethod(constructorSpec2)
-                        .build();
+                TypeSpec fixedType = TypeSpec.classBuilder(className.simpleName()).addJavadoc(CODEGEN_WARNING).superclass(superclass).addModifiers(Modifier.PUBLIC).addField(defaultFieldSpec).addMethod(constructorSpec1).addMethod(constructorSpec2).build();
 
                 write(packageName, fixedType, path);
             }
         }
     }
 
-    private <T extends Type> void generateBytesTypes(
-            Class<T> superclass, String path) throws IOException {
+    private <T extends Type> void generateBytesTypes(Class<T> superclass, String path) throws IOException {
         String packageName = createPackageName(superclass);
         ClassName className;
 
         for (int byteSize = 1; byteSize <= 32; byteSize++) {
 
-            MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-                    .addModifiers(Modifier.PUBLIC)
-                    .addParameter(byte[].class, "value")
-                    .addStatement("super($L, $N)", byteSize, "value")
-                    .build();
+            MethodSpec constructorSpec = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addParameter(byte[].class, "value").addStatement("super($L, $N)", byteSize, "value").build();
 
             className = ClassName.get(packageName, superclass.getSimpleName() + byteSize);
 
-            FieldSpec defaultFieldSpec = FieldSpec
-                    .builder(className, DEFAULT, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("new $T(new byte[$L])", className, byteSize)
-                    .build();
+            FieldSpec defaultFieldSpec = FieldSpec.builder(className, DEFAULT, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).initializer("new $T(new byte[$L])", className, byteSize).build();
 
-            TypeSpec bytesType = TypeSpec
-                    .classBuilder(className.simpleName())
-                    .addJavadoc(CODEGEN_WARNING)
-                    .superclass(superclass)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addField(defaultFieldSpec)
-                    .addMethod(constructorSpec)
-                    .build();
+            TypeSpec bytesType = TypeSpec.classBuilder(className.simpleName()).addJavadoc(CODEGEN_WARNING).superclass(superclass).addModifiers(Modifier.PUBLIC).addField(defaultFieldSpec).addMethod(constructorSpec).build();
 
             write(packageName, bytesType, path);
         }
     }
 
-    private <T extends Type> void generateStaticArrayTypes(
-            Class<T> superclass, String path) throws IOException {
+    private <T extends Type> void generateStaticArrayTypes(Class<T> superclass, String path) throws IOException {
         String packageName = createPackageName(superclass);
         ClassName className;
 
@@ -187,32 +125,13 @@ public class AbiTypesGenerator extends Generator {
 
             TypeVariableName typeVariableName = TypeVariableName.get("T").withBounds(Type.class);
 
-            MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-                    .addModifiers(Modifier.PUBLIC)
-                    .addParameter(ParameterizedTypeName.get(ClassName.get(List.class),
-                            typeVariableName), "values")
-                    .addStatement("super($L, $N)", length, "values")
-                    .build();
+            MethodSpec constructorSpec = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC).addParameter(ParameterizedTypeName.get(ClassName.get(List.class), typeVariableName), "values").addStatement("super($L, $N)", length, "values").build();
 
-            MethodSpec arrayOverloadConstructorSpec = MethodSpec.constructorBuilder()
-                    .addAnnotation(SafeVarargs.class)
-                    .addModifiers(Modifier.PUBLIC)
-                    .addParameter(ArrayTypeName.of(typeVariableName), "values")
-                    .varargs()
-                    .addStatement("super($L, $N)", length, "values")
-                    .build();
+            MethodSpec arrayOverloadConstructorSpec = MethodSpec.constructorBuilder().addAnnotation(SafeVarargs.class).addModifiers(Modifier.PUBLIC).addParameter(ArrayTypeName.of(typeVariableName), "values").varargs().addStatement("super($L, $N)", length, "values").build();
 
             className = ClassName.get(packageName, superclass.getSimpleName() + length);
 
-            TypeSpec bytesType = TypeSpec
-                    .classBuilder(className.simpleName())
-                    .addTypeVariable(typeVariableName)
-                    .addJavadoc(CODEGEN_WARNING)
-                    .superclass(ParameterizedTypeName.get(ClassName.get(superclass),
-                            typeVariableName))
-                    .addModifiers(Modifier.PUBLIC)
-                    .addMethods(Arrays.asList(constructorSpec, arrayOverloadConstructorSpec))
-                    .build();
+            TypeSpec bytesType = TypeSpec.classBuilder(className.simpleName()).addTypeVariable(typeVariableName).addJavadoc(CODEGEN_WARNING).superclass(ParameterizedTypeName.get(ClassName.get(superclass), typeVariableName)).addModifiers(Modifier.PUBLIC).addMethods(Arrays.asList(constructorSpec, arrayOverloadConstructorSpec)).build();
 
             write(packageName, bytesType, path);
         }

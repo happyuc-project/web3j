@@ -1,5 +1,5 @@
 
-description 'webuj HappyUC crypto library'
+description 'Webuj HappyUC crypto library'
 
 dependencies {
     compile project(':rlp'),

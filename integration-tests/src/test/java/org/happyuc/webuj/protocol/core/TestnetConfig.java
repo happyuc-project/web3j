@@ -16,7 +16,8 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {
-        https://testnet.hucscan.io/block/1627453
+        https:
+        //testnet.hucscan.io/block/1627453
         return "0xd67e59db999c3bd78bd4c2ba54689dba0c372ebcad09c8b9677970f37d64ca46";
     }
 
@@ -60,12 +61,8 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public Transaction buildTransaction() {
-        return Transaction.createContractTransaction(
-                validAccount(),
-                BigInteger.ZERO,  // nonce
-                Transaction.DEFAULT_GAS,
-                validContractCode()
-        );
+        return Transaction.createContractTransaction(validAccount(), BigInteger.ZERO,  // nonce
+                Transaction.DEFAULT_GAS, validContractCode());
     }
 
     @Override
@@ -85,9 +82,7 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String encodedEvent() {
-        Event event = new Event("Notify",
-                Collections.singletonList(new TypeReference<Uint>() {}),
-                Collections.singletonList(new TypeReference<Uint>() {}));
+        Event event = new Event("Notify", Collections.singletonList(new TypeReference<Uint>() {}), Collections.singletonList(new TypeReference<Uint>() {}));
 
         return EventEncoder.encode(event);
     }

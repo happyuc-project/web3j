@@ -3,7 +3,7 @@ package org.happyuc.webuj.tx;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.methods.request.Transaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
@@ -15,37 +15,28 @@ import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
  */
 public class ClientTransactionManager extends TransactionManager {
 
-    private final webuj webuj;
+    private final Webuj webuj;
 
-    public ClientTransactionManager(
-            webuj webuj, String fromAddress) {
+    public ClientTransactionManager(Webuj webuj, String fromAddress) {
         super(webuj, fromAddress);
         this.webuj = webuj;
     }
 
-    public ClientTransactionManager(
-            webuj webuj, String fromAddress, int attempts, int sleepDuration) {
+    public ClientTransactionManager(Webuj webuj, String fromAddress, int attempts, int sleepDuration) {
         super(webuj, attempts, sleepDuration, fromAddress);
         this.webuj = webuj;
     }
 
-    public ClientTransactionManager(
-            webuj webuj, String fromAddress,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
+    public ClientTransactionManager(Webuj webuj, String fromAddress, TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, fromAddress);
         this.webuj = webuj;
     }
 
     @Override
-    public HucSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
-            throws IOException {
+    public HucSendTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
 
-        Transaction transaction = new Transaction(
-                getFromAddress(), null, gasPrice, gasLimit, to, value, data);
+        Transaction transaction = new Transaction(getFromAddress(), null, gasPrice, gasLimit, to, value, data);
 
-        return webuj.hucSendTransaction(transaction)
-                .send();
+        return webuj.hucSendTransaction(transaction).send();
     }
 }

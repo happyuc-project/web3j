@@ -20,7 +20,7 @@ public class WalletRunner {
         } else {
             switch (args[0]) {
                 case "create":
-                    WalletCreator.main(new String[] {});
+                    WalletCreator.main(new String[]{});
                     break;
                 case "update":
                     WalletUpdater.main(tail(args));

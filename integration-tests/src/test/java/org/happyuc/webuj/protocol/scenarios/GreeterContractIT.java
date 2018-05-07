@@ -40,13 +40,11 @@ public class GreeterContractIT extends Scenario {
         String createTransactionHash = sendCreateContractTransaction();
         assertFalse(createTransactionHash.isEmpty());
 
-        TransactionReceipt createTransactionReceipt =
-                waitForTransactionReceipt(createTransactionHash);
+        TransactionReceipt createTransactionReceipt = waitForTransactionReceipt(createTransactionHash);
 
         assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
 
-        assertFalse("Contract execution ran out of gas",
-                createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertFalse("Contract execution ran out of gas", createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
         String contractAddress = createTransactionReceipt.getContractAddress();
 
@@ -57,8 +55,7 @@ public class GreeterContractIT extends Scenario {
         String responseValue = callSmartContractFunction(getFunction, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type> response = FunctionReturnDecoder.decode(
-                responseValue, getFunction.getOutputParameters());
+        List<Type> response = FunctionReturnDecoder.decode(responseValue, getFunction.getOutputParameters());
         assertThat(response.size(), is(1));
         assertThat(response.get(0).getValue(), is(VALUE));
     }
@@ -66,34 +63,20 @@ public class GreeterContractIT extends Scenario {
     private String sendCreateContractTransaction() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
 
-        String encodedConstructor =
-                FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
+        String encodedConstructor = FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
 
-        Transaction transaction = Transaction.createContractTransaction(
-                ALICE.getAddress(),
-                nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
-                BigInteger.ZERO,
-                getGreeterSolidityBinary() + encodedConstructor);
+        Transaction transaction = Transaction.createContractTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getGreeterSolidityBinary() + encodedConstructor);
 
-        org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction
-                transactionResponse = webuj.hucSendTransaction(transaction)
-                .sendAsync().get();
+        org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction transactionResponse = webuj.hucSendTransaction(transaction).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(
-            Function function, String contractAddress) throws Exception {
+    private String callSmartContractFunction(Function function, String contractAddress) throws Exception {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.happyuc.webuj.protocol.core.methods.response.HucCall response = webuj.hucCall(
-                Transaction.createHucCallTransaction(
-                        ALICE.getAddress(), contractAddress, encodedFunction),
-                DefaultBlockParameterName.LATEST)
-                .sendAsync().get();
+        org.happyuc.webuj.protocol.core.methods.response.HucCall response = webuj.hucCall(Transaction.createHucCallTransaction(ALICE.getAddress(), contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return response.getValue();
     }
@@ -103,9 +86,6 @@ public class GreeterContractIT extends Scenario {
     }
 
     Function createGreetFunction() {
-        return new Function(
-                "greet",
-                Collections.emptyList(),
-                Collections.singletonList(new TypeReference<Utf8String>() {}));
+        return new Function("greet", Collections.emptyList(), Collections.singletonList(new TypeReference<Utf8String>() {}));
     }
 }

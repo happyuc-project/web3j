@@ -32,9 +32,7 @@ public class TypeEncoder {
     private TypeEncoder() { }
 
     static boolean isDynamic(Type parameter) {
-        return parameter instanceof DynamicBytes
-                || parameter instanceof Utf8String
-                || parameter instanceof DynamicArray;
+        return parameter instanceof DynamicBytes || parameter instanceof Utf8String || parameter instanceof DynamicArray;
     }
 
     @SuppressWarnings("unchecked")
@@ -56,8 +54,7 @@ public class TypeEncoder {
         } else if (parameter instanceof DynamicArray) {
             return encodeDynamicArray((DynamicArray) parameter);
         } else {
-            throw new UnsupportedOperationException(
-                    "Type cannot be encoded: " + parameter.getClass());
+            throw new UnsupportedOperationException("Type cannot be encoded: " + parameter.getClass());
         }
     }
 
@@ -75,10 +72,7 @@ public class TypeEncoder {
             }
         }
 
-        System.arraycopy(
-                rawValue, 0,
-                paddedRawValue, MAX_BYTE_LENGTH - rawValue.length,
-                rawValue.length);
+        System.arraycopy(rawValue, 0, paddedRawValue, MAX_BYTE_LENGTH - rawValue.length, rawValue.length);
         return Numeric.toHexStringNoPrefix(paddedRawValue);
     }
 
@@ -147,7 +141,7 @@ public class TypeEncoder {
 
     static <T extends Type> String encodeArrayValues(Array<T> value) {
         StringBuilder result = new StringBuilder();
-        for (Type type:value.getValue()) {
+        for (Type type : value.getValue()) {
             result.append(TypeEncoder.encode(type));
         }
         return result.toString();

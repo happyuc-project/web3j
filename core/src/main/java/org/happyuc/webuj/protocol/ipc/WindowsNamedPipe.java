@@ -14,8 +14,7 @@ public class WindowsNamedPipe implements IOFacade {
         try {
             pipe = new RandomAccessFile(ipcSocketPath, "rw");
         } catch (IOException e) {
-            throw new RuntimeException(
-                    "Provided file pipe cannot be opened: " + ipcSocketPath, e);
+            throw new RuntimeException("Provided file pipe cannot be opened: " + ipcSocketPath, e);
         }
     }
 

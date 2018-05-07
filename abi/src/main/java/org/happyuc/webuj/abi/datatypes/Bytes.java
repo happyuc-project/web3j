@@ -10,8 +10,7 @@ public class Bytes extends BytesType {
     protected Bytes(int byteSize, byte[] value) {
         super(value, TYPE_NAME + value.length);
         if (!isValid(byteSize, value)) {
-            throw new UnsupportedOperationException(
-                    "Input byte array must be in range 0 < M <= 32 and length must match type");
+            throw new UnsupportedOperationException("Input byte array must be in range 0 < M <= 32 and length must match type");
         }
     }
 

@@ -12,15 +12,15 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import org.happyuc.webuj.TempFileProvider;
 import org.happyuc.webuj.utils.Strings;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.happyuc.webuj.codegen.FunctionWrapperGenerator.JAVA_TYPES_ARG;
 import static org.happyuc.webuj.codegen.FunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
+import static org.junit.Assert.assertTrue;
 
 public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
 
@@ -32,12 +32,9 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
-        try (StandardJavaFileManager fileManager =
-                compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits = fileManager
-                    .getJavaFileObjectsFromStrings(Collections.singletonList(sourceFile));
-            JavaCompiler.CompilationTask task = compiler.getTask(
-                    null, fileManager, diagnostics, null, null, compilationUnits);
+        try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null)) {
+            Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(Collections.singletonList(sourceFile));
+            JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
             assertTrue("Generated contract contains compile time error", task.call());
         }
     }
@@ -63,38 +60,24 @@ public class TruffleJsonFunctionWrapperGeneratorTest extends TempFileProvider {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void testCodeGenerationJvmTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationJvmTypes(String contractName, String inputFileName) throws Exception {
 
-        testCodeGeneration(
-                contractName, inputFileName, PackageName, JAVA_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, PackageName, JAVA_TYPES_ARG);
 
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void testCodeGenerationSolidtyTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationSolidtyTypes(String contractName, String inputFileName) throws Exception {
 
-        testCodeGeneration(
-                contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, PackageName, SOLIDITY_TYPES_ARG);
 
     }
 
-    private void testCodeGeneration(
-            String contractName, String inputFileName, String packageName, String types)
-            throws Exception {
+    private void testCodeGeneration(String contractName, String inputFileName, String packageName, String types) throws Exception {
 
-        TruffleJsonFunctionWrapperGenerator.main(Arrays.asList(
-                types,
-                ContractJsonParseTest
-                        .jsonFileLocation(contractBaseDir, contractName, inputFileName),
-                "-p", packageName,
-                "-o", tempDirPath
-        ).toArray(new String[0]));
+        TruffleJsonFunctionWrapperGenerator.main(Arrays.asList(types, ContractJsonParseTest.jsonFileLocation(contractBaseDir, contractName, inputFileName), "-p", packageName, "-o", tempDirPath).toArray(new String[0]));
 
-        verifyGeneratedCode(tempDirPath + File.separator
-                + packageName.replace('.', File.separatorChar) + File.separator
-                + Strings.capitaliseFirstLetter(inputFileName) + ".java");
+        verifyGeneratedCode(tempDirPath + File.separator + packageName.replace('.', File.separatorChar) + File.separator + Strings.capitaliseFirstLetter(inputFileName) + ".java");
     }
 
 

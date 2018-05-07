@@ -41,13 +41,11 @@ public class Scenario {
     "0x..." // 20 bytes (40 hex characters) & replace instances of ALICE.getAddress() with this
     WALLET address variable you've defined.
     */
-    static final Credentials ALICE = Credentials.create(
-            "",  // 32 byte hex value
+    static final Credentials ALICE = Credentials.create("",  // 32 byte hex value
             "0x"  // 64 byte hex value
     );
 
-    static final Credentials BOB = Credentials.create(
-            "",  // 32 byte hex value
+    static final Credentials BOB = Credentials.create("",  // 32 byte hex value
             "0x"  // 64 byte hex value
     );
 
@@ -66,18 +64,13 @@ public class Scenario {
     }
 
     boolean unlockAccount() throws Exception {
-        PersonalUnlockAccount personalUnlockAccount =
-                webuj.personalUnlockAccount(
-                        ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
-                        .sendAsync().get();
+        PersonalUnlockAccount personalUnlockAccount = webuj.personalUnlockAccount(ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION).sendAsync().get();
         return personalUnlockAccount.accountUnlocked();
     }
 
-    TransactionReceipt waitForTransactionReceipt(
-            String transactionHash) throws Exception {
+    TransactionReceipt waitForTransactionReceipt(String transactionHash) throws Exception {
 
-        Optional<TransactionReceipt> transactionReceiptOptional =
-                getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
+        Optional<TransactionReceipt> transactionReceiptOptional = getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
 
         if (!transactionReceiptOptional.isPresent()) {
             fail("Transaction receipt not generated after " + ATTEMPTS + " attempts");
@@ -86,11 +79,9 @@ public class Scenario {
         return transactionReceiptOptional.get();
     }
 
-    private Optional<TransactionReceipt> getTransactionReceipt(
-            String transactionHash, int sleepDuration, int attempts) throws Exception {
+    private Optional<TransactionReceipt> getTransactionReceipt(String transactionHash, int sleepDuration, int attempts) throws Exception {
 
-        Optional<TransactionReceipt> receiptOptional =
-                sendTransactionReceiptRequest(transactionHash);
+        Optional<TransactionReceipt> receiptOptional = sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
                 Thread.sleep(sleepDuration);
@@ -103,26 +94,20 @@ public class Scenario {
         return receiptOptional;
     }
 
-    private Optional<TransactionReceipt> sendTransactionReceiptRequest(
-            String transactionHash) throws Exception {
-        HucGetTransactionReceipt transactionReceipt =
-                webuj.hucGetTransactionReceipt(transactionHash).sendAsync().get();
+    private Optional<TransactionReceipt> sendTransactionReceiptRequest(String transactionHash) throws Exception {
+        HucGetTransactionReceipt transactionReceipt = webuj.hucGetTransactionReceipt(transactionHash).sendAsync().get();
 
         return transactionReceipt.getTransactionReceipt();
     }
 
     BigInteger getNonce(String address) throws Exception {
-        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(
-                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return hucGetTransactionCount.getTransactionCount();
     }
 
     Function createFibonacciFunction() {
-        return new Function(
-                "fibonacciNotify",
-                Collections.singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.singletonList(new TypeReference<Uint>() {}));
+        return new Function("fibonacciNotify", Collections.singletonList(new Uint(BigInteger.valueOf(7))), Collections.singletonList(new TypeReference<Uint>() {}));
     }
 
     static String load(String filePath) throws URISyntaxException, IOException {

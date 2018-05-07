@@ -23,15 +23,12 @@ public class EventEncoder {
         List<TypeReference<Type>> indexedParameters = function.getIndexedParameters();
         List<TypeReference<Type>> nonIndexedParameters = function.getNonIndexedParameters();
 
-        String methodSignature = buildMethodSignature(function.getName(),
-                indexedParameters, nonIndexedParameters);
+        String methodSignature = buildMethodSignature(function.getName(), indexedParameters, nonIndexedParameters);
 
         return buildEventSignature(methodSignature);
     }
 
-    static <T extends Type> String buildMethodSignature(
-            String methodName, List<TypeReference<T>> indexParameters,
-            List<TypeReference<T>> nonIndexedParameters) {
+    static <T extends Type> String buildMethodSignature(String methodName, List<TypeReference<T>> indexParameters, List<TypeReference<T>> nonIndexedParameters) {
 
         List<TypeReference<T>> parameters = new ArrayList<>(indexParameters);
         parameters.addAll(nonIndexedParameters);
@@ -39,9 +36,7 @@ public class EventEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-        String params = parameters.stream()
-                .map(p -> Utils.getTypeName(p))
-                .collect(Collectors.joining(","));
+        String params = parameters.stream().map(p -> Utils.getTypeName(p)).collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();

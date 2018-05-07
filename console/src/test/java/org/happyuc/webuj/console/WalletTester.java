@@ -1,11 +1,11 @@
 package org.happyuc.webuj.console;
 
-import org.junit.Before;
-
 import org.happyuc.webuj.TempFileProvider;
 
-import static org.mockito.Mockito.mock;
+import org.junit.Before;
+
 import static org.happyuc.webuj.crypto.SampleKeys.PASSWORD;
+import static org.mockito.Mockito.mock;
 
 public abstract class WalletTester extends TempFileProvider {
 

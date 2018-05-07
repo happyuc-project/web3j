@@ -10,22 +10,21 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.junit.Test;
-
 import org.happyuc.webuj.TempFileProvider;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
 import static org.happyuc.webuj.codegen.TupleGenerator.CLASS_NAME;
 import static org.happyuc.webuj.codegen.TupleGenerator.LIMIT;
+import static org.junit.Assert.assertTrue;
 
 public class TupleGeneratorTest extends TempFileProvider {
 
     @Test
     public void testTuplesGeneration() throws IOException {
-        TupleGenerator.main(new String[] { tempDirPath });
+        TupleGenerator.main(new String[]{tempDirPath});
 
-        String baseDir = tempDirPath + File.separatorChar
-                + TupleGenerator.PACKAGE_NAME.replace('.', File.separatorChar);
+        String baseDir = tempDirPath + File.separatorChar + TupleGenerator.PACKAGE_NAME.replace('.', File.separatorChar);
 
         String fileNameBase = baseDir + File.separator + CLASS_NAME;
         List<String> fileNames = new ArrayList<>(LIMIT);
@@ -39,12 +38,9 @@ public class TupleGeneratorTest extends TempFileProvider {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
-        try (StandardJavaFileManager fileManager =
-                     compiler.getStandardFileManager(diagnostics, null, null)) {
-            Iterable<? extends JavaFileObject> compilationUnits = fileManager
-                    .getJavaFileObjectsFromStrings(sourceFiles);
-            JavaCompiler.CompilationTask task = compiler.getTask(
-                    null, fileManager, diagnostics, null, null, compilationUnits);
+        try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null)) {
+            Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(sourceFiles);
+            JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
             assertTrue("Generated code contains compile time error", task.call());
         }
     }

@@ -66,7 +66,7 @@ Details of how to request Huc for the Kovan testnet are available
 `here <https://github.com/kovan-testnet/faucet>`_.
 
 If you need some Huc on the Ropsten testnet to get started, please post a message with your
-wallet address to the `webuj Gitter channel <https://gitter.im/webuj/webuj>`_ and you will be
+wallet address to the `Webuj Gitter channel <https://gitter.im/Webuj/Webuj>`_ and you will be
 sent some.
 
 
@@ -110,10 +110,10 @@ are used to dictate how much Huc you wish to spend in order for a tranaction to 
 
 *Gas price*
 
-  This is the amount you are prepared in Huc per unit of gas. webuj uses a default price
+  This is the amount you are prepared in Huc per unit of gas. Webuj uses a default price
   of 22,000,000,000 Wei
   (22 x 10\ :sup:`-8` Huc). This is defined in
-  `ManagedTransaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/tx/ManagedTransaction.java>`_.
+  `ManagedTransaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/ManagedTransaction.java>`_.
 
 
 *Gas limit*
@@ -140,7 +140,7 @@ transact with HappyUC.
 #. :ref:`signing-via-client`
 #. :ref:`offline-signing`
 
-Both mechanisms are supported via webuj.
+Both mechanisms are supported via Webuj.
 
 
 .. _signing-via-client:
@@ -160,22 +160,22 @@ via:
   for `Parity <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module#personal_newaccount>`_
   or `Ghuc <https://github.com/happyuc-project/go-happyuc/wiki/Management-APIs#personal_newaccount>`_
 
-With your wallet file created, you can unlock your account via webuj by first of all creating an
-instance of webuj that supports Parity/Ghuc admin commands::
+With your wallet file created, you can unlock your account via Webuj by first of all creating an
+instance of Webuj that supports Parity/Ghuc admin commands::
 
-   Admin webuj = Admin.build(new HttpService());
+   Admin Webuj = Admin.build(new HttpService());
 
 Then you can unlock the account, and providing this was successful, send a transaction::
 
-   PersonalUnlockAccount personalUnlockAccount = webuj.personalUnlockAccount("0x000...", "a password").send();
+   PersonalUnlockAccount personalUnlockAccount = Webuj.personalUnlockAccount("0x000...", "a password").send();
    if (personalUnlockAccount.accountUnlocked()) {
        // send a transaction
    }
 
 
 Transactions for sending in this manner should be created via
-`HucSendTransaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/core/methods/response/HucSendTransaction.java>`_,
-with the `Transaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/protocol/core/methods/request/Transaction.java>`_ type::
+`HucSendTransaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/methods/response/HucSendTransaction.java>`_,
+with the `Transaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/methods/request/Transaction.java>`_ type::
 
   Transaction transaction = Transaction.createContractTransaction(
                 <from address>,
@@ -184,23 +184,23 @@ with the `Transaction <https://github.com/happyuc-project/webu.java/blob/master/
                 "0x...<smart contract code to execute>"
         );
 
-        org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction
+        org.happyuc.Webuj.protocol.core.methods.response.HucSendTransaction
                 transactionResponse = parity.hucSendTransaction(hucSendTransaction)
                 .send();
 
         String transactionHash = transactionResponse.getTransactionHash();
 
-        // poll for transaction response via org.happyuc.webuj.protocol.webuj.hucGetTransactionReceipt(<txHash>)
+        // poll for transaction response via org.happyuc.webuj.protocol.Webuj.hucGetTransactionReceipt(<txHash>)
 
 Where the *<nonce>* value is obtained as per :ref:`below <nonce>`.
 
 Please refer to the integration test
-`DeployContractIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/DeployContractIT.java>`_
+`DeployContractIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/scenarios/DeployContractIT.java>`_
 and its superclass
-`Scenario <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/Scenario.java>`_
+`Scenario <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/scenarios/Scenario.java>`_
 for further details of this transaction workflow.
 
-Further details of working with the different admin commands supported by webuj are available in
+Further details of working with the different admin commands supported by Webuj are available in
 the section :doc:`management_apis`.
 
 
@@ -213,13 +213,13 @@ If you'd prefer not to manage your own HappyUC client, or do not want to provide
 such as your password to an HappyUC client, then offline transaction signing is the way to go.
 
 Offline transaction signing allows you to sign a transaction using your HappyUC HappyUC wallet
-within webuj, allowing you to have complete control over your private credentials. A transaction
+within Webuj, allowing you to have complete control over your private credentials. A transaction
 created offline can then be sent to any HappyUC client on the network, which will propagate the
 transaction out to other nodes, provided it is a valid transaction.
 
 You can also perform out of process transaction signing if required. This can be achieved by
 overriding the *sign* method in
-`ECKeyPair <https://github.com/happyuc-project/webu.java/blob/master/crypto/src/main/java/org/webuj/crypto/ECKeyPair.java#L41>`_.
+`ECKeyPair <https://github.com/happyuc-project/webu.java/blob/master/crypto/src/main/java/org/Webuj/crypto/ECKeyPair.java#L41>`_.
 
 
 .. _wallet-files:
@@ -230,7 +230,7 @@ Creating and working with wallet files
 In order to sign transactions offline, you need to have either your HappyUC wallet file or the
 public and private keys associated with an HappyUC wallet/account.
 
-webuj is able to both generate a new secure HappyUC wallet file for you, or work with an existing
+Webuj is able to both generate a new secure HappyUC wallet file for you, or work with an existing
 wallet file.
 
 To create a new wallet file::
@@ -256,7 +256,7 @@ Signing transactions
 --------------------
 
 Transactions to be used in an offline signing capacity, should use the
-`RawTransaction <https://github.com/happyuc-project/webu.java/blob/master/crypto/src/main/java/org/webuj/crypto/RawTransaction.java>`_
+`RawTransaction <https://github.com/happyuc-project/webu.java/blob/master/crypto/src/main/java/org/Webuj/crypto/RawTransaction.java>`_
 type for this purpose. The RawTransaction is similar to the previously mentioned Transaction type,
 however it does not require a *from* address, as this can be inferred from the signature.
 
@@ -287,13 +287,13 @@ Where the credentials are those loaded as per :ref:`wallet-files`.
 
 The transaction is then sent using `huc_sendRawTransaction <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_sendrawtransaction>`_::
 
-   HucSendTransaction hucSendTransaction = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
+   HucSendTransaction hucSendTransaction = Webuj.hucSendRawTransaction(hexValue).sendAsync().get();
    String transactionHash = hucSendTransaction.getTransactionHash();
-   // poll for transaction response via org.happyuc.webuj.protocol.webuj.hucGetTransactionReceipt(<txHash>)
+   // poll for transaction response via org.happyuc.webuj.protocol.Webuj.hucGetTransactionReceipt(<txHash>)
 
 
 Please refer to the integration test
-`CreateRawTransactionIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/CreateRawTransactionIT.java>`_
+`CreateRawTransactionIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/scenarios/CreateRawTransactionIT.java>`_
 for a full example of creating and sending a raw transaction.
 
 
@@ -309,7 +309,7 @@ a transaction with the same nonce, however, once mined, any subsequent submissio
 You can obtain the next available nonce via the
 `huc_getTransactionCount <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_gettransactioncount>`_ method::
 
-   HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(
+   HucGetTransactionCount hucGetTransactionCount = Webuj.hucGetTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
         BigInteger nonce = hucGetTransactionCount.getTransactionCount();
@@ -325,7 +325,7 @@ The nonce can then be used to create your transaction object::
 Transaction types
 -----------------
 
-The different types of transaction in webuj work with both Transaction and RawTransaction objects.
+The different types of transaction in Webuj work with both Transaction and RawTransaction objects.
 The key difference is that Transaction objects must always have a from address, so that the
 HappyUC client which processes the
 `huc_sendTransaction <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_sendtransaction>`_
@@ -366,11 +366,11 @@ object:
    // send...
 
 However, it is recommended that you use the
-`Transfer class <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/webuj/tx/Transfer.java>`_
+`Transfer class <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/Transfer.java>`_
 for sending Huc, which takes care of the nonce management and polling for a
 response for you::
 
-   webuj web3 = webuj.build(new HttpService());  // defaults to http://localhost:8545/
+   Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
    TransactionReceipt transactionReceipt = Transfer.sendFunds(
            web3, credentials, "0x<address>|<ensName>",
@@ -382,7 +382,7 @@ Recommended approach for working with smart contracts
 
 When working with smart contract wrappers as outlined below, you will have to perform all of
 the conversions from Solidity to native Java types manually. It is far more effective to use
-webuj's :ref:`smart-contract-wrappers` which take care of all code generation and this conversion
+Webuj's :ref:`smart-contract-wrappers` which take care of all code generation and this conversion
 for you.
 
 
@@ -412,7 +412,7 @@ To deploy a new smart contract, the following attributes will need to be provide
 
    // get contract address
    HucGetTransactionReceipt transactionReceipt =
-                webuj.hucGetTransactionReceipt(transactionHash).send();
+                Webuj.hucGetTransactionReceipt(transactionHash).send();
 
    if (transactionReceipt.getTransactionReceipt.isPresent()) {
        String contractAddress = transactionReceipt.get().getContractAddress();
@@ -457,7 +457,7 @@ To transact with an existing smart contract, the following attributes will need 
 *data*
   the encoded function selector and parameter arguments
 
-webuj takes care of the function encoding for you, for further details on the implementation refer
+Webuj takes care of the function encoding for you, for further details on the implementation refer
 to the :doc:`abi` section.
 
 ::
@@ -471,8 +471,8 @@ to the :doc:`abi` section.
    Transaction transaction = Transaction.createFunctionCallTransaction(
                 <from>, <gasPrice>, <gasLimit>, contractAddress, <funds>, encodedFunction);
 
-   org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction transactionResponse =
-                webuj.hucSendTransaction(transaction).sendAsync().get();
+   org.happyuc.Webuj.protocol.core.methods.response.HucSendTransaction transactionResponse =
+                Webuj.hucSendTransaction(transaction).sendAsync().get();
 
    String transactionHash = transactionResponse.getTransactionHash();
 
@@ -501,7 +501,7 @@ contract method's called, it simply returns the value from them::
                 Arrays.asList(new TypeReference<Type>() {}, ...));
 
    String encodedFunction = FunctionEncoder.encode(function)
-   org.happyuc.webuj.protocol.core.methods.response.HucCall response = webuj.hucCall(
+   org.happyuc.Webuj.protocol.core.methods.response.HucCall response = Webuj.hucCall(
                 Transaction.createHucCallTransaction(<from>, contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();

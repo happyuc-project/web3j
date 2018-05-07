@@ -17,8 +17,7 @@ public class TraceFilter {
     private List<String> fromAddress;
     private List<String> toAddress;
 
-    public TraceFilter(DefaultBlockParameter fromBlock, DefaultBlockParameter toBlock,
-            List<String> fromAddress, List<String> toAddress) {
+    public TraceFilter(DefaultBlockParameter fromBlock, DefaultBlockParameter toBlock, List<String> fromAddress, List<String> toAddress) {
         this.fromBlock = fromBlock;
         this.toBlock = toBlock;
         this.fromAddress = fromAddress;

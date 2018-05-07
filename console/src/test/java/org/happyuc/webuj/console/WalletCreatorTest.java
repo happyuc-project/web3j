@@ -11,10 +11,8 @@ public class WalletCreatorTest extends WalletTester {
 
     @Test
     public void testWalletCreation() {
-        when(console.readPassword(contains("password")))
-                .thenReturn(WALLET_PASSWORD, WALLET_PASSWORD);
-        when(console.readLine(startsWith("Please enter a destination directory ")))
-                .thenReturn(tempDirPath);
+        when(console.readPassword(contains("password"))).thenReturn(WALLET_PASSWORD, WALLET_PASSWORD);
+        when(console.readLine(startsWith("Please enter a destination directory "))).thenReturn(tempDirPath);
 
         WalletCreator.main(console);
 

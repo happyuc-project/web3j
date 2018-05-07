@@ -9,10 +9,10 @@ for target in ${targets}; do
     fileName=$(basename $target)
 
     cd $dirName
-    echo "Generating webuj bindings"
-    webuj truffle generate \
+    echo "Generating Webuj bindings"
+    Webuj truffle generate \
         build/contracts/${fileName}.json \
-        -p org.happyuc.webuj.generated \
+        -p org.happyuc.Webuj.generated \
         -o ../../../../../../integration-tests/src/test/java/ > /dev/null
     echo "Complete"
 

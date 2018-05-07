@@ -45,15 +45,13 @@ public class RemoteCall<T> {
      * @return an observable
      */
     public Observable<T> observable() {
-        return Observable.create(
-                subscriber -> {
-                    try {
-                        subscriber.onNext(send());
-                        subscriber.onCompleted();
-                    } catch (Exception e) {
-                        subscriber.onError(e);
-                    }
-                }
-        );
+        return Observable.create(subscriber -> {
+            try {
+                subscriber.onNext(send());
+                subscriber.onCompleted();
+            } catch (Exception e) {
+                subscriber.onError(e);
+            }
+        });
     }
 }

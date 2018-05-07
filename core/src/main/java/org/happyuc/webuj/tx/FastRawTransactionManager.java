@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import org.happyuc.webuj.crypto.Credentials;
-import org.happyuc.webuj.protocol.webuj;
-import org.happyuc.webuj.tx.response.Callback;
-import org.happyuc.webuj.tx.response.QueuingTransactionReceiptProcessor;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
 
 /**
@@ -17,23 +15,19 @@ public class FastRawTransactionManager extends RawTransactionManager {
 
     private volatile BigInteger nonce = BigInteger.valueOf(-1);
 
-    public FastRawTransactionManager(webuj webuj, Credentials credentials, byte chainId) {
+    public FastRawTransactionManager(Webuj webuj, Credentials credentials, byte chainId) {
         super(webuj, credentials, chainId);
     }
 
-    public FastRawTransactionManager(webuj webuj, Credentials credentials) {
+    public FastRawTransactionManager(Webuj webuj, Credentials credentials) {
         super(webuj, credentials);
     }
 
-    public FastRawTransactionManager(
-            webuj webuj, Credentials credentials,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
+    public FastRawTransactionManager(Webuj webuj, Credentials credentials, TransactionReceiptProcessor transactionReceiptProcessor) {
         super(webuj, credentials, ChainId.NONE, transactionReceiptProcessor);
     }
 
-    public FastRawTransactionManager(
-            webuj webuj, Credentials credentials, byte chainId,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
+    public FastRawTransactionManager(Webuj webuj, Credentials credentials, byte chainId, TransactionReceiptProcessor transactionReceiptProcessor) {
         super(webuj, credentials, chainId, transactionReceiptProcessor);
     }
 

@@ -3,50 +3,13 @@ package org.happyuc.webuj.protocol.core;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.methods.response.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.happyuc.webuj.protocol.webuj;
-import org.happyuc.webuj.protocol.core.methods.response.HucAccounts;
-import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
-import org.happyuc.webuj.protocol.core.methods.response.HucBlockNumber;
-import org.happyuc.webuj.protocol.core.methods.response.HucCall;
-import org.happyuc.webuj.protocol.core.methods.response.HucCoinbase;
-import org.happyuc.webuj.protocol.core.methods.response.HucCompileLLL;
-import org.happyuc.webuj.protocol.core.methods.response.HucCompileSerpent;
-import org.happyuc.webuj.protocol.core.methods.response.HucCompileSolidity;
-import org.happyuc.webuj.protocol.core.methods.response.HucEstimateGas;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
-import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetBalance;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockTransactionCountByHash;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockTransactionCountByNumber;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetCompilers;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetStorageAt;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionCount;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockHash;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockNumber;
-import org.happyuc.webuj.protocol.core.methods.response.HucHashrate;
-import org.happyuc.webuj.protocol.core.methods.response.HucLog;
-import org.happyuc.webuj.protocol.core.methods.response.HucMining;
-import org.happyuc.webuj.protocol.core.methods.response.HucProtocolVersion;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
-import org.happyuc.webuj.protocol.core.methods.response.HucTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
-import org.happyuc.webuj.protocol.core.methods.response.NetListening;
-import org.happyuc.webuj.protocol.core.methods.response.NetPeerCount;
-import org.happyuc.webuj.protocol.core.methods.response.NetVersion;
-import org.happyuc.webuj.protocol.core.methods.response.ShhNewGroup;
-import org.happyuc.webuj.protocol.core.methods.response.ShhNewIdentity;
-import org.happyuc.webuj.protocol.core.methods.response.ShhVersion;
-import org.happyuc.webuj.protocol.core.methods.response.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
-import org.happyuc.webuj.protocol.core.methods.response.Web3ClientVersion;
-import org.happyuc.webuj.protocol.core.methods.response.Web3Sha3;
+import org.happyuc.webuj.protocol.core.methods.response.WebuClientVersion;
 import org.happyuc.webuj.protocol.http.HttpService;
 
 import static junit.framework.TestCase.assertFalse;
@@ -61,7 +24,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class CoreIT {
 
-    private webuj webuj;
+    private Webuj webuj;
 
     private IntegrationTestConfig config = new TestnetConfig();
 
@@ -69,22 +32,21 @@ public class CoreIT {
 
     @Before
     public void setUp() {
-        this.webuj = webuj.build(new HttpService());
+        this.webuj = Webuj.build(new HttpService());
     }
 
     @Test
     public void testWeb3ClientVersion() throws Exception {
-        Web3ClientVersion web3ClientVersion = webuj.web3ClientVersion().send();
-        String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+        WebuClientVersion webuClientVersion = webuj.webuClientVersion().send();
+        String clientVersion = webuClientVersion.getWebuClientVersion();
         System.out.println("HappyUC client version: " + clientVersion);
         assertFalse(clientVersion.isEmpty());
     }
 
     @Test
     public void testWeb3Sha3() throws Exception {
-        Web3Sha3 web3Sha3 = webuj.web3Sha3("0x68656c6c6f20776f726c64").send();
-        assertThat(web3Sha3.getResult(),
-                is("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
+        WebuSha3 webuSha3 = webuj.webuSha3("0x68656c6c6f20776f726c64").send();
+        assertThat(webuSha3.getResult(), is("0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"));
     }
 
     @Test
@@ -155,67 +117,49 @@ public class CoreIT {
 
     @Test
     public void testHucGetBalance() throws Exception {
-        HucGetBalance hucGetBalance = webuj.hucGetBalance(
-                config.validAccount(), DefaultBlockParameter.valueOf("latest")).send();
+        HucGetBalance hucGetBalance = webuj.hucGetBalance(config.validAccount(), DefaultBlockParameter.valueOf("latest")).send();
         assertTrue(hucGetBalance.getBalance().signum() == 1);
     }
 
     @Test
     public void testHucGetStorageAt() throws Exception {
-        HucGetStorageAt hucGetStorageAt = webuj.hucGetStorageAt(
-                config.validContractAddress(),
-                BigInteger.valueOf(0),
-                DefaultBlockParameter.valueOf("latest")).send();
+        HucGetStorageAt hucGetStorageAt = webuj.hucGetStorageAt(config.validContractAddress(), BigInteger.valueOf(0), DefaultBlockParameter.valueOf("latest")).send();
         assertThat(hucGetStorageAt.getData(), is(config.validContractAddressPositionZero()));
     }
 
     @Test
     public void testHucGetTransactionCount() throws Exception {
-        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(
-                config.validAccount(),
-                DefaultBlockParameter.valueOf("latest")).send();
+        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(config.validAccount(), DefaultBlockParameter.valueOf("latest")).send();
         assertTrue(hucGetTransactionCount.getTransactionCount().signum() == 1);
     }
 
     @Test
     public void testHucGetBlockTransactionCountByHash() throws Exception {
-        HucGetBlockTransactionCountByHash hucGetBlockTransactionCountByHash =
-                webuj.hucGetBlockTransactionCountByHash(
-                        config.validBlockHash()).send();
-        assertThat(hucGetBlockTransactionCountByHash.getTransactionCount(),
-                equalTo(config.validBlockTransactionCount()));
+        HucGetBlockTransactionCountByHash hucGetBlockTransactionCountByHash = webuj.hucGetBlockTransactionCountByHash(config.validBlockHash()).send();
+        assertThat(hucGetBlockTransactionCountByHash.getTransactionCount(), equalTo(config.validBlockTransactionCount()));
     }
 
     @Test
     public void testHucGetBlockTransactionCountByNumber() throws Exception {
-        HucGetBlockTransactionCountByNumber hucGetBlockTransactionCountByNumber =
-                webuj.hucGetBlockTransactionCountByNumber(
-                        DefaultBlockParameter.valueOf(config.validBlock())).send();
-        assertThat(hucGetBlockTransactionCountByNumber.getTransactionCount(),
-                equalTo(config.validBlockTransactionCount()));
+        HucGetBlockTransactionCountByNumber hucGetBlockTransactionCountByNumber = webuj.hucGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(config.validBlock())).send();
+        assertThat(hucGetBlockTransactionCountByNumber.getTransactionCount(), equalTo(config.validBlockTransactionCount()));
     }
 
     @Test
     public void testHucGetUncleCountByBlockHash() throws Exception {
-        HucGetUncleCountByBlockHash hucGetUncleCountByBlockHash =
-                webuj.hucGetUncleCountByBlockHash(config.validBlockHash()).send();
-        assertThat(hucGetUncleCountByBlockHash.getUncleCount(),
-                equalTo(config.validBlockUncleCount()));
+        HucGetUncleCountByBlockHash hucGetUncleCountByBlockHash = webuj.hucGetUncleCountByBlockHash(config.validBlockHash()).send();
+        assertThat(hucGetUncleCountByBlockHash.getUncleCount(), equalTo(config.validBlockUncleCount()));
     }
 
     @Test
     public void testHucGetUncleCountByBlockNumber() throws Exception {
-        HucGetUncleCountByBlockNumber hucGetUncleCountByBlockNumber =
-                webuj.hucGetUncleCountByBlockNumber(
-                        DefaultBlockParameter.valueOf("latest")).send();
-        assertThat(hucGetUncleCountByBlockNumber.getUncleCount(),
-                equalTo(config.validBlockUncleCount()));
+        HucGetUncleCountByBlockNumber hucGetUncleCountByBlockNumber = webuj.hucGetUncleCountByBlockNumber(DefaultBlockParameter.valueOf("latest")).send();
+        assertThat(hucGetUncleCountByBlockNumber.getUncleCount(), equalTo(config.validBlockUncleCount()));
     }
 
     @Test
     public void testHucGetCode() throws Exception {
-        HucGetCode hucGetCode = webuj.hucGetCode(config.validContractAddress(),
-                DefaultBlockParameter.valueOf(config.validBlock())).send();
+        HucGetCode hucGetCode = webuj.hucGetCode(config.validContractAddress(), DefaultBlockParameter.valueOf(config.validBlock())).send();
         assertThat(hucGetCode.getCode(), is(config.validContractCode()));
     }
 
@@ -228,8 +172,7 @@ public class CoreIT {
     @Ignore  // TODO: Once account unlock functionality is available
     @Test
     public void testHucSendTransaction() throws Exception {
-        HucSendTransaction hucSendTransaction = webuj.hucSendTransaction(
-                config.buildTransaction()).send();
+        HucSendTransaction hucSendTransaction = webuj.hucSendTransaction(config.buildTransaction()).send();
         assertFalse(hucSendTransaction.getTransactionHash().isEmpty());
     }
 
@@ -241,8 +184,7 @@ public class CoreIT {
 
     @Test
     public void testHucCall() throws Exception {
-        HucCall hucCall = webuj.hucCall(config.buildTransaction(),
-                DefaultBlockParameter.valueOf("latest")).send();
+        HucCall hucCall = webuj.hucCall(config.buildTransaction(), DefaultBlockParameter.valueOf("latest")).send();
 
         assertThat(DefaultBlockParameterName.LATEST.getValue(), is("latest"));
         assertThat(hucCall.getValue(), is("0x"));
@@ -250,63 +192,53 @@ public class CoreIT {
 
     @Test
     public void testHucEstimateGas() throws Exception {
-        HucEstimateGas hucEstimateGas = webuj.hucEstimateGas(config.buildTransaction())
-                .send();
+        HucEstimateGas hucEstimateGas = webuj.hucEstimateGas(config.buildTransaction()).send();
         assertTrue(hucEstimateGas.getAmountUsed().signum() == 1);
     }
 
     @Test
     public void testHucGetBlockByHashReturnHashObjects() throws Exception {
-        HucBlock hucBlock = webuj.hucGetBlockByHash(config.validBlockHash(), false)
-                .send();
+        HucBlock hucBlock = webuj.hucGetBlockByHash(config.validBlockHash(), false).send();
 
         HucBlock.Block block = hucBlock.getBlock();
         assertNotNull(hucBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(block.getTransactions().size(),
-                is(config.validBlockTransactionCount().intValue()));
+        assertThat(block.getTransactions().size(), is(config.validBlockTransactionCount().intValue()));
     }
 
     @Test
     public void testHucGetBlockByHashReturnFullTransactionObjects() throws Exception {
-        HucBlock hucBlock = webuj.hucGetBlockByHash(config.validBlockHash(), true)
-                .send();
+        HucBlock hucBlock = webuj.hucGetBlockByHash(config.validBlockHash(), true).send();
 
         HucBlock.Block block = hucBlock.getBlock();
         assertNotNull(hucBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(block.getTransactions().size(),
-                equalTo(config.validBlockTransactionCount().intValue()));
+        assertThat(block.getTransactions().size(), equalTo(config.validBlockTransactionCount().intValue()));
     }
 
     @Test
     public void testHucGetBlockByNumberReturnHashObjects() throws Exception {
-        HucBlock hucBlock = webuj.hucGetBlockByNumber(
-                DefaultBlockParameter.valueOf(config.validBlock()), false).send();
+        HucBlock hucBlock = webuj.hucGetBlockByNumber(DefaultBlockParameter.valueOf(config.validBlock()), false).send();
 
         HucBlock.Block block = hucBlock.getBlock();
         assertNotNull(hucBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(block.getTransactions().size(),
-                equalTo(config.validBlockTransactionCount().intValue()));
+        assertThat(block.getTransactions().size(), equalTo(config.validBlockTransactionCount().intValue()));
     }
 
     @Test
     public void testHucGetBlockByNumberReturnTransactionObjects() throws Exception {
-        HucBlock hucBlock = webuj.hucGetBlockByNumber(
-                DefaultBlockParameter.valueOf(config.validBlock()), true).send();
+        HucBlock hucBlock = webuj.hucGetBlockByNumber(DefaultBlockParameter.valueOf(config.validBlock()), true).send();
 
         HucBlock.Block block = hucBlock.getBlock();
         assertNotNull(hucBlock.getBlock());
         assertThat(block.getNumber(), equalTo(config.validBlock()));
-        assertThat(block.getTransactions().size(),
-                equalTo(config.validBlockTransactionCount().intValue()));
+        assertThat(block.getTransactions().size(), equalTo(config.validBlockTransactionCount().intValue()));
     }
 
     @Test
     public void testHucGetTransactionByHash() throws Exception {
-        HucTransaction hucTransaction = webuj.hucGetTransactionByHash(
-                config.validTransactionHash()).send();
+        HucTransaction hucTransaction = webuj.hucGetTransactionByHash(config.validTransactionHash()).send();
         assertTrue(hucTransaction.getTransaction().isPresent());
         Transaction transaction = hucTransaction.getTransaction().get();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
@@ -316,8 +248,7 @@ public class CoreIT {
     public void testHucGetTransactionByBlockHashAndIndex() throws Exception {
         BigInteger index = BigInteger.ONE;
 
-        HucTransaction hucTransaction = webuj.hucGetTransactionByBlockHashAndIndex(
-                config.validBlockHash(), index).send();
+        HucTransaction hucTransaction = webuj.hucGetTransactionByBlockHashAndIndex(config.validBlockHash(), index).send();
         assertTrue(hucTransaction.getTransaction().isPresent());
         Transaction transaction = hucTransaction.getTransaction().get();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
@@ -328,8 +259,7 @@ public class CoreIT {
     public void testHucGetTransactionByBlockNumberAndIndex() throws Exception {
         BigInteger index = BigInteger.ONE;
 
-        HucTransaction hucTransaction = webuj.hucGetTransactionByBlockNumberAndIndex(
-                DefaultBlockParameter.valueOf(config.validBlock()), index).send();
+        HucTransaction hucTransaction = webuj.hucGetTransactionByBlockNumberAndIndex(DefaultBlockParameter.valueOf(config.validBlock()), index).send();
         assertTrue(hucTransaction.getTransaction().isPresent());
         Transaction transaction = hucTransaction.getTransaction().get();
         assertThat(transaction.getBlockHash(), is(config.validBlockHash()));
@@ -338,26 +268,21 @@ public class CoreIT {
 
     @Test
     public void testHucGetTransactionReceipt() throws Exception {
-        HucGetTransactionReceipt hucGetTransactionReceipt = webuj.hucGetTransactionReceipt(
-                config.validTransactionHash()).send();
+        HucGetTransactionReceipt hucGetTransactionReceipt = webuj.hucGetTransactionReceipt(config.validTransactionHash()).send();
         assertTrue(hucGetTransactionReceipt.getTransactionReceipt().isPresent());
-        TransactionReceipt transactionReceipt =
-                hucGetTransactionReceipt.getTransactionReceipt().get();
+        TransactionReceipt transactionReceipt = hucGetTransactionReceipt.getTransactionReceipt().get();
         assertThat(transactionReceipt.getTransactionHash(), is(config.validTransactionHash()));
     }
 
     @Test
     public void testHucGetUncleByBlockHashAndIndex() throws Exception {
-        HucBlock hucBlock = webuj.hucGetUncleByBlockHashAndIndex(
-                config.validUncleBlockHash(), BigInteger.ZERO).send();
+        HucBlock hucBlock = webuj.hucGetUncleByBlockHashAndIndex(config.validUncleBlockHash(), BigInteger.ZERO).send();
         assertNotNull(hucBlock.getBlock());
     }
 
     @Test
     public void testHucGetUncleByBlockNumberAndIndex() throws Exception {
-        HucBlock hucBlock = webuj.hucGetUncleByBlockNumberAndIndex(
-                DefaultBlockParameter.valueOf(config.validUncleBlock()), BigInteger.ZERO)
-                .send();
+        HucBlock hucBlock = webuj.hucGetUncleByBlockNumberAndIndex(DefaultBlockParameter.valueOf(config.validUncleBlock()), BigInteger.ZERO).send();
         assertNotNull(hucBlock.getBlock());
     }
 
@@ -367,44 +292,31 @@ public class CoreIT {
         assertNotNull(hucGetCompilers.getCompilers());
     }
 
-    @Ignore  // The mhucod huc_compileLLL does not exist/is not available
+    @Ignore  // The method huc_compileLLL does not exist/is not available
     @Test
     public void testHucCompileLLL() throws Exception {
-        HucCompileLLL hucCompileLLL = webuj.hucCompileLLL(
-                "(returnlll (suicide (caller)))").send();
+        HucCompileLLL hucCompileLLL = webuj.hucCompileLLL("(returnlll (suicide (caller)))").send();
         assertFalse(hucCompileLLL.getCompiledSourceCode().isEmpty());
     }
 
     @Test
     public void testHucCompileSolidity() throws Exception {
-        String sourceCode = "pragma solidity ^0.4.0;"
-                + "\ncontract test { function multiply(uint a) returns(uint d) {"
-                + "   return a * 7;   } }"
-                + "\ncontract test2 { function multiply2(uint a) returns(uint d) {"
-                + "   return a * 7;   } }";
-        HucCompileSolidity hucCompileSolidity = webuj.hucCompileSolidity(sourceCode)
-                .send();
+        String sourceCode = "pragma solidity ^0.4.0;" + "\ncontract test { function multiply(uint a) returns(uint d) {" + "   return a * 7;   } }" + "\ncontract test2 { function multiply2(uint a) returns(uint d) {" + "   return a * 7;   } }";
+        HucCompileSolidity hucCompileSolidity = webuj.hucCompileSolidity(sourceCode).send();
         assertNotNull(hucCompileSolidity.getCompiledSolidity());
-        assertThat(
-                hucCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(),
-                is(sourceCode));
+        assertThat(hucCompileSolidity.getCompiledSolidity().get("test2").getInfo().getSource(), is(sourceCode));
     }
 
     @Ignore  // The method huc_compileSerpent does not exist/is not available
     @Test
     public void testHucCompileSerpent() throws Exception {
-        HucCompileSerpent hucCompileSerpent = webuj.hucCompileSerpent(
-                "/* some serpent */").send();
+        HucCompileSerpent hucCompileSerpent = webuj.hucCompileSerpent("/* some serpent */").send();
         assertFalse(hucCompileSerpent.getCompiledSourceCode().isEmpty());
     }
 
     @Test
     public void testFiltersByFilterId() throws Exception {
-        org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter =
-                new org.happyuc.webuj.protocol.core.methods.request.HucFilter(
-                DefaultBlockParameterName.EARLIEST,
-                DefaultBlockParameterName.LATEST,
-                config.validContractAddress());
+        org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter = new org.happyuc.webuj.protocol.core.methods.request.HucFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST, config.validContractAddress());
 
         String eventSignature = config.encodedEvent();
         hucFilter.addSingleTopic(eventSignature);
@@ -435,19 +347,13 @@ public class CoreIT {
 
     @Test
     public void testHucNewPendingTransactionFilter() throws Exception {
-        HucFilter hucNewPendingTransactionFilter =
-                webuj.hucNewPendingTransactionFilter().send();
+        HucFilter hucNewPendingTransactionFilter = webuj.hucNewPendingTransactionFilter().send();
         assertNotNull(hucNewPendingTransactionFilter.getFilterId());
     }
 
     @Test
     public void testHucGetLogs() throws Exception {
-        org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter =
-                new org.happyuc.webuj.protocol.core.methods.request.HucFilter(
-                DefaultBlockParameterName.EARLIEST,
-                DefaultBlockParameterName.LATEST,
-                config.validContractAddress()
-        );
+        org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter = new org.happyuc.webuj.protocol.core.methods.request.HucFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST, config.validContractAddress());
 
         hucFilter.addSingleTopic(config.encodedEvent());
 
@@ -469,32 +375,32 @@ public class CoreIT {
 
     @Test
     public void testHucSubmitHashrate() throws Exception {
-    
+
     }
 
     @Test
     public void testDbPutString() throws Exception {
-    
+
     }
 
     @Test
     public void testDbGetString() throws Exception {
-    
+
     }
 
     @Test
     public void testDbPutHex() throws Exception {
-    
+
     }
 
     @Test
     public void testDbGetHex() throws Exception {
-    
+
     }
 
     @Test
     public void testShhPost() throws Exception {
-    
+
     }
 
     @Ignore // The method shh_version does not exist/is not available
@@ -513,7 +419,7 @@ public class CoreIT {
 
     @Test
     public void testShhHasIdentity() throws Exception {
-    
+
     }
 
     @Ignore  // The method shh_newIdentity does not exist/is not available
@@ -531,21 +437,21 @@ public class CoreIT {
 
     @Test
     public void testShhNewFilter() throws Exception {
-    
+
     }
 
     @Test
     public void testShhUninstallFilter() throws Exception {
-    
+
     }
 
     @Test
     public void testShhGetFilterChanges() throws Exception {
-    
+
     }
 
     @Test
     public void testShhGetMessages() throws Exception {
-    
+
     }
 }

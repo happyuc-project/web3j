@@ -14,8 +14,7 @@ public class Event {
     private List<TypeReference<Type>> indexedParameters;
     private List<TypeReference<Type>> nonIndexedParameters;
 
-    public Event(String name, List<TypeReference<?>> indexedParameters,
-                 List<TypeReference<?>> nonIndexedParameters) {
+    public Event(String name, List<TypeReference<?>> indexedParameters, List<TypeReference<?>> nonIndexedParameters) {
         this.name = name;
         this.indexedParameters = convert(indexedParameters);
         this.nonIndexedParameters = convert(nonIndexedParameters);

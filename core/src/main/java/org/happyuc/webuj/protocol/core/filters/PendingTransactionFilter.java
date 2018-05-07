@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import org.happyuc.webuj.protocol.webuj;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
@@ -15,7 +15,7 @@ import org.happyuc.webuj.protocol.core.methods.response.HucLog;
  */
 public class PendingTransactionFilter extends Filter<String> {
 
-    public PendingTransactionFilter(webuj webuj, Callback<String> callback) {
+    public PendingTransactionFilter(Webuj webuj, Callback<String> callback) {
         super(webuj, callback);
     }
 
@@ -31,8 +31,7 @@ public class PendingTransactionFilter extends Filter<String> {
                 String transactionHash = ((HucLog.Hash) logResult).get();
                 callback.onEvent(transactionHash);
             } else {
-                throw new FilterException(
-                        "Unexpected result type: " + logResult.get() + ", required Hash");
+                throw new FilterException("Unexpected result type: " + logResult.get() + ", required Hash");
             }
         }
     }
@@ -40,10 +39,9 @@ public class PendingTransactionFilter extends Filter<String> {
     /**
      * Since the pending transaction filter does not support historic filters,
      * the filterId is ignored and an empty optional is returned
-     * @param filterId
-     * Id of the filter for which the historic log should be retrieved
-     * @return
-     * Optional.empty()
+     *
+     * @param filterId Id of the filter for which the historic log should be retrieved
+     * @return Optional.empty()
      */
     @Override
     protected Optional<Request<?, HucLog>> getFilterLogs(BigInteger filterId) {

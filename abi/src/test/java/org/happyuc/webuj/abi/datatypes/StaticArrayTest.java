@@ -2,10 +2,10 @@ package org.happyuc.webuj.abi.datatypes;
 
 import java.util.stream.IntStream;
 
-import org.junit.Test;
-
 import org.happyuc.webuj.abi.datatypes.generated.StaticArray3;
 import org.happyuc.webuj.abi.datatypes.generated.Uint8;
+
+import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,8 +33,7 @@ public class StaticArrayTest {
             new StaticArray3<>(arrayOfUints(4));
             fail();
         } catch (UnsupportedOperationException e) {
-            assertThat(e.getMessage(), equalTo(
-                    "Expected array of type [StaticArray3] to have [3] elements."));
+            assertThat(e.getMessage(), equalTo("Expected array of type [StaticArray3] to have [3] elements."));
         }
     }
 
@@ -44,8 +43,7 @@ public class StaticArrayTest {
             new StaticArray<>(arrayOfUints(33));
             fail();
         } catch (UnsupportedOperationException e) {
-            assertThat(e.getMessage(), equalTo(
-                    "Static arrays with a length greater than 32 are not supported."));
+            assertThat(e.getMessage(), equalTo("Static arrays with a length greater than 32 are not supported."));
         }
     }
 

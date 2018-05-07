@@ -1,19 +1,21 @@
 package org.happyuc.webuj.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * HappyUC unit conversion functions.
  */
 public final class Convert {
-    private Convert() { }
+    private Convert() {
+    }
 
     public static BigDecimal fromWei(String number, Unit unit) {
         return fromWei(new BigDecimal(number), unit);
     }
 
-    public static BigDecimal fromWei(BigDecimal number, Unit unit) {
-        return number.divide(unit.getWeiFactor());
+    private static BigDecimal fromWei(BigDecimal number, Unit unit) {
+        return number.divide(unit.getWeiFactor(), RoundingMode.HALF_UP);
     }
 
     public static BigDecimal toWei(String number, Unit unit) {
@@ -25,25 +27,7 @@ public final class Convert {
     }
 
     public enum Unit {
-         WEI( "wei", 0),
-        KWEI("kwei", 3),
-        MWEI("mwei", 6),
-        GWEI("gwei", 9),
-        TWEI("twei", 12),
-        PWEI("pwei", 15),
-         HUC( "huc", 18),
-        KHUC("khuc", 21),
-        MHUC("mhuc", 24),
-        GHUC("ghuc", 27);
-        THUC("thuc", 30);
-        PHUC("phuc", 33);
-        EHUC("ehuc", 36);
-        ZHUC("zhuc", 39);
-        YHUC("yhuc", 42);
-        NHUC("nhuc", 45);
-        DHUC("dhuc", 48);
-        VHUC("vhuc", 51);
-        UHUC("uhuc", 54);
+        WEI("wei", 0), KWEI("kwei", 3), MWEI("mwei", 6), GWEI("gwei", 9), TWEI("twei", 12), PWEI("pwei", 15), HUC("huc", 18), KHUC("khuc", 21), MHUC("mhuc", 24), GHUC("ghuc", 27), THUC("thuc", 30), PHUC("phuc", 33), EHUC("ehuc", 36), ZHUC("zhuc", 39), YHUC("yhuc", 42), NHUC("nhuc", 45), DHUC("dhuc", 48), VHUC("vhuc", 51), UHUC("uhuc", 54);
 
         private String name;
         private BigDecimal weiFactor;

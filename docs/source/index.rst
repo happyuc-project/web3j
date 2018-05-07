@@ -1,9 +1,9 @@
-.. webuj documentation master file
+.. Webuj documentation master file
 
-webuj
+Webuj
 =====
 
-webuj is a highly modular, reactive, type safe Java and Android library for working with
+Webuj is a highly modular, reactive, type safe Java and Android library for working with
 Smart Contracts and integrating with clients (nodes) on the HappyUC network:
 
 .. image:: /images/webuj_network.png
@@ -12,7 +12,7 @@ This allows you to work with the `HappyUC <https://www.happyuc.org/>`_ blockchai
 additional overhead of having to write your own integration code for the platform.
 
 The `Java and the Blockchain <https://www.youtube.com/watch?v=ea3miXs_P6Y>`_ talk provides an
-overview of blockchain, HappyUC and webuj.
+overview of blockchain, HappyUC and Webuj.
 
 
 Features
@@ -35,7 +35,7 @@ Features
 - Comprehensive integration tests demonstrating a number of the above scenarios
 - Command line tools
 - Android compatible
-- Support for JP Morgan's Quorum via `webuj-quorum <https://github.com/webuj/quorum>`_
+- Support for JP Morgan's Quorum via `Webuj-quorum <https://github.com/Webuj/quorum>`_
 
 
 Dependencies
@@ -59,7 +59,7 @@ wrappers
 Donate
 ======
 
-You can help fund the development of webuj by donating to the following wallet addresses:
+You can help fund the development of Webuj by donating to the following wallet addresses:
 
 +----------+--------------------------------------------+
 | HappyUC | 0x2dfBf35bb7c3c0A466A6C48BEBf3eF7576d3C420 |

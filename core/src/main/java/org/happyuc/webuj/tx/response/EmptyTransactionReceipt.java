@@ -28,8 +28,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
     }
 
     private UnsupportedOperationException unsupportedOperation() {
-        return new UnsupportedOperationException(
-                "Empty transaction receipt, only transaction hash is available");
+        return new UnsupportedOperationException("Empty transaction receipt, only transaction hash is available");
     }
 
     @Override
@@ -183,9 +182,7 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
 
         TransactionReceipt that = (TransactionReceipt) o;
 
-        return getTransactionHash() != null
-                ? getTransactionHash().equals(that.getTransactionHash())
-                : that.getTransactionHash() == null;
+        return getTransactionHash() != null ? getTransactionHash().equals(that.getTransactionHash()) : that.getTransactionHash() == null;
     }
 
     @Override

@@ -14,8 +14,7 @@ public class Function {
     private List<Type> inputParameters;
     private List<TypeReference<Type>> outputParameters;
 
-    public Function(String name, List<Type> inputParameters,
-                    List<TypeReference<?>> outputParameters) {
+    public Function(String name, List<Type> inputParameters, List<TypeReference<?>> outputParameters) {
         this.name = name;
         this.inputParameters = inputParameters;
         this.outputParameters = convert(outputParameters);

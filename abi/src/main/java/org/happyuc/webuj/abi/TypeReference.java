@@ -14,8 +14,7 @@ import java.lang.reflect.Type;
  * <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Type.html">Type</a> to
  * avoid working around this fundamental generics limitation.
  */
-public abstract class TypeReference<T extends org.happyuc.webuj.abi.datatypes.Type>
-        implements Comparable<TypeReference<T>> {
+public abstract class TypeReference<T extends org.happyuc.webuj.abi.datatypes.Type> implements Comparable<TypeReference<T>> {
 
     private final Type type;
 
@@ -64,8 +63,7 @@ public abstract class TypeReference<T extends org.happyuc.webuj.abi.datatypes.Ty
         };
     }
 
-    public abstract static class StaticArrayTypeReference<T extends org.happyuc.webuj.abi.datatypes.Type>
-            extends TypeReference<T> {
+    public abstract static class StaticArrayTypeReference<T extends org.happyuc.webuj.abi.datatypes.Type> extends TypeReference<T> {
 
         private final int size;
 

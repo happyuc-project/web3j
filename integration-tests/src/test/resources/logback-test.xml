@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.happyuc.webuj.protocol" level="DEBUG"/>
+    <logger name="org.happyuc.Webuj.protocol" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

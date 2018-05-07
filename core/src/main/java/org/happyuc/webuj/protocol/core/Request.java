@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import rx.Observable;
 
-import org.happyuc.webuj.protocol.webujService;
+import org.happyuc.webuj.protocol.WebujService;
 
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
@@ -17,7 +17,7 @@ public class Request<S, T extends Response> {
     private List<S> params;
     private long id;
 
-    private webujService webujService;
+    private WebujService webujService;
 
     // Unfortunately require an instance of the type too, see
     // http://stackoverflow.com/a/3437930/3211687
@@ -26,8 +26,7 @@ public class Request<S, T extends Response> {
     public Request() {
     }
 
-    public Request(String method, List<S> params,
-                   webujService webujService, Class<T> type) {
+    public Request(String method, List<S> params, WebujService webujService, Class<T> type) {
         this.method = method;
         this.params = params;
         this.id = nextId.getAndIncrement();
@@ -72,7 +71,7 @@ public class Request<S, T extends Response> {
     }
 
     public CompletableFuture<T> sendAsync() {
-        return  webujService.sendAsync(this, responseType);
+        return webujService.sendAsync(this, responseType);
     }
 
     public Observable<T> observable() {

@@ -13,7 +13,7 @@ import org.happyuc.webuj.utils.Async;
 /**
  * Base service implementation.
  */
-public abstract class Service implements webujService {
+public abstract class Service implements WebujService {
 
     protected final ObjectMapper objectMapper;
 
@@ -24,8 +24,7 @@ public abstract class Service implements webujService {
     protected abstract InputStream performIO(String payload) throws IOException;
 
     @Override
-    public <T extends Response> T send(
-            Request request, Class<T> responseType) throws IOException {
+    public <T extends Response> T send(Request request, Class<T> responseType) throws IOException {
         String payload = objectMapper.writeValueAsString(request);
 
         try (InputStream result = performIO(payload)) {
@@ -38,8 +37,7 @@ public abstract class Service implements webujService {
     }
 
     @Override
-    public <T extends Response> CompletableFuture<T> sendAsync(
-            Request jsonRpc20Request, Class<T> responseType) {
+    public <T extends Response> CompletableFuture<T> sendAsync(Request jsonRpc20Request, Class<T> responseType) {
         return Async.run(() -> send(jsonRpc20Request, responseType));
     }
 }

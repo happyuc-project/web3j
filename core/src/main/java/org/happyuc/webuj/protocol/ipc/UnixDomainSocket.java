@@ -22,7 +22,7 @@ public class UnixDomainSocket implements IOFacade {
     private final PrintWriter writer;
 
     private final UnixSocketChannel channel;
-    
+
     public UnixDomainSocket(String ipcSocketPath) {
         this(ipcSocketPath, DEFAULT_BUFFER_SIZE);
     }
@@ -38,8 +38,7 @@ public class UnixDomainSocket implements IOFacade {
             writer = new PrintWriter(Channels.newOutputStream(channel));
 
         } catch (IOException e) {
-            throw new RuntimeException(
-                    "Provided file socket cannot be opened: " + ipcSocketPath, e);
+            throw new RuntimeException("Provided file socket cannot be opened: " + ipcSocketPath, e);
         }
     }
 
@@ -65,8 +64,7 @@ public class UnixDomainSocket implements IOFacade {
             response.clear();
             reader.read(response);
             result += new String(response.array(), response.arrayOffset(), response.position());
-        } while (response.position() == response.limit()
-                && response.get(response.limit() - 1) != '\n');
+        } while (response.position() == response.limit() && response.get(response.limit() - 1) != '\n');
 
         return result;
     }
