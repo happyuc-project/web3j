@@ -163,7 +163,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     name 'webuj'
                     packaging 'jar'
                     description project.description
-                    url 'https://webuj.io'
+                    url 'https://github.webu.java.io'
 
                     scm {
                         connection 'scm:git:https://github.com/happyuc-project/webuj.git'
