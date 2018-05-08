@@ -90,8 +90,7 @@ subprojects {
     apply plugin: 'java'
 
     dependencies {
-        testCompile "junit:junit:$junitVersion",
-                "org.mockito:mockito-core:$mockitoVersion"
+        testCompile "junit:junit:$junitVersion", "org.mockito:mockito-core:$mockitoVersion"
     }
 }
 
@@ -104,14 +103,14 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
 
-    task javadocJar(type: Jar) {
-        classifier = 'javadoc'
-        from javadoc
-    }
-
     task sourcesJar(type: Jar) {
         classifier = 'sources'
         from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
     }
 
     task testJar(type: Jar) {
@@ -202,13 +201,13 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         publish = true
         pkg {
             repo = 'maven'
-            name = 'org.happyuc.webuj'
+            name = 'webuj'
             desc = project.description
             userOrg = 'webuj'
             licenses = ['Apache-2.0']
             issueTrackerUrl = 'https://github.com/happyuc-project/webu.java/issues'
-            vcsUrl = 'https://github.com/happyuc-project/webuj.git'
-            websiteUrl = 'https://webuj.io'
+            vcsUrl = 'https://github.com/happyuc-project/webu.java.git'
+            websiteUrl = 'https://github.webu.java.io'
             publicDownloadNumbers = true
         }
     }
