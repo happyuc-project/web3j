@@ -43,8 +43,8 @@ allprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    group 'org.happyuc.webuj'
-    version '0.0.1'
+    group 'org.happyuc'
+    version '1.0.0'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -90,8 +90,7 @@ subprojects {
     apply plugin: 'java'
 
     dependencies {
-        testCompile "junit:junit:$junitVersion",
-                "org.mockito:mockito-core:$mockitoVersion"
+        testCompile "junit:junit:$junitVersion", "org.mockito:mockito-core:$mockitoVersion"
     }
 }
 
@@ -104,14 +103,14 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
 
-    task javadocJar(type: Jar) {
-        classifier = 'javadoc'
-        from javadoc
-    }
-
     task sourcesJar(type: Jar) {
         classifier = 'sources'
         from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
     }
 
     task testJar(type: Jar) {
@@ -131,10 +130,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                groupId 'org.happyuc.webuj'
-                artifactId 'webuj'
-                version '0.0.1'
                 from components.java
+                groupId 'org.happyuc'
+                artifactId 'webu.java'
+                version '1.0.0'
 
                 artifact sourcesJar {
                     classifier 'sources'
@@ -161,14 +160,14 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                 }
 
                 pom.project {
-                    name 'webuj'
+                    name 'webu.java'
                     packaging 'jar'
                     description project.description
-                    url 'https://webuj.io'
+                    url 'https://github.webu.java.io'
 
                     scm {
-                        connection 'scm:git:https://github.com/happyuc-project/webuj.git'
-                        url 'https://github.com/happyuc-porject/webuj.git'
+                        connection 'scm:git:https://github.com/happyuc-project/webu.java.git'
+                        url 'https://github.com/happyuc-porject/webu.java.git'
                     }
 
                     licenses {
@@ -180,9 +179,9 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
                     developers {
                         developer {
-                            id 'conor10'
-                            name 'Conor Svensson'
-                            email 'conor10@gmail.com'
+                            id 'happyuc0'
+                            name 'happyuc'
+                            email 'npm@ounun.org'
                         }
                     }
                 }
@@ -196,19 +195,21 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
     }
 
     bintray {
-        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+//        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+//        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+        user = "npm"
+        key = "7f5f4ef22fd3372225af5243c6016040b39ef9a7"
         publications = ['mavenJava']
         publish = true
         pkg {
-            repo = 'maven'
-            name = 'org.happyuc.webuj'
+            repo = 'happyuc'
+            name = 'webu.java'
             desc = project.description
-            userOrg = 'webuj'
+            userOrg = 'npm'
             licenses = ['Apache-2.0']
+            vcsUrl = 'https://github.com/happyuc-project/webu.java.git'
             issueTrackerUrl = 'https://github.com/happyuc-project/webu.java/issues'
-            vcsUrl = 'https://github.com/happyuc-project/webuj.git'
-            websiteUrl = 'https://webuj.io'
+            websiteUrl = 'https://github.webu.java.io'
             publicDownloadNumbers = true
         }
     }
@@ -255,4 +256,7 @@ task jacocoRootTestReport(type: JacocoReport) {
                     ])
         })
     }
+}
+
+test {
 }
