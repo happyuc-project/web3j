@@ -382,6 +382,13 @@ Transactions
 Webuj provides support for both working with HappyUC wallet files (recommended) and HappyUC
 client admin commands for sending transactions.
 
+Create my wallet
+
+.. code-block:: java
+    String filePath = Environment.getExternalStorageDirectory().toString() + "/MyWallet";
+    String fileName = WalletUtils.generateNewWalletFile("123456",new File(filePath),false);
+    Credentials credentials = WalletUtils.loadCredentials("123456", filePath+"/"+fileName);
+
 To send Huc to another party using your HappyUC wallet file:
 
 .. code-block:: java
