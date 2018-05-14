@@ -10,13 +10,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.web3j.utils.Strings.capitaliseFirstLetter;
-import static org.web3j.utils.Strings.isEmpty;
-import static org.web3j.utils.Strings.join;
-import static org.web3j.utils.Strings.lowercaseFirstLetter;
-import static org.web3j.utils.Strings.repeat;
-import static org.web3j.utils.Strings.toCsv;
-import static org.web3j.utils.Strings.zeros;
+import static org.happyuc.webuj.utils.Strings.capitaliseFirstLetter;
+import static org.happyuc.webuj.utils.Strings.isEmpty;
+import static org.happyuc.webuj.utils.Strings.join;
+import static org.happyuc.webuj.utils.Strings.lowercaseFirstLetter;
+import static org.happyuc.webuj.utils.Strings.repeat;
+import static org.happyuc.webuj.utils.Strings.toCsv;
+import static org.happyuc.webuj.utils.Strings.zeros;
 
 
 public class StringsTest {
@@ -72,5 +72,5 @@ public class StringsTest {
         assertTrue(Strings.isEmpty(""));
         assertFalse(Strings.isEmpty("hello world"));
     }
-    
+
 }

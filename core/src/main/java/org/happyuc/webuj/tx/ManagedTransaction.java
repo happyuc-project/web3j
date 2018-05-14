@@ -1,18 +1,13 @@
 package org.happyuc.webuj.tx;
 
+import org.happyuc.webuj.ens.EnsResolver;
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
+import org.happyuc.webuj.protocol.exceptions.TransactionException;
+
 import java.io.IOException;
 import java.math.BigInteger;
-
-import org.happyuc.webuj.ens.EnsResolver;
-import org.happyuc.webuj.protocol.Web3j;
-import org.happyuc.webuj.protocol.core.methods.response.EthGasPrice;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
-import org.happyuc.webuj.protocol.exceptions.TransactionException;
-import org.web3j.ens.EnsResolver;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.EthGasPrice;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
 
 
 /**
@@ -22,16 +17,16 @@ public abstract class ManagedTransaction {
 
     public static final BigInteger GAS_PRICE = BigInteger.valueOf(22000000000L);
 
-    protected Web3j web3j;
+    protected Webuj webuj;
 
     protected TransactionManager transactionManager;
 
     protected EnsResolver ensResolver;
 
-    protected ManagedTransaction(Web3j web3j, TransactionManager transactionManager) {
+    protected ManagedTransaction(Webuj webuj, TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
-        this.web3j = web3j;
-        this.ensResolver = new EnsResolver(web3j);
+        this.webuj = webuj;
+        this.ensResolver = new EnsResolver(webuj);
     }
 
     /**
@@ -65,27 +60,25 @@ public abstract class ManagedTransaction {
     /**
      * Return the current gas price from the ethereum node.
      * <p>
-     *     Note: this method was previously called {@code getGasPrice} but was renamed to
-     *     distinguish it when a bean accessor method on {@link Contract} was added with that name.
-     *     If you have a Contract subclass that is calling this method (unlikely since those
-     *     classes are usually generated and until very recently those generated subclasses were
-     *     marked {@code final}), then you will need to change your code to call this method
-     *     instead, if you want the dynamic behavior.
+     * Note: this method was previously called {@code getGasPrice} but was renamed to
+     * distinguish it when a bean accessor method on {@link Contract} was added with that name.
+     * If you have a Contract subclass that is calling this method (unlikely since those
+     * classes are usually generated and until very recently those generated subclasses were
+     * marked {@code final}), then you will need to change your code to call this method
+     * instead, if you want the dynamic behavior.
      * </p>
+     *
      * @return the current gas price, determined dynamically at invocation
      * @throws IOException if there's a problem communicating with the ethereum node
      */
     public BigInteger requestCurrentGasPrice() throws IOException {
-        EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
+        HucGasPrice hucGasPrice = webuj.hucGasPrice().send();
 
-        return ethGasPrice.getGasPrice();
+        return hucGasPrice.getGasPrice();
     }
 
-    protected TransactionReceipt send(
-            String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit)
-            throws IOException, TransactionException {
+    protected RepTransactionReceipt send(String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit) throws IOException, TransactionException {
 
-        return transactionManager.executeTransaction(
-                gasPrice, gasLimit, to, data, value);
+        return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
     }
 }

@@ -2,14 +2,14 @@ package org.happyuc.webuj.ens;
 
 import org.junit.Test;
 
-import org.web3j.tx.ChainId;
+import org.happyuc.webuj.tx.ChainId;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.ens.Contracts.MAINNET;
-import static org.web3j.ens.Contracts.RINKEBY;
-import static org.web3j.ens.Contracts.ROPSTEN;
-import static org.web3j.ens.Contracts.resolveRegistryContract;
+import static org.happyuc.webuj.ens.Contracts.MAINNET;
+import static org.happyuc.webuj.ens.Contracts.RINKEBY;
+import static org.happyuc.webuj.ens.Contracts.ROPSTEN;
+import static org.happyuc.webuj.ens.Contracts.resolveRegistryContract;
 
 public class ContractsTest {
 

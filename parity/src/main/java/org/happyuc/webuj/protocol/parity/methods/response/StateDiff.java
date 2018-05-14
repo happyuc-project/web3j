@@ -1,16 +1,16 @@
 package org.happyuc.webuj.protocol.parity.methods.response;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * StateDiff used in following methods.
  * <ol>
- *     <li>trace_call</li>
- *     <li>trace_rawTransaction</li>
- *     <li>trace_replayTransaction</li>
+ * <li>trace_call</li>
+ * <li>trace_rawTransaction</li>
+ * <li>trace_replayTransaction</li>
  * </ol>
  */
 public class StateDiff {
@@ -92,10 +92,7 @@ public class StateDiff {
 
         @Override
         public String toString() {
-            return "ChangedState{"
-                    + "from='" + from + '\''
-                    + ", to='" + to + '\''
-                    + '}';
+            return "ChangedState{" + "from='" + from + '\'' + ", to='" + to + '\'' + '}';
         }
 
     }
@@ -186,9 +183,7 @@ public class StateDiff {
 
         @Override
         public String toString() {
-            return "AddedState{"
-                    + "value='" + value + '\''
-                    + '}';
+            return "AddedState{" + "value='" + value + '\'' + '}';
         }
 
     }
@@ -250,20 +245,16 @@ public class StateDiff {
 
         StateDiff that = (StateDiff) o;
 
-        if (getBalance() != null ? !getBalance().equals(that.getBalance())
-                : that.getBalance() != null) {
+        if (getBalance() != null ? !getBalance().equals(that.getBalance()) : that.getBalance() != null) {
             return false;
         }
-        if (getCode() != null ? !getCode().equals(that.getCode())
-                : that.getCode() != null) {
+        if (getCode() != null ? !getCode().equals(that.getCode()) : that.getCode() != null) {
             return false;
         }
-        if (getNonce() != null ? !getNonce().equals(that.getNonce())
-                : that.getNonce() != null) {
+        if (getNonce() != null ? !getNonce().equals(that.getNonce()) : that.getNonce() != null) {
             return false;
         }
-        return getStorage() != null ? getStorage().equals(that.getStorage())
-                : that.getStorage() == null;
+        return getStorage() != null ? getStorage().equals(that.getStorage()) : that.getStorage() == null;
     }
 
     @Override
@@ -282,10 +273,7 @@ public class StateDiff {
         } else if (node.isObject() && node.has("*")) {
             JsonNode subNode = node.get("*");
             if (subNode.isObject() && subNode.has("from") && subNode.has("to")) {
-                state = new ChangedState(
-                    subNode.get("from").asText(),
-                    subNode.get("to").asText()
-                );
+                state = new ChangedState(subNode.get("from").asText(), subNode.get("to").asText());
             }
         } else if (node.isObject() && node.has("+")) {
             JsonNode subNode = node.get("+");
@@ -298,11 +286,6 @@ public class StateDiff {
 
     @Override
     public String toString() {
-        return "StateDiff{"
-                + "balance=" + getBalance()
-                + ", code=" + getCode()
-                + ", nonce=" + getNonce()
-                + ", storage=" + getStorage()
-                + '}';
+        return "StateDiff{" + "balance=" + getBalance() + ", code=" + getCode() + ", nonce=" + getNonce() + ", storage=" + getStorage() + '}';
     }
 }

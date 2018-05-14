@@ -6,21 +6,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.happyuc.webuj.protocol.Web3j;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.utils.Async;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.utils.Async;
 
 /**
- * Transaction receipt processor that uses a single thread to query for transaction receipts.
+ * ReqTransaction receipt processor that uses a single thread to query for transaction receipts.
  *
  * <p><em>Note:</em>When initially invoked, this processor returns a transaction receipt containing
  * only the transaction hash of the submitted transaction. This is encapsulated in an
- * {@link EmptyTransactionReceipt}.
+ * {@link EmptyRepTransactionReceipt}.
  */
 public class QueuingTransactionReceiptProcessor extends TransactionReceiptProcessor {
 
@@ -30,48 +26,39 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
     private final Callback callback;
     private final BlockingQueue<RequestWrapper> pendingTransactions;
 
-    public QueuingTransactionReceiptProcessor(
-            Web3j web3j, Callback callback,
-            int pollingAttemptsPerTxHash, long pollingFrequency) {
+    public QueuingTransactionReceiptProcessor(Webuj web3j, Callback callback, int pollingAttemptsPerTxHash, long pollingFrequency) {
         super(web3j);
         this.scheduledExecutorService = Async.defaultExecutorService();
         this.callback = callback;
         this.pendingTransactions = new LinkedBlockingQueue<RequestWrapper>();
         this.pollingAttemptsPerTxHash = pollingAttemptsPerTxHash;
 
-        scheduledExecutorService.scheduleAtFixedRate(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        QueuingTransactionReceiptProcessor.this.sendTransactionReceiptRequests();
-                    }
-                },
-                pollingFrequency, pollingFrequency, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                QueuingTransactionReceiptProcessor.this.sendTransactionReceiptRequests();
+            }
+        }, pollingFrequency, pollingFrequency, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(String transactionHash)
-            throws IOException, TransactionException {
+    public RepTransactionReceipt waitForTransactionReceipt(String transactionHash) throws IOException, TransactionException {
         pendingTransactions.add(new RequestWrapper(transactionHash));
 
-        return new EmptyTransactionReceipt(transactionHash);
+        return new EmptyRepTransactionReceipt(transactionHash);
     }
 
     private void sendTransactionReceiptRequests() {
         for (RequestWrapper requestWrapper : pendingTransactions) {
             try {
                 String transactionHash = requestWrapper.getTransactionHash();
-                TransactionReceipt transactionReceipt =
-                        sendTransactionReceiptRequest(transactionHash);
-                if (transactionReceipt != null) {
-                    callback.accept(transactionReceipt);
+                RepTransactionReceipt repTransactionReceipt = sendTransactionReceiptRequest(transactionHash);
+                if (repTransactionReceipt != null) {
+                    callback.accept(repTransactionReceipt);
                     pendingTransactions.remove(requestWrapper);
                 } else {
                     if (requestWrapper.getCount() == pollingAttemptsPerTxHash) {
-                        throw new TransactionException(
-                                "No transaction receipt for txHash: " + transactionHash
-                                        + "received after " + pollingAttemptsPerTxHash
-                                        + " attempts");
+                        throw new TransactionException("No transaction receipt for txHash: " + transactionHash + "received after " + pollingAttemptsPerTxHash + " attempts");
                     } else {
                         requestWrapper.incrementCount();
                     }

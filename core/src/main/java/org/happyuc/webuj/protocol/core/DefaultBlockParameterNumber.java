@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * DefaultBlockParameter implementation that takes a numeric value.

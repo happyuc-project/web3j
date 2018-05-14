@@ -1,19 +1,18 @@
 package org.happyuc.webuj.contracts.token;
 
+import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
+import org.happyuc.webuj.protocol.core.RemoteCall;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
+import rx.Observable;
+
 import java.math.BigInteger;
 import java.util.List;
 
-import rx.Observable;
-
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-
 /**
- * Describes the Ethereum "Basic" subset of the ERC-20 token standard.
+ * Describes the Happyuc "Basic" subset of the ERC-20 token standard.
  * <p>
- *     Implementations should provide the concrete <code>TransferEventResponse</code>
- *     from their token as the generic type "T".
+ * Implementations should provide the concrete <code>TransferEventResponse</code>
+ * from their token as the generic type "T".
  * </p>
  *
  * @see <a href="https://github.com/ethereum/EIPs/issues/179">ERC: Simpler Token Standard #179</a>
@@ -26,11 +25,10 @@ public interface ERC20BasicInterface<T> {
 
     RemoteCall<BigInteger> balanceOf(String who);
 
-    RemoteCall<TransactionReceipt> transfer(String to, BigInteger value);
-    
-    List<T> getTransferEvents(TransactionReceipt transactionReceipt);
+    RemoteCall<RepTransactionReceipt> transfer(String to, BigInteger value);
 
-    Observable<T> transferEventObservable(DefaultBlockParameter startBlock,
-            DefaultBlockParameter endBlock);
+    List<T> getTransferEvents(RepTransactionReceipt repTransactionReceipt);
+
+    Observable<T> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
 
 }

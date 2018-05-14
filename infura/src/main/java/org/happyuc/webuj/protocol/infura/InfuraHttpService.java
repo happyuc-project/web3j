@@ -1,17 +1,16 @@
 package org.happyuc.webuj.protocol.infura;
 
+import org.happyuc.webuj.protocol.http.HttpService;
+
 import java.util.Collections;
 import java.util.Map;
-
-import org.web3j.protocol.http.HttpService;
 
 /**
  * HttpService for working with <a href="https://infura.io/">Infura</a> clients.
  */
 public class InfuraHttpService extends HttpService {
 
-    private static final String INFURA_ETHEREUM_PREFERRED_CLIENT =
-            "Infura-Ethereum-Preferred-Client";
+    private static final String INFURA_HAPPYUC_PREFERRED_CLIENT = "Infura-Happyuc-Preferred-Client";
 
     private final Map<String, String> clientVersionHeader;
 
@@ -35,10 +34,9 @@ public class InfuraHttpService extends HttpService {
         }
 
         if (required) {
-            return Collections.singletonMap(INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion);
+            return Collections.singletonMap(INFURA_HAPPYUC_PREFERRED_CLIENT, clientVersion);
         } else {
-            return Collections.singletonMap(
-                    INFURA_ETHEREUM_PREFERRED_CLIENT, clientVersion + "; required=false");
+            return Collections.singletonMap(INFURA_HAPPYUC_PREFERRED_CLIENT, clientVersion + "; required=false");
         }
     }
 }

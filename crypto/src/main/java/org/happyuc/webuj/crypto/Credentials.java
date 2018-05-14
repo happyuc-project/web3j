@@ -1,7 +1,7 @@
 package org.happyuc.webuj.crypto;
 
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Credentials wrapper.

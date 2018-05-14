@@ -22,28 +22,25 @@ public class AbiDefinition {
      * since multiple functions with the same signature that only differ in mutability are not
      * allowed in Solidity.</p>
      * <p>
-     *     Valid values are:
-     *     <ul>
-     *         <li>pure</li>
-     *         <li>view</li>
-     *         <li>nonpayable</li>
-     *         <li>payable</li>
-     *     </ul>
+     * Valid values are:
+     * <ul>
+     * <li>pure</li>
+     * <li>view</li>
+     * <li>nonpayable</li>
+     * <li>payable</li>
+     * </ul>
      * </p>
      */
     private String stateMutability;
-    
+
     public AbiDefinition() {
     }
 
-    public AbiDefinition(boolean constant, List<NamedType> inputs, String name,
-                         List<NamedType> outputs, String type, boolean payable) {
+    public AbiDefinition(boolean constant, List<NamedType> inputs, String name, List<NamedType> outputs, String type, boolean payable) {
         this(constant, inputs, name, outputs, type, payable, null);
     }
 
-    public AbiDefinition(boolean constant, List<NamedType> inputs, String name,
-            List<NamedType> outputs, String type, boolean payable,
-            String stateMutability) {
+    public AbiDefinition(boolean constant, List<NamedType> inputs, String name, List<NamedType> outputs, String type, boolean payable, String stateMutability) {
         this.constant = constant;
         this.inputs = inputs;
         this.name = name;
@@ -127,25 +124,19 @@ public class AbiDefinition {
         if (isPayable() != that.isPayable()) {
             return false;
         }
-        if (getInputs() != null
-                ? !getInputs().equals(that.getInputs()) : that.getInputs() != null) {
+        if (getInputs() != null ? !getInputs().equals(that.getInputs()) : that.getInputs() != null) {
             return false;
         }
-        if (getName() != null
-                ? !getName().equals(that.getName()) : that.getName() != null) {
+        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
             return false;
         }
-        if (getOutputs() != null
-                ? !getOutputs().equals(that.getOutputs()) : that.getOutputs() != null) {
+        if (getOutputs() != null ? !getOutputs().equals(that.getOutputs()) : that.getOutputs() != null) {
             return false;
         }
-        if (getStateMutability() != null
-                ? !getStateMutability().equals(that.getStateMutability())
-                : that.getStateMutability() != null) {
+        if (getStateMutability() != null ? !getStateMutability().equals(that.getStateMutability()) : that.getStateMutability() != null) {
             return false;
         }
-        return getType() != null
-                ? getType().equals(that.getType()) : that.getType() == null;
+        return getType() != null ? getType().equals(that.getType()) : that.getType() == null;
     }
 
     @Override
@@ -218,12 +209,10 @@ public class AbiDefinition {
                 return false;
             }
 
-            if (getName() != null
-                    ? !getName().equals(namedType.getName()) : namedType.getName() != null) {
+            if (getName() != null ? !getName().equals(namedType.getName()) : namedType.getName() != null) {
                 return false;
             }
-            return getType() != null
-                    ? getType().equals(namedType.getType()) : namedType.getType() == null;
+            return getType() != null ? getType().equals(namedType.getType()) : namedType.getType() == null;
         }
 
         @Override

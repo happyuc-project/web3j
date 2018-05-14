@@ -12,17 +12,10 @@ import static org.happyuc.webuj.utils.Collection.tail;
  */
 public class Runner {
 
-    private static String USAGE = "Usage: web3j version|wallet|solidity ...";
+    private static String USAGE = "Usage: webuj version|wallet|solidity ...";
 
     private static String LOGO = "\n" // generated at http://patorjk.com/software/taag
-            + "              _      _____ _     _        \n"
-            + "             | |    |____ (_)   (_)       \n"
-            + "__      _____| |__      / /_     _   ___  \n"
-            + "\\ \\ /\\ / / _ \\ '_ \\     \\ \\ |   | | / _ \\ \n"
-            + " \\ V  V /  __/ |_) |.___/ / | _ | || (_) |\n"
-            + "  \\_/\\_/ \\___|_.__/ \\____/| |(_)|_| \\___/ \n"
-            + "                         _/ |             \n"
-            + "                        |__/              \n";
+            + "              _      _____ _     _        \n" + "             | |    |____ (_)   (_)       \n" + "__      _____| |__      / /_     _   ___  \n" + "\\ \\ /\\ / / _ \\ '_ \\     \\ \\ |   | | / _ \\ \n" + " \\ V  V /  __/ |_) |.___/ / | _ | || (_) |\n" + "  \\_/\\_/ \\___|_.__/ \\____/| |(_)|_| \\___/ \n" + "                         _/ |             \n" + "                        |__/              \n";
 
     public static void main(String[] args) throws Exception {
         System.out.println(LOGO);
@@ -38,8 +31,7 @@ public class Runner {
             } else if (arg.equals("truffle")) {
                 TruffleJsonFunctionWrapperGenerator.run(tail(args));
             } else if (arg.equals("version")) {
-                Console.exitSuccess("Version: " + Version.getVersion() + "\n"
-                        + "Build timestamp: " + Version.getTimestamp());
+                Console.exitSuccess("Version: " + Version.getVersion() + "\n" + "Build timestamp: " + Version.getTimestamp());
             } else {
                 Console.exitError(USAGE);
             }

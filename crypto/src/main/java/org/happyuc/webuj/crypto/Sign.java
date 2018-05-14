@@ -1,27 +1,19 @@
 package org.happyuc.webuj.crypto;
 
-import java.math.BigInteger;
-import java.security.SignatureException;
-import java.util.Arrays;
-
 import org.happyuc.webuj.utils.Assertions;
 import org.happyuc.webuj.utils.Numeric;
 import org.spongycastle.asn1.x9.X9ECParameters;
 import org.spongycastle.asn1.x9.X9IntegerConverter;
-import org.spongycastle.crypto.digests.SHA256Digest;
 import org.spongycastle.crypto.ec.CustomNamedCurves;
 import org.spongycastle.crypto.params.ECDomainParameters;
-import org.spongycastle.crypto.params.ECPrivateKeyParameters;
-import org.spongycastle.crypto.signers.ECDSASigner;
-import org.spongycastle.crypto.signers.HMacDSAKCalculator;
 import org.spongycastle.math.ec.ECAlgorithms;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.math.ec.FixedPointCombMultiplier;
 import org.spongycastle.math.ec.custom.sec.SecP256K1Curve;
 
-import org.web3j.utils.Numeric;
-
-import static org.web3j.utils.Assertions.verifyPrecondition;
+import java.math.BigInteger;
+import java.security.SignatureException;
+import java.util.Arrays;
 
 /**
  * <p>Transaction signing logic.</p>
@@ -33,8 +25,7 @@ import static org.web3j.utils.Assertions.verifyPrecondition;
 public class Sign {
 
     private static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
-    static final ECDomainParameters CURVE = new ECDomainParameters(
-            CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
+    static final ECDomainParameters CURVE = new ECDomainParameters(CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
 
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
@@ -61,8 +52,7 @@ public class Sign {
             }
         }
         if (recId == -1) {
-            throw new RuntimeException(
-                    "Could not construct a recoverable key. This should never happen.");
+            throw new RuntimeException("Could not construct a recoverable key. This should never happen.");
         }
 
         int headerByte = recId + 27;
@@ -92,8 +82,8 @@ public class Sign {
      * 0 to 3, and if the output is null OR a key that is not the one you expect, you try again
      * with the next recId.</p>
      *
-     * @param recId Which possible key to recover.
-     * @param sig the R and S components of the signature, wrapped.
+     * @param recId   Which possible key to recover.
+     * @param sig     the R and S components of the signature, wrapped.
      * @param message Hash of the data that was signed.
      * @return An ECKey containing only the public part, or null if recovery wasn't possible.
      */
@@ -109,7 +99,7 @@ public class Sign {
         BigInteger i = BigInteger.valueOf((long) recId / 2);
         BigInteger x = sig.r.add(i.multiply(n));
         //   1.2. Convert the integer x to an octet string X of length mlen using the conversion
-        //        routine specified in Section 2.3.7, where mlen = ⌈(log2 p)/8⌉ or mlen = ⌈m/8⌉.
+        //        routine specified in Section 2.3.7.
         //   1.3. Convert the octet string (16 set binary digits)||X to an elliptic curve point R
         //        using the conversion routine specified in Section 2.3.4. If this conversion
         //        routine outputs "invalid", then do another iteration of Step 1.
@@ -155,11 +145,13 @@ public class Sign {
         return new BigInteger(1, Arrays.copyOfRange(qBytes, 1, qBytes.length));
     }
 
-    /** Decompress a compressed public key (x co-ord and low-bit of y-coord). */
+    /**
+     * Decompress a compressed public key (x co-ord and low-bit of y-coord).
+     */
     private static ECPoint decompressKey(BigInteger xBN, boolean yBit) {
         X9IntegerConverter x9 = new X9IntegerConverter();
         byte[] compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE.getCurve()));
-        compEnc[0] = (byte)(yBit ? 0x03 : 0x02);
+        compEnc[0] = (byte) (yBit ? 0x03 : 0x02);
         return CURVE.getCurve().decodePoint(compEnc);
     }
 
@@ -168,14 +160,13 @@ public class Sign {
      * returns the public key that was used to sign it. This can then be compared to the expected
      * public key to determine if the signature was correct.
      *
-     * @param message RLP encoded message.
+     * @param message       RLP encoded message.
      * @param signatureData The message signature components
      * @return the public key used to sign the message
      * @throws SignatureException If the public key could not be recovered or if there was a
-     *     signature format error.
+     *                            signature format error.
      */
-    public static BigInteger signedMessageToKey(
-            byte[] message, SignatureData signatureData) throws SignatureException {
+    public static BigInteger signedMessageToKey(byte[] message, SignatureData signatureData) throws SignatureException {
 
         byte[] r = signatureData.getR();
         byte[] s = signatureData.getS();
@@ -189,9 +180,7 @@ public class Sign {
             throw new SignatureException("Header byte out of range: " + header);
         }
 
-        ECDSASignature sig = new ECDSASignature(
-                new BigInteger(1, signatureData.getR()),
-                new BigInteger(1, signatureData.getS()));
+        ECDSASignature sig = new ECDSASignature(new BigInteger(1, signatureData.getR()), new BigInteger(1, signatureData.getS()));
 
         byte[] messageHash = Hash.sha3(message);
         int recId = header - 27;

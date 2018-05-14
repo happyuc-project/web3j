@@ -1,9 +1,8 @@
 package org.happyuc.webuj.crypto;
 
-import java.math.BigInteger;
-
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.utils.Numeric;
+
+import java.math.BigInteger;
 
 /**
  * Transaction class used for signing transactions locally.<br>
@@ -19,8 +18,7 @@ public class RawTransaction {
     private BigInteger value;
     private String data;
 
-    private RawTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-                           BigInteger value, String data) {
+    private RawTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String data) {
         this.nonce = nonce;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
@@ -32,29 +30,21 @@ public class RawTransaction {
         }
     }
 
-    public static RawTransaction createContractTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
-            String init) {
+    public static RawTransaction createContractTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value, String init) {
 
         return new RawTransaction(nonce, gasPrice, gasLimit, "", value, init);
     }
 
-    public static RawTransaction createEtherTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value) {
-
+    public static RawTransaction createHucerTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value) {
         return new RawTransaction(nonce, gasPrice, gasLimit, to, value, "");
 
     }
 
-    public static RawTransaction createTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, String data) {
+    public static RawTransaction createTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, String data) {
         return createTransaction(nonce, gasPrice, gasLimit, to, BigInteger.ZERO, data);
     }
 
-    public static RawTransaction createTransaction(
-            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value, String data) {
+    public static RawTransaction createTransaction(BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String data) {
 
         return new RawTransaction(nonce, gasPrice, gasLimit, to, value, data);
     }

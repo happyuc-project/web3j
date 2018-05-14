@@ -10,19 +10,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.web3j.crypto.Hash.sha256;
-import static org.web3j.crypto.SampleKeys.CREDENTIALS;
-import static org.web3j.crypto.SampleKeys.KEY_PAIR;
-import static org.web3j.crypto.SampleKeys.PASSWORD;
-import static org.web3j.crypto.WalletUtils.isValidAddress;
-import static org.web3j.crypto.WalletUtils.isValidPrivateKey;
+import static org.happyuc.webuj.crypto.Hash.sha256;
+import static org.happyuc.webuj.crypto.SampleKeys.CREDENTIALS;
+import static org.happyuc.webuj.crypto.SampleKeys.KEY_PAIR;
+import static org.happyuc.webuj.crypto.SampleKeys.PASSWORD;
+import static org.happyuc.webuj.crypto.WalletUtils.isValidAddress;
+import static org.happyuc.webuj.crypto.WalletUtils.isValidPrivateKey;
 
 public class WalletUtilsTest {
 
@@ -34,14 +34,13 @@ public class WalletUtilsTest {
 
     @Before
     public void setUp() throws Exception {
-        tempDir = folder.newFolder(
-                WalletUtilsTest.class.getSimpleName() + "-testkeys");
+        tempDir = folder.newFolder(WalletUtilsTest.class.getSimpleName() + "-testkeys");
         tempDirPath = tempDir.getPath();
     }
 
     @After
     public void tearDown() throws Exception {
-        for (File file:tempDir.listFiles()) {
+        for (File file : tempDir.listFiles()) {
             file.delete();
         }
         tempDir.delete();
@@ -85,33 +84,21 @@ public class WalletUtilsTest {
     }
 
     private void testGenerateWalletFile(String fileName) throws Exception {
-        Credentials credentials = WalletUtils.loadCredentials(
-                PASSWORD, new File(tempDir, fileName));
+        Credentials credentials = WalletUtils.loadCredentials(PASSWORD, new File(tempDir, fileName));
 
         assertThat(credentials, equalTo(CREDENTIALS));
     }
 
     @Test
     public void testLoadCredentialsFromFile() throws Exception {
-        Credentials credentials = WalletUtils.loadCredentials(
-                PASSWORD,
-                new File(WalletUtilsTest.class.getResource(
-                        "/keyfiles/"
-                                + "UTC--2016-11-03T05-55-06."
-                                + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")
-                        .getFile()));
+        Credentials credentials = WalletUtils.loadCredentials(PASSWORD, new File(WalletUtilsTest.class.getResource("/keyfiles/" + "UTC--2016-11-03T05-55-06." + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile()));
 
         assertThat(credentials, equalTo(CREDENTIALS));
     }
 
     @Test
     public void testLoadCredentialsFromString() throws Exception {
-        Credentials credentials = WalletUtils.loadCredentials(
-                PASSWORD,
-                WalletUtilsTest.class.getResource(
-                        "/keyfiles/"
-                        + "UTC--2016-11-03T05-55-06."
-                        + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
+        Credentials credentials = WalletUtils.loadCredentials(PASSWORD, WalletUtilsTest.class.getResource("/keyfiles/" + "UTC--2016-11-03T05-55-06." + "340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc").getFile());
 
         assertThat(credentials, equalTo(CREDENTIALS));
     }
@@ -119,34 +106,22 @@ public class WalletUtilsTest {
     @Ignore  // enable if users need to work with MyEtherWallet
     @Test
     public void testLoadCredentialsMyEtherWallet() throws Exception {
-        Credentials credentials = WalletUtils.loadCredentials(
-                PASSWORD,
-                new File(WalletUtilsTest.class.getResource(
-                        "/keyfiles/"
-                        + "UTC--2016-11-03T07-47-45."
-                        + "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818").getFile()));
+        Credentials credentials = WalletUtils.loadCredentials(PASSWORD, new File(WalletUtilsTest.class.getResource("/keyfiles/" + "UTC--2016-11-03T07-47-45." + "988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818").getFile()));
 
-        assertThat(credentials, equalTo(
-                Credentials.create(
-                        "6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9")));
+        assertThat(credentials, equalTo(Credentials.create("6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9")));
     }
 
     @Test
     public void testGetDefaultKeyDirectory() {
-        assertTrue(WalletUtils.getDefaultKeyDirectory("Mac OS X")
-                .endsWith(String.format("%sLibrary%sEthereum", File.separator, File.separator)));
-        assertTrue(WalletUtils.getDefaultKeyDirectory("Windows")
-                .endsWith(String.format("%sEthereum", File.separator)));
-        assertTrue(WalletUtils.getDefaultKeyDirectory("Linux")
-                .endsWith(String.format("%s.ethereum", File.separator)));
+        assertTrue(WalletUtils.getDefaultKeyDirectory("Mac OS X").endsWith(String.format("%sLibrary%sEthereum", File.separator, File.separator)));
+        assertTrue(WalletUtils.getDefaultKeyDirectory("Windows").endsWith(String.format("%sEthereum", File.separator)));
+        assertTrue(WalletUtils.getDefaultKeyDirectory("Linux").endsWith(String.format("%s.ethereum", File.separator)));
     }
 
     @Test
     public void testGetTestnetKeyDirectory() {
-        assertTrue(WalletUtils.getMainnetKeyDirectory()
-                .endsWith(String.format("%skeystore", File.separator)));
-        assertTrue(WalletUtils.getTestnetKeyDirectory()
-                .endsWith(String.format("%stestnet%skeystore", File.separator, File.separator)));
+        assertTrue(WalletUtils.getMainnetKeyDirectory().endsWith(String.format("%skeystore", File.separator)));
+        assertTrue(WalletUtils.getTestnetKeyDirectory().endsWith(String.format("%stestnet%skeystore", File.separator, File.separator)));
     }
 
     @Test

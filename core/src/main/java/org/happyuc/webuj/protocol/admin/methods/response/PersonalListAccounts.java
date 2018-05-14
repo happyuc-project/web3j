@@ -2,7 +2,7 @@ package org.happyuc.webuj.protocol.admin.methods.response;
 
 import java.util.List;
 
-import org.web3j.protocol.core.Response;
+import org.happyuc.webuj.protocol.core.Response;
 
 /**
  * personal_listAccounts.

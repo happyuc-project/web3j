@@ -1,7 +1,7 @@
 package org.happyuc.webuj.ens;
 
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Record type interfaces supported by resolvers as per

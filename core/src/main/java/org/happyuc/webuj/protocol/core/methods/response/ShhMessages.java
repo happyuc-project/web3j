@@ -4,8 +4,8 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.protocol.core.Response;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.protocol.core.Response;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Whisper messages returned by:
@@ -38,8 +38,7 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
         public SshMessage() {
         }
 
-        public SshMessage(String hash, String from, String to, String expiry, String ttl,
-                          String sent, List<String> topics, String payload, String workProved) {
+        public SshMessage(String hash, String from, String to, String expiry, String ttl, String sent, List<String> topics, String payload, String workProved) {
             this.hash = hash;
             this.from = from;
             this.to = to;
@@ -159,29 +158,22 @@ public class ShhMessages extends Response<List<ShhMessages.SshMessage>> {
             if (getTo() != null ? !getTo().equals(that.getTo()) : that.getTo() != null) {
                 return false;
             }
-            if (getExpiryRaw() != null
-                    ? !getExpiryRaw().equals(that.getExpiryRaw()) : that.getExpiryRaw() != null) {
+            if (getExpiryRaw() != null ? !getExpiryRaw().equals(that.getExpiryRaw()) : that.getExpiryRaw() != null) {
                 return false;
             }
-            if (getTtlRaw() != null
-                    ? !getTtlRaw().equals(that.getTtlRaw()) : that.getTtlRaw() != null) {
+            if (getTtlRaw() != null ? !getTtlRaw().equals(that.getTtlRaw()) : that.getTtlRaw() != null) {
                 return false;
             }
-            if (getSentRaw() != null
-                    ? !getSentRaw().equals(that.getSentRaw()) : that.getSentRaw() != null) {
+            if (getSentRaw() != null ? !getSentRaw().equals(that.getSentRaw()) : that.getSentRaw() != null) {
                 return false;
             }
-            if (getTopics() != null
-                    ? !getTopics().equals(that.getTopics()) : that.getTopics() != null) {
+            if (getTopics() != null ? !getTopics().equals(that.getTopics()) : that.getTopics() != null) {
                 return false;
             }
-            if (getPayload() != null
-                    ? !getPayload().equals(that.getPayload()) : that.getPayload() != null) {
+            if (getPayload() != null ? !getPayload().equals(that.getPayload()) : that.getPayload() != null) {
                 return false;
             }
-            return getWorkProvedRaw() != null
-                    ? getWorkProvedRaw().equals(that.getWorkProvedRaw())
-                    : that.getWorkProvedRaw() == null;
+            return getWorkProvedRaw() != null ? getWorkProvedRaw().equals(that.getWorkProvedRaw()) : that.getWorkProvedRaw() == null;
         }
 
         @Override

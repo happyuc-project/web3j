@@ -20,13 +20,13 @@ import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
 import org.happyuc.webuj.tx.ChainId;
 import org.happyuc.webuj.utils.Collection;
 import org.happyuc.webuj.utils.Strings;
-import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.tx.ChainId;
-import org.web3j.utils.Strings;
+import org.happyuc.webuj.protocol.ObjectMapperFactory;
+import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
+import org.happyuc.webuj.tx.ChainId;
+import org.happyuc.webuj.utils.Strings;
 
-import static org.web3j.codegen.Console.exitError;
-import static org.web3j.utils.Collection.tail;
+import static org.happyuc.webuj.codegen.Console.exitError;
+import static org.happyuc.webuj.utils.Collection.tail;
 
 /**
  * Java wrapper source code generator for Truffle JSON format. Truffle embeds the Solidity ABI
@@ -36,20 +36,12 @@ import static org.web3j.utils.Collection.tail;
  */
 public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
-    private static final String USAGE = "truffle generate "
-            + "[--javaTypes|--solidityTypes] "
-            + "<input truffle json file>.json "
-            + "-p|--package <base package name> "
-            + "-o|--output <destination base directory>";
+    private static final String USAGE = "truffle generate " + "[--javaTypes|--solidityTypes] " + "<input truffle json file>.json " + "-p|--package <base package name> " + "-o|--output <destination base directory>";
 
 
     private String jsonFileLocation;
 
-    private TruffleJsonFunctionWrapperGenerator(
-            String jsonFileLocation,
-            String destinationDirLocation,
-            String basePackageName,
-            boolean useJavaNativeTypes) {
+    private TruffleJsonFunctionWrapperGenerator(String jsonFileLocation, String destinationDirLocation, String basePackageName, boolean useJavaNativeTypes) {
 
         super(destinationDirLocation, basePackageName, useJavaNativeTypes);
         this.jsonFileLocation = jsonFileLocation;
@@ -84,22 +76,14 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         String destinationDirLocation = parseParameterArgument(fullArgs, "-o", "--outputDir");
         String basePackageName = parseParameterArgument(fullArgs, "-p", "--package");
 
-        if (Strings.isEmpty(jsonFileLocation)
-                || Strings.isEmpty(destinationDirLocation)
-                || Strings.isEmpty(basePackageName)) {
+        if (Strings.isEmpty(jsonFileLocation) || Strings.isEmpty(destinationDirLocation) || Strings.isEmpty(basePackageName)) {
             exitError(USAGE);
         }
 
-        new TruffleJsonFunctionWrapperGenerator(
-                jsonFileLocation,
-                destinationDirLocation,
-                basePackageName,
-                useJavaNativeTypes)
-                .generate();
+        new TruffleJsonFunctionWrapperGenerator(jsonFileLocation, destinationDirLocation, basePackageName, useJavaNativeTypes).generate();
     }
 
-    static Contract loadContractDefinition(File jsonFile)
-            throws IOException {
+    static Contract loadContractDefinition(File jsonFile) throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         return objectMapper.readValue(jsonFile, Contract.class);
     }
@@ -123,7 +107,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
             Map<String, String> addresses = new HashMap<String, String>();
             if (c.networks != null && !c.networks.isEmpty()) {
-                Set<Map.Entry<String, NetworkInfo>> entrySet= c.networks.entrySet();
+                Set<Map.Entry<String, NetworkInfo>> entrySet = c.networks.entrySet();
                 for (Map.Entry<String, NetworkInfo> entry : entrySet) {
                     if (entry.getValue() != null && entry.getValue().getAddress() != null) {
                         addresses.put(entry.getKey(), entry.getValue().getAddress());
@@ -132,13 +116,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             } else {
                 addresses = Collections.EMPTY_MAP;
             }
-            new SolidityFunctionWrapper(useJavaNativeTypes)
-                    .generateJavaFiles(contractName,
-                            c.getBytecode(),
-                            c.getAbi(),
-                            destinationDirLocation.toString(),
-                            basePackageName,
-                            addresses);
+            new SolidityFunctionWrapper(useJavaNativeTypes).generateJavaFiles(contractName, c.getBytecode(), c.getAbi(), destinationDirLocation.toString(), basePackageName, addresses);
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }
     }
@@ -148,21 +126,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
      * include information about deployed instances on networks. </p>
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyOrder({
-            "contractName",
-            "abi",
-            "bytecode",
-            "deployedBytecode",
-            "sourceMap",
-            "deployedSourceMap",
-            "source",
-            "sourcePath",
-            "ast",
-            "compiler",
-            "networks",
-            "schemaVersion",
-            "updatedAt"
-    })
+    @JsonPropertyOrder({"contractName", "abi", "bytecode", "deployedBytecode", "sourceMap", "deployedSourceMap", "source", "sourcePath", "ast", "compiler", "networks", "schemaVersion", "updatedAt"})
     public static class Contract {
 
         @JsonProperty("contractName")
@@ -171,12 +135,10 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         @JsonProperty(value = "abi", required = true)
         public List<AbiDefinition> abi;
         @JsonProperty("bytecode")
-        @JsonFormat(shape = JsonFormat.Shape.STRING,
-                pattern = "^0x0$|^0x([a-fA-F0-9]{2}|__.{38})+$")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "^0x0$|^0x([a-fA-F0-9]{2}|__.{38})+$")
         public String bytecode;
         @JsonProperty("deployedBytecode")
-        @JsonFormat(shape = JsonFormat.Shape.STRING,
-                pattern = "^0x0$|^0x([a-fA-F0-9]{2}|__.{38})+$")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "^0x0$|^0x([a-fA-F0-9]{2}|__.{38})+$")
         public String deployedBytecode;
         @JsonProperty("sourceMap")
         public String sourceMap;
@@ -196,19 +158,13 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "[0-9]+\\.[0-9]+\\.[0-9]+")
         public String schemaVersion;
         @JsonProperty("updatedAt")
-        @JsonFormat(shape = JsonFormat.Shape.STRING,
-                pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "GMT")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "GMT")
         public Date updatedAt;
 
         public Contract() {
         }
 
-        public Contract(String contractName, List<AbiDefinition> abi, String bytecode,
-                String deployedBytecode,
-                String sourceMap, String deployedSourceMap, String source, String sourcePath,
-                JsonNode ast,
-                Compiler compiler, Map<String, NetworkInfo> networks, String schemaVersion,
-                Date updatedAt) {
+        public Contract(String contractName, List<AbiDefinition> abi, String bytecode, String deployedBytecode, String sourceMap, String deployedSourceMap, String source, String sourcePath, JsonNode ast, Compiler compiler, Map<String, NetworkInfo> networks, String schemaVersion, Date updatedAt) {
             super();
             this.contractName = contractName;
             this.abi = abi;
@@ -224,7 +180,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
             this.schemaVersion = schemaVersion;
             this.updatedAt = updatedAt;
         }
-        
+
         public String getContractName() {
             return contractName;
         }
@@ -236,7 +192,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public String getBytecode() {
             return bytecode;
         }
-        
+
         public NetworkInfo getNetwork(String networkId) {
             return networks == null ? null : networks.get(networkId);
         }
@@ -249,7 +205,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         /**
          * Convenience method to get the deployed address of the contract.
          *
-         * @param network the contract's address on this Ethereum network
+         * @param network the contract's address on this Happyuc network
          * @return the contract's address or <code>null</code> if there isn't one known.
          */
         public String getAddress(Network network) {
@@ -257,17 +213,12 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         }
 
         /*
-         * c.f., org.web3j.tx.ChainId
+         * c.f., org.happyuc.webuj.tx.ChainId
          *
          * This should be updated with https://github.com/web3j/web3j/issues/234
          */
         enum Network {
-            olympic(0),
-            mainnet(ChainId.MAINNET),
-            morden(ChainId.EXPANSE_MAINNET),
-            ropsten(ChainId.ROPSTEN),
-            rinkeby(ChainId.RINKEBY),
-            kovan(ChainId.KOVAN);
+            olympic(0), mainnet(ChainId.MAINNET), morden(ChainId.EXPANSE_MAINNET), ropsten(ChainId.ROPSTEN), rinkeby(ChainId.RINKEBY), kovan(ChainId.KOVAN);
 
             public final long id;
 
@@ -279,10 +230,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyOrder({
-            "name",
-            "version"
-    })
+    @JsonPropertyOrder({"name", "version"})
     public static class Compiler {
 
         @JsonProperty("name")
@@ -321,11 +269,7 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
     // For now we just ignore "events"
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyOrder({
-            "events",
-            "links",
-            "address"
-    })
+    @JsonPropertyOrder({"events", "links", "address"})
     public static class NetworkInfo {
 
         @JsonProperty("events")
@@ -338,14 +282,13 @@ public class TruffleJsonFunctionWrapperGenerator extends FunctionWrapperGenerato
         public NetworkInfo() {
         }
 
-        public NetworkInfo(Map<String, JsonNode> events, Map<String, JsonNode> links,
-                String address) {
+        public NetworkInfo(Map<String, JsonNode> events, Map<String, JsonNode> links, String address) {
             super();
             this.events = events;
             this.links = links;
             this.address = address;
         }
-        
+
         public String getAddress() {
             return address;
         }

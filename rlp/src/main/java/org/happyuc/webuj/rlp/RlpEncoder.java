@@ -3,8 +3,8 @@ package org.happyuc.webuj.rlp;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.web3j.rlp.RlpDecoder.OFFSET_SHORT_LIST;
-import static org.web3j.rlp.RlpDecoder.OFFSET_SHORT_STRING;
+import static org.happyuc.webuj.rlp.RlpDecoder.OFFSET_SHORT_LIST;
+import static org.happyuc.webuj.rlp.RlpDecoder.OFFSET_SHORT_STRING;
 
 /**
  * <p>Recursive Length Prefix (RLP) encoder.</p>
@@ -23,10 +23,7 @@ public class RlpEncoder {
     }
 
     private static byte[] encode(byte[] bytesValue, int offset) {
-        if (bytesValue.length == 1
-                && offset == OFFSET_SHORT_STRING
-                && bytesValue[0] >= (byte) 0x00
-                && bytesValue[0] <= (byte) 0x7f) {
+        if (bytesValue.length == 1 && offset == OFFSET_SHORT_STRING && bytesValue[0] >= (byte) 0x00 && bytesValue[0] <= (byte) 0x7f) {
             return bytesValue;
         } else if (bytesValue.length < 55) {
             byte[] result = new byte[bytesValue.length + 1];
@@ -39,8 +36,7 @@ public class RlpEncoder {
 
             result[0] = (byte) ((offset + 0x37) + encodedStringLength.length);
             System.arraycopy(encodedStringLength, 0, result, 1, encodedStringLength.length);
-            System.arraycopy(
-                    bytesValue, 0, result, encodedStringLength.length + 1, bytesValue.length);
+            System.arraycopy(bytesValue, 0, result, encodedStringLength.length + 1, bytesValue.length);
             return result;
         }
     }
@@ -58,25 +54,20 @@ public class RlpEncoder {
             }
         }
 
-        return new byte[]{ };
+        return new byte[]{};
     }
 
     private static byte[] toByteArray(int value) {
-        return new byte[] {
-                (byte) ((value >> 24) & 0xff),
-                (byte) ((value >> 16) & 0xff),
-                (byte) ((value >> 8) & 0xff),
-                (byte) (value & 0xff)
-        };
+        return new byte[]{(byte) ((value >> 24) & 0xff), (byte) ((value >> 16) & 0xff), (byte) ((value >> 8) & 0xff), (byte) (value & 0xff)};
     }
 
     static byte[] encodeList(RlpList value) {
         List<RlpType> values = value.getValues();
         if (values.isEmpty()) {
-            return encode(new byte[]{ }, OFFSET_SHORT_LIST);
+            return encode(new byte[]{}, OFFSET_SHORT_LIST);
         } else {
             byte[] result = new byte[0];
-            for (RlpType entry:values) {
+            for (RlpType entry : values) {
                 result = concat(result, encode(entry));
             }
             return encode(result, OFFSET_SHORT_LIST);

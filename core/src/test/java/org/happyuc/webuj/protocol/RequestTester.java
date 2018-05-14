@@ -10,7 +10,7 @@ import okhttp3.RequestBody;
 import okio.Buffer;
 import org.junit.Before;
 
-import org.web3j.protocol.http.HttpService;
+import org.happyuc.webuj.protocol.http.HttpService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,9 +26,7 @@ public abstract class RequestTester {
     @Before
     public void setUp() {
         requestInterceptor = new RequestInterceptor();
-        httpClient = new OkHttpClient.Builder()
-                .addInterceptor(requestInterceptor)
-                .build();
+        httpClient = new OkHttpClient.Builder().addInterceptor(requestInterceptor).build();
         httpService = new HttpService(httpClient);
         initWeb3Client(httpService);
     }
@@ -59,12 +57,7 @@ public abstract class RequestTester {
             Request request = chain.request();
             this.requestBody = request.body();
 
-            okhttp3.Response response = new okhttp3.Response.Builder()
-                    .request(chain.request())
-                    .protocol(Protocol.HTTP_2)
-                    .code(200)
-                    .message("")
-                    .build();
+            okhttp3.Response response = new okhttp3.Response.Builder().request(chain.request()).protocol(Protocol.HTTP_2).code(200).message("").build();
 
             return response;
         }

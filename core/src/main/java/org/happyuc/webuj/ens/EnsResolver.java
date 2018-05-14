@@ -3,24 +3,15 @@ package org.happyuc.webuj.ens;
 import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.ens.contracts.generated.ENS;
 import org.happyuc.webuj.ens.contracts.generated.PublicResolver;
-import org.happyuc.webuj.protocol.Web3j;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.response.EthBlock;
-import org.happyuc.webuj.protocol.core.methods.response.EthSyncing;
+import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
+import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
 import org.happyuc.webuj.protocol.core.methods.response.NetVersion;
+import org.happyuc.webuj.tx.ClientTransactionManager;
+import org.happyuc.webuj.tx.ManagedTransaction;
+import org.happyuc.webuj.tx.TransactionManager;
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.ens.contracts.generated.ENS;
-import org.web3j.ens.contracts.generated.PublicResolver;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthSyncing;
-import org.web3j.protocol.core.methods.response.NetVersion;
-import org.web3j.tx.ClientTransactionManager;
-import org.web3j.tx.ManagedTransaction;
-import org.web3j.tx.TransactionManager;
-import org.web3j.utils.Numeric;
 
 /**
  * Resolution logic for contract addresses.
@@ -30,18 +21,18 @@ public class EnsResolver {
     static final long DEFAULT_SYNC_THRESHOLD = 1000 * 60 * 3;
     static final String REVERSE_NAME_SUFFIX = ".addr.reverse";
 
-    private final Web3j web3j;
+    private final Webuj webuj;
     private final TransactionManager transactionManager;
     private long syncThreshold;  // non-final in case this value needs to be tweaked
 
-    public EnsResolver(Web3j web3j, long syncThreshold) {
-        this.web3j = web3j;
-        transactionManager = new ClientTransactionManager(web3j, null);  // don't use empty string
+    public EnsResolver(Webuj webuj, long syncThreshold) {
+        this.webuj = webuj;
+        transactionManager = new ClientTransactionManager(webuj, null);  // don't use empty string
         this.syncThreshold = syncThreshold;
     }
 
-    public EnsResolver(Web3j web3j) {
-        this(web3j, DEFAULT_SYNC_THRESHOLD);
+    public EnsResolver(Webuj webuj) {
+        this(webuj, DEFAULT_SYNC_THRESHOLD);
     }
 
     public void setSyncThreshold(long syncThreshold) {
@@ -54,6 +45,7 @@ public class EnsResolver {
 
     /**
      * Provides an access to a valid public resolver in order to access other API methods.
+     *
      * @param ensName our user input ENS name
      * @return PublicResolver
      */
@@ -83,7 +75,7 @@ public class EnsResolver {
             try {
                 contractAddress = resolver.addr(nameHash).send();
             } catch (Exception e) {
-                throw new RuntimeException("Unable to execute Ethereum request", e);
+                throw new RuntimeException("Unable to execute Happyuc request", e);
             }
 
             if (!WalletUtils.isValidAddress(contractAddress)) {
@@ -99,6 +91,7 @@ public class EnsResolver {
     /**
      * Reverse name resolution as documented in the
      * <a href="https://docs.ens.domains/en/latest/userguide.html#reverse-name-resolution">specification</a>.
+     *
      * @param address an ethereum address, example: "0x314159265dd8dbb310642f98f50c066173c1259b"
      * @return a EnsName registered for provided address
      */
@@ -112,7 +105,7 @@ public class EnsResolver {
             try {
                 name = resolver.name(nameHash).send();
             } catch (Exception e) {
-                throw new RuntimeException("Unable to execute Ethereum request", e);
+                throw new RuntimeException("Unable to execute Happyuc request", e);
             }
 
             if (!isValidEnsName(name)) {
@@ -126,31 +119,26 @@ public class EnsResolver {
     }
 
     PublicResolver lookupResolver(String ensName) throws Exception {
-        NetVersion netVersion = web3j.netVersion().send();
+        NetVersion netVersion = webuj.netVersion().send();
         String registryContract = Contracts.resolveRegistryContract(netVersion.getNetVersion());
 
-        ENS ensRegistry = ENS.load(
-                registryContract, web3j, transactionManager,
-                ManagedTransaction.GAS_PRICE, org.web3j.tx.Contract.GAS_LIMIT);
+        ENS ensRegistry = ENS.load(registryContract, webuj, transactionManager, ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
 
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
 
         String resolverAddress = ensRegistry.resolver(nameHash).send();
-        PublicResolver resolver = PublicResolver.load(
-                resolverAddress, web3j, transactionManager,
-                ManagedTransaction.GAS_PRICE, org.web3j.tx.Contract.GAS_LIMIT);
+        PublicResolver resolver = PublicResolver.load(resolverAddress, webuj, transactionManager, ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
 
         return resolver;
     }
 
     boolean isSynced() throws Exception {
-        EthSyncing ethSyncing = web3j.ethSyncing().send();
-        if (ethSyncing.isSyncing()) {
+        HucSyncing hucSyncing = webuj.hucSyncing().send();
+        if (hucSyncing.isSyncing()) {
             return false;
         } else {
-            EthBlock ethBlock =
-                    web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
-            long timestamp = ethBlock.getBlock().getTimestamp().longValue() * 1000;
+            HucBlock hucBlock = webuj.hucGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
+            long timestamp = hucBlock.getBlock().getTimestamp().longValue() * 1000;
 
             return System.currentTimeMillis() - syncThreshold < timestamp;
         }

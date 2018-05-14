@@ -1,25 +1,25 @@
 package org.happyuc.webuj.console;
 
+import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.crypto.WalletUtils;
+import org.happyuc.webuj.ens.EnsResolver;
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.WebujFactory;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.WebuClientVersion;
+import org.happyuc.webuj.protocol.exceptions.TransactionException;
+import org.happyuc.webuj.protocol.http.HttpService;
+import org.happyuc.webuj.protocol.infura.InfuraHttpService;
+import org.happyuc.webuj.tx.Transfer;
+import org.happyuc.webuj.utils.Convert;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.ens.EnsResolver;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jFactory;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.infura.InfuraHttpService;
-import org.web3j.tx.Transfer;
-import org.web3j.utils.Convert;
-
-import static org.web3j.codegen.Console.exitError;
+import static org.happyuc.webuj.codegen.Console.exitError;
 
 /**
  * Simple class for creating a wallet file.
@@ -41,12 +41,11 @@ public class WalletSendFunds extends WalletManager {
         Credentials credentials = getCredentials(walletFile);
         console.printf("Wallet for address " + credentials.getAddress() + " loaded\n");
 
-        if (!WalletUtils.isValidAddress(destinationAddress)
-                && !EnsResolver.isValidEnsName(destinationAddress)) {
+        if (!WalletUtils.isValidAddress(destinationAddress) && !EnsResolver.isValidEnsName(destinationAddress)) {
             exitError("Invalid destination address specified");
         }
 
-        Web3j web3j = getEthereumClient();
+        Webuj web3j = getHappyucClient();
 
         BigDecimal amountToTransfer = getAmountToTransfer();
         Convert.Unit transferUnit = getTransferUnit();
@@ -54,21 +53,13 @@ public class WalletSendFunds extends WalletManager {
 
         confirmTransfer(amountToTransfer, transferUnit, amountInWei, destinationAddress);
 
-        TransactionReceipt transactionReceipt = performTransfer(
-                web3j, destinationAddress, credentials, amountInWei);
+        RepTransactionReceipt repTransactionReceipt = performTransfer(web3j, destinationAddress, credentials, amountInWei);
 
-        console.printf("Funds have been successfully transferred from %s to %s%n"
-                        + "Transaction hash: %s%nMined block number: %s%n",
-                credentials.getAddress(),
-                destinationAddress,
-                transactionReceipt.getTransactionHash(),
-                transactionReceipt.getBlockNumber());
+        console.printf("Funds have been successfully transferred from %s to %s%n" + "ReqTransaction hash: %s%nMined block number: %s%n", credentials.getAddress(), destinationAddress, repTransactionReceipt.getTransactionHash(), repTransactionReceipt.getBlockNumber());
     }
 
     private BigDecimal getAmountToTransfer() {
-        String amount = console.readLine("What amound would you like to transfer "
-                + "(please enter a numeric value): ")
-                .trim();
+        String amount = console.readLine("What amound would you like to transfer " + "(please enter a numeric value): ").trim();
         try {
             return new BigDecimal(amount);
         } catch (NumberFormatException e) {
@@ -78,12 +69,11 @@ public class WalletSendFunds extends WalletManager {
     }
 
     private Convert.Unit getTransferUnit() {
-        String unit = console.readLine("Please specify the unit (ether, wei, ...) [ether]: ")
-                .trim();
+        String unit = console.readLine("Please specify the unit (ether, wei, ...) [ether]: ").trim();
 
         Convert.Unit transferUnit;
         if (unit.equals("")) {
-            transferUnit = Convert.Unit.ETHER;
+            transferUnit = Convert.Unit.HUC;
         } else {
             transferUnit = Convert.Unit.fromString(unit.toLowerCase());
         }
@@ -91,29 +81,20 @@ public class WalletSendFunds extends WalletManager {
         return transferUnit;
     }
 
-    private void confirmTransfer(
-            BigDecimal amountToTransfer, Convert.Unit transferUnit, BigDecimal amountInWei,
-            String destinationAddress) {
+    private void confirmTransfer(BigDecimal amountToTransfer, Convert.Unit transferUnit, BigDecimal amountInWei, String destinationAddress) {
 
-        console.printf("Please confim that you wish to transfer %s %s (%s %s) to address %s%n",
-                amountToTransfer.stripTrailingZeros().toPlainString(), transferUnit,
-                amountInWei.stripTrailingZeros().toPlainString(),
-                Convert.Unit.WEI, destinationAddress);
+        console.printf("Please confim that you wish to transfer %s %s (%s %s) to address %s%n", amountToTransfer.stripTrailingZeros().toPlainString(), transferUnit, amountInWei.stripTrailingZeros().toPlainString(), Convert.Unit.WEI, destinationAddress);
         String confirm = console.readLine("Please type 'yes' to proceed: ").trim();
         if (!confirm.toLowerCase().equals("yes")) {
             exitError("OK, some other time perhaps...");
         }
     }
 
-    private TransactionReceipt performTransfer(
-            Web3j web3j, String destinationAddress, Credentials credentials,
-            BigDecimal amountInWei) {
+    private RepTransactionReceipt performTransfer(Webuj web3j, String destinationAddress, Credentials credentials, BigDecimal amountInWei) {
 
         console.printf("Commencing transfer (this may take a few minutes) ");
         try {
-            Future<TransactionReceipt> future = Transfer.sendFunds(
-                    web3j, credentials, destinationAddress, amountInWei, Convert.Unit.WEI)
-                    .sendAsync();
+            Future<RepTransactionReceipt> future = Transfer.sendFunds(web3j, credentials, destinationAddress, amountInWei, Convert.Unit.WEI).sendAsync();
 
             while (!future.isDone()) {
                 console.printf(".");
@@ -121,50 +102,37 @@ public class WalletSendFunds extends WalletManager {
             }
             console.printf("$%n%n");
             return future.get();
-        } catch (ExecutionException e) {
-            return errorTransferringFunds(e);
-        } catch (InterruptedException e) {
-            return errorTransferringFunds(e);
-        } catch (IOException e) {
-            return errorTransferringFunds(e);
-        } catch (TransactionException e) {
+        } catch (ExecutionException | InterruptedException | IOException | TransactionException e) {
             return errorTransferringFunds(e);
         }
     }
 
-    private TransactionReceipt errorTransferringFunds(Exception e) {
+    private RepTransactionReceipt errorTransferringFunds(Exception e) {
         exitError("Problem encountered transferring funds: \n" + e.getMessage());
         throw new RuntimeException("Application exit failure");
     }
 
-    private Web3j getEthereumClient() {
-        String clientAddress = console.readLine(
-                "Please confirm address of running Ethereum client you wish to send "
-                + "the transfer request to [" + HttpService.DEFAULT_URL + "]: ")
-                .trim();
+    private Webuj getHappyucClient() {
+        String clientAddress = console.readLine("Please confirm address of running Happyuc client you wish to send " + "the transfer request to [" + HttpService.DEFAULT_URL + "]: ").trim();
 
-        Web3j web3j;
+        Webuj webuj;
         if (clientAddress.equals("")) {
-            web3j = Web3jFactory.build(new HttpService());
+            webuj = WebujFactory.build(new HttpService());
         } else if (clientAddress.contains("infura.io")) {
-            web3j = Web3jFactory.build(new InfuraHttpService(clientAddress));
+            webuj = WebujFactory.build(new InfuraHttpService(clientAddress));
         } else {
-            web3j = Web3jFactory.build(new HttpService(clientAddress));
+            webuj = WebujFactory.build(new HttpService(clientAddress));
         }
 
         try {
-            Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
-            if (web3ClientVersion.hasError()) {
-                exitError("Unable to process response from client: "
-                        + web3ClientVersion.getError());
+            WebuClientVersion webuClientVersion = webuj.webuClientVersion().sendAsync().get();
+            if (webuClientVersion.hasError()) {
+                exitError("Unable to process response from client: " + webuClientVersion.getError());
             } else {
-                console.printf("Connected successfully to client: %s%n",
-                        web3ClientVersion.getWeb3ClientVersion());
-                return web3j;
+                console.printf("Connected successfully to client: %s%n", webuClientVersion.getWeb3ClientVersion());
+                return webuj;
             }
-        } catch (InterruptedException e) {
-            exitError("Problem encountered verifying client: " + e.getMessage());
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             exitError("Problem encountered verifying client: " + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");

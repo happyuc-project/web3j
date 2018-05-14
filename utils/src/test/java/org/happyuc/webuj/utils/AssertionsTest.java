@@ -2,7 +2,7 @@ package org.happyuc.webuj.utils;
 
 import org.junit.Test;
 
-import static org.web3j.utils.Assertions.verifyPrecondition;
+import static org.happyuc.webuj.utils.Assertions.verifyPrecondition;
 
 public class AssertionsTest {
 

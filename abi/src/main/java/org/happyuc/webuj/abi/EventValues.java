@@ -3,7 +3,7 @@ package org.happyuc.webuj.abi;
 import java.util.List;
 
 import org.happyuc.webuj.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Type;
+import org.happyuc.webuj.abi.datatypes.Type;
 
 /**
  * Persisted solidity event parameters.

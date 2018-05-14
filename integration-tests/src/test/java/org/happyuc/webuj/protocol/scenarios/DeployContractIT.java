@@ -8,15 +8,13 @@ import org.happyuc.webuj.abi.FunctionEncoder;
 import org.happyuc.webuj.abi.FunctionReturnDecoder;
 import org.happyuc.webuj.abi.datatypes.Function;
 import org.happyuc.webuj.abi.datatypes.Type;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucCall;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.junit.Test;
 
-import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.FunctionReturnDecoder;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
@@ -37,15 +35,13 @@ public class DeployContractIT extends Scenario {
         String transactionHash = sendTransaction();
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt =
-                waitForTransactionReceipt(transactionHash);
+        RepTransactionReceipt repTransactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
+        assertThat(repTransactionReceipt.getTransactionHash(), is(transactionHash));
 
-        assertFalse("Contract execution ran out of gas",
-                transactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertFalse("Contract execution ran out of gas", repTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        String contractAddress = transactionReceipt.getContractAddress();
+        String contractAddress = repTransactionReceipt.getContractAddress();
 
         assertNotNull(contractAddress);
 
@@ -54,8 +50,7 @@ public class DeployContractIT extends Scenario {
         String responseValue = callSmartContractFunction(function, contractAddress);
         assertFalse(responseValue.isEmpty());
 
-        List<Type> uint = FunctionReturnDecoder.decode(
-                responseValue, function.getOutputParameters());
+        List<Type> uint = FunctionReturnDecoder.decode(responseValue, function.getOutputParameters());
         assertThat(uint.size(), is(1));
         assertThat(uint.get(0).getValue(), IsEqual.<Object>equalTo(BigInteger.valueOf(13)));
     }
@@ -63,31 +58,18 @@ public class DeployContractIT extends Scenario {
     private String sendTransaction() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
 
-        Transaction transaction = Transaction.createContractTransaction(
-                ALICE.getAddress(),
-                nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
-                BigInteger.ZERO,
-                getFibonacciSolidityBinary());
+        ReqTransaction reqTransaction = ReqTransaction.createContractTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
 
-        org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = web3j.ethSendTransaction(transaction)
-                .sendAsync().get();
+        HucSendRepTransaction transactionResponse = webuj.hucSendTransaction(reqTransaction).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
 
-    private String callSmartContractFunction(
-            Function function, String contractAddress) throws Exception {
+    private String callSmartContractFunction(Function function, String contractAddress) throws Exception {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
-                Transaction.createEthCallTransaction(
-                        ALICE.getAddress(), contractAddress, encodedFunction),
-                DefaultBlockParameterName.LATEST)
-                .sendAsync().get();
+        HucCall response = webuj.hucCall(ReqTransaction.createHucCallTransaction(ALICE.getAddress(), contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return response.getValue();
     }

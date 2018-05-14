@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.DefaultBlockParameter;
+import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 
 /**
  * TraceFilter used in trace_filter.
@@ -18,8 +18,7 @@ public class TraceFilter {
     private List<String> fromAddress;
     private List<String> toAddress;
 
-    public TraceFilter(DefaultBlockParameter fromBlock, DefaultBlockParameter toBlock,
-            List<String> fromAddress, List<String> toAddress) {
+    public TraceFilter(DefaultBlockParameter fromBlock, DefaultBlockParameter toBlock, List<String> fromAddress, List<String> toAddress) {
         this.fromBlock = fromBlock;
         this.toBlock = toBlock;
         this.fromAddress = fromAddress;

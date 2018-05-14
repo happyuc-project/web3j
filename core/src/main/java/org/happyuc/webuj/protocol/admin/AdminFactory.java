@@ -1,9 +1,9 @@
 package org.happyuc.webuj.protocol.admin;
 
-import org.web3j.protocol.Web3jService;
+import org.happyuc.webuj.protocol.WebujService;
 
 public class AdminFactory {
-    public static Admin build(Web3jService web3jService) {
-        return new JsonRpc2_0Admin(web3jService);
+    public static Admin build(WebujService webujService) {
+        return new JsonRpc2_0Admin(webujService);
     }
 }

@@ -23,8 +23,7 @@ public class ObservablesTests {
     public void testRangeObservable() throws InterruptedException {
         int count = 10;
 
-        Observable<BigInteger> observable = Observables.range(
-                BigInteger.ZERO, BigInteger.valueOf(count - 1));
+        Observable<BigInteger> observable = Observables.range(BigInteger.ZERO, BigInteger.valueOf(count - 1));
 
         List<BigInteger> expected = new ArrayList<BigInteger>(count);
         for (int i = 0; i < count; i++) {
@@ -38,8 +37,7 @@ public class ObservablesTests {
     public void testRangeDescendingObservable() throws InterruptedException {
         int count = 10;
 
-        Observable<BigInteger> observable = Observables.range(
-                BigInteger.ZERO, BigInteger.valueOf(count - 1), false);
+        Observable<BigInteger> observable = Observables.range(BigInteger.ZERO, BigInteger.valueOf(count - 1), false);
 
         List<BigInteger> expected = new ArrayList<BigInteger>(count);
         for (int i = count - 1; i >= 0; i--) {
@@ -49,35 +47,30 @@ public class ObservablesTests {
         runRangeTest(observable, expected);
     }
 
-    private void runRangeTest(
-            Observable<BigInteger> observable, List<BigInteger> expected)
-            throws InterruptedException {
+    private void runRangeTest(Observable<BigInteger> observable, List<BigInteger> expected) throws InterruptedException {
 
         final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
         final CountDownLatch completedLatch = new CountDownLatch(1);
 
         final List<BigInteger> results = new ArrayList<BigInteger>(expected.size());
 
-        Subscription subscription = observable.subscribe(
-                new Action1<BigInteger>() {
-                    @Override
-                    public void call(BigInteger result) {
-                        results.add(result);
-                        transactionLatch.countDown();
-                    }
-                },
-                new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        fail(throwable.getMessage());
-                    }
-                },
-                new Action0() {
-                    @Override
-                    public void call() {
-                        completedLatch.countDown();
-                    }
-                });
+        Subscription subscription = observable.subscribe(new Action1<BigInteger>() {
+            @Override
+            public void call(BigInteger result) {
+                results.add(result);
+                transactionLatch.countDown();
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                completedLatch.countDown();
+            }
+        });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
         assertThat(results, equalTo(expected));

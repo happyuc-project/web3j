@@ -12,34 +12,25 @@ import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
 import org.happyuc.webuj.utils.Collection;
 import org.happyuc.webuj.utils.Files;
 import org.happyuc.webuj.utils.Strings;
-import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.core.methods.response.AbiDefinition;
-import org.web3j.utils.Files;
-import org.web3j.utils.Strings;
+import org.happyuc.webuj.protocol.ObjectMapperFactory;
+import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
+import org.happyuc.webuj.utils.Files;
+import org.happyuc.webuj.utils.Strings;
 
-import static org.web3j.codegen.Console.exitError;
-import static org.web3j.utils.Collection.tail;
+import static org.happyuc.webuj.codegen.Console.exitError;
+import static org.happyuc.webuj.utils.Collection.tail;
 
 /**
  * Java wrapper source code generator for Solidity ABI format.
  */
 public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
 
-    private static final String USAGE = "solidity generate "
-            + "[--javaTypes|--solidityTypes] "
-            + "<input binary file>.bin <input abi file>.abi "
-            + "-p|--package <base package name> "
-            + "-o|--output <destination base directory>";
+    private static final String USAGE = "solidity generate " + "[--javaTypes|--solidityTypes] " + "<input binary file>.bin <input abi file>.abi " + "-p|--package <base package name> " + "-o|--output <destination base directory>";
 
     private final String binaryFileLocation;
     private final String absFileLocation;
 
-    private SolidityFunctionWrapperGenerator(
-            String binaryFileLocation,
-            String absFileLocation,
-            String destinationDirLocation,
-            String basePackageName,
-            boolean useJavaNativeTypes) {
+    private SolidityFunctionWrapperGenerator(String binaryFileLocation, String absFileLocation, String destinationDirLocation, String basePackageName, boolean useJavaNativeTypes) {
 
         super(destinationDirLocation, basePackageName, useJavaNativeTypes);
         this.binaryFileLocation = binaryFileLocation;
@@ -76,24 +67,14 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         String destinationDirLocation = parseParameterArgument(fullArgs, "-o", "--outputDir");
         String basePackageName = parseParameterArgument(fullArgs, "-p", "--package");
 
-        if (binaryFileLocation.equals("")
-                || absFileLocation.equals("")
-                || destinationDirLocation.equals("")
-                || basePackageName.equals("")) {
+        if (binaryFileLocation.equals("") || absFileLocation.equals("") || destinationDirLocation.equals("") || basePackageName.equals("")) {
             exitError(USAGE);
         }
 
-        new SolidityFunctionWrapperGenerator(
-                binaryFileLocation,
-                absFileLocation,
-                destinationDirLocation,
-                basePackageName,
-                useJavaNativeTypes)
-                .generate();
+        new SolidityFunctionWrapperGenerator(binaryFileLocation, absFileLocation, destinationDirLocation, basePackageName, useJavaNativeTypes).generate();
     }
 
-    static List<AbiDefinition> loadContractDefinition(File absFile)
-            throws IOException {
+    static List<AbiDefinition> loadContractDefinition(File absFile) throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         AbiDefinition[] abiDefinition = objectMapper.readValue(absFile, AbiDefinition[].class);
         return Arrays.asList(abiDefinition);
@@ -125,8 +106,7 @@ public class SolidityFunctionWrapperGenerator extends FunctionWrapperGenerator {
         } else {
             String className = Strings.capitaliseFirstLetter(contractName);
             System.out.printf("Generating " + basePackageName + "." + className + " ... ");
-            new SolidityFunctionWrapper(useJavaNativeTypes).generateJavaFiles(
-                    contractName, binary, abi, destinationDirLocation.toString(), basePackageName);
+            new SolidityFunctionWrapper(useJavaNativeTypes).generateJavaFiles(contractName, binary, abi, destinationDirLocation.toString(), basePackageName);
             System.out.println("File written to " + destinationDirLocation.toString() + "\n");
         }
     }

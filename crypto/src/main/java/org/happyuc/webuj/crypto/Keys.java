@@ -14,10 +14,10 @@ import org.happyuc.webuj.utils.Numeric;
 import org.happyuc.webuj.utils.Strings;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
-import org.web3j.utils.Numeric;
-import org.web3j.utils.Strings;
+import org.happyuc.webuj.utils.Numeric;
+import org.happyuc.webuj.utils.Strings;
 
-import static org.web3j.crypto.SecureRandomUtils.secureRandom;
+import static org.happyuc.webuj.crypto.SecureRandomUtils.secureRandom;
 
 
 /**
@@ -46,8 +46,7 @@ public class Keys {
      *
      * <p>Private keys are encoded using X.509
      */
-    static KeyPair createSecp256k1KeyPair() throws NoSuchProviderException,
-            NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    static KeyPair createSecp256k1KeyPair() throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "SC");
         ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
@@ -55,8 +54,7 @@ public class Keys {
         return keyPairGenerator.generateKeyPair();
     }
 
-    public static ECKeyPair createEcKeyPair() throws InvalidAlgorithmParameterException,
-            NoSuchAlgorithmException, NoSuchProviderException {
+    public static ECKeyPair createEcKeyPair() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         KeyPair keyPair = createSecp256k1KeyPair();
         return ECKeyPair.create(keyPair);
     }
@@ -66,17 +64,14 @@ public class Keys {
     }
 
     public static String getAddress(BigInteger publicKey) {
-        return getAddress(
-                Numeric.toHexStringWithPrefixZeroPadded(publicKey, PUBLIC_KEY_LENGTH_IN_HEX));
+        return getAddress(Numeric.toHexStringWithPrefixZeroPadded(publicKey, PUBLIC_KEY_LENGTH_IN_HEX));
     }
 
     public static String getAddress(String publicKey) {
         String publicKeyNoPrefix = Numeric.cleanHexPrefix(publicKey);
 
         if (publicKeyNoPrefix.length() < PUBLIC_KEY_LENGTH_IN_HEX) {
-            publicKeyNoPrefix = Strings.zeros(
-                    PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length())
-                    + publicKeyNoPrefix;
+            publicKeyNoPrefix = Strings.zeros(PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length()) + publicKeyNoPrefix;
         }
         String hash = Hash.sha3(publicKeyNoPrefix);
         return hash.substring(hash.length() - ADDRESS_LENGTH_IN_HEX);  // right most 160 bits

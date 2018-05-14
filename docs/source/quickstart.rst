@@ -1,8 +1,8 @@
 Quickstart
 ==========
 
-A `web3j sample project <https://github.com/web3j/sample-project-gradle>`_ is available that
-demonstrates a number of core features of Ethereum with web3j, including:
+A `webuj sample project <https://github.com/webuj/sample-project-gradle>`_ is available that
+demonstrates a number of core features of Ethereum with webuj, including:
 
 - Connecting to a node on the Ethereum network
 - Loading an Ethereum wallet file

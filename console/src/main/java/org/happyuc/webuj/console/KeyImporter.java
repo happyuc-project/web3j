@@ -9,16 +9,16 @@ import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.Keys;
 import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.utils.Files;
-import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.utils.Files;
+import org.happyuc.webuj.crypto.CipherException;
+import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.crypto.WalletUtils;
+import org.happyuc.webuj.utils.Files;
 
-import static org.web3j.codegen.Console.exitError;
-import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
+import static org.happyuc.webuj.codegen.Console.exitError;
+import static org.happyuc.webuj.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
 
 /**
- * Create Ethereum wallet file from a provided private key.
+ * Create Happyuc wallet file from a provided private key.
  */
 public class KeyImporter extends WalletManager {
 
@@ -59,16 +59,13 @@ public class KeyImporter extends WalletManager {
     }
 
     private void run() {
-        String input = console.readLine(
-                "Please enter the hex encoded private key or key file location: ").trim();
+        String input = console.readLine("Please enter the hex encoded private key or key file location: ").trim();
         run(input);
     }
 
     private void createWalletFile(String privateKey) {
         if (!WalletUtils.isValidPrivateKey(privateKey)) {
-            Console.exitError("Invalid private key specified, must be "
-                    + Keys.PRIVATE_KEY_LENGTH_IN_HEX
-                    + " digit hex value");
+            Console.exitError("Invalid private key specified, must be " + Keys.PRIVATE_KEY_LENGTH_IN_HEX + " digit hex value");
         }
 
         Credentials credentials = Credentials.create(privateKey);
@@ -78,10 +75,8 @@ public class KeyImporter extends WalletManager {
         File destination = createDir(destinationDir);
 
         try {
-            String walletFileName = WalletUtils.generateWalletFile(
-                    password, credentials.getEcKeyPair(), destination, true);
-            console.printf("Wallet file " + walletFileName
-                    + " successfully created in: " + destinationDir + "\n");
+            String walletFileName = WalletUtils.generateWalletFile(password, credentials.getEcKeyPair(), destination, true);
+            console.printf("Wallet file " + walletFileName + " successfully created in: " + destinationDir + "\n");
         } catch (CipherException e) {
             Console.exitError(e);
         } catch (IOException e) {

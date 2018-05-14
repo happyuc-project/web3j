@@ -1,14 +1,13 @@
 package org.happyuc.webuj.protocol.core;
 
+import org.happyuc.webuj.protocol.WebujService;
+import rx.Observable;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
-
-import rx.Observable;
-
-import org.web3j.protocol.Web3jService;
 
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
@@ -18,7 +17,7 @@ public class Request<S, T extends Response> {
     private List<S> params;
     private long id;
 
-    private Web3jService web3jService;
+    private WebujService webujService;
 
     // Unfortunately require an instance of the type too, see
     // http://stackoverflow.com/a/3437930/3211687
@@ -27,12 +26,11 @@ public class Request<S, T extends Response> {
     public Request() {
     }
 
-    public Request(String method, List<S> params,
-                   Web3jService web3jService, Class<T> type) {
+    public Request(String method, List<S> params, WebujService webujService, Class<T> type) {
         this.method = method;
         this.params = params;
         this.id = nextId.getAndIncrement();
-        this.web3jService = web3jService;
+        this.webujService = webujService;
         this.responseType = type;
     }
 
@@ -69,11 +67,11 @@ public class Request<S, T extends Response> {
     }
 
     public T send() throws IOException {
-        return web3jService.send(this, responseType);
+        return webujService.send(this, responseType);
     }
 
     public Future<T> sendAsync() {
-        return  web3jService.sendAsync(this, responseType);
+        return webujService.sendAsync(this, responseType);
     }
 
     public Observable<T> observable() {

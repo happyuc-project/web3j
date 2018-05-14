@@ -19,14 +19,13 @@ public class TempFileProvider {
 
     @Before
     public void setUp() throws Exception {
-        tempDir = folder.newFolder(
-                TempFileProvider.class.getSimpleName());
+        tempDir = folder.newFolder(TempFileProvider.class.getSimpleName());
         tempDirPath = tempDir.getPath();
     }
 
     @After
     public void tearDown() throws Exception {
-        for (File file:tempDir.listFiles()) {
+        for (File file : tempDir.listFiles()) {
             file.delete();
         }
         tempDir.delete();

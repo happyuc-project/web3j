@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.happyuc.webuj.abi.datatypes.*;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.Fixed;
-import org.web3j.abi.datatypes.Int;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
+import org.happyuc.webuj.abi.datatypes.DynamicArray;
+import org.happyuc.webuj.abi.datatypes.DynamicBytes;
+import org.happyuc.webuj.abi.datatypes.Fixed;
+import org.happyuc.webuj.abi.datatypes.Int;
+import org.happyuc.webuj.abi.datatypes.StaticArray;
+import org.happyuc.webuj.abi.datatypes.Type;
+import org.happyuc.webuj.abi.datatypes.Ufixed;
+import org.happyuc.webuj.abi.datatypes.Uint;
+import org.happyuc.webuj.abi.datatypes.Utf8String;
 
 /**
  * Utility functions.
@@ -43,8 +43,7 @@ public class Utils {
     static String getSimpleTypeName(Class<?> type) {
         String simpleName = type.getSimpleName().toLowerCase();
 
-        if (type.equals(Uint.class) || type.equals(Int.class)
-                || type.equals(Ufixed.class) || type.equals(Fixed.class)) {
+        if (type.equals(Uint.class) || type.equals(Int.class) || type.equals(Ufixed.class) || type.equals(Fixed.class)) {
             return simpleName + "256";
         } else if (type.equals(Utf8String.class)) {
             return "string";
@@ -55,8 +54,7 @@ public class Utils {
         }
     }
 
-    static <T extends Type, U extends Type> String getParameterizedTypeName(
-            TypeReference<T> typeReference, Class<?> type) {
+    static <T extends Type, U extends Type> String getParameterizedTypeName(TypeReference<T> typeReference, Class<?> type) {
 
         try {
             if (type.equals(DynamicArray.class)) {
@@ -66,10 +64,7 @@ public class Utils {
             } else if (type.equals(StaticArray.class)) {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
                 String parameterizedTypeName = getSimpleTypeName(parameterizedType);
-                return parameterizedTypeName
-                        + "["
-                        + ((TypeReference.StaticArrayTypeReference) typeReference).getSize()
-                        + "]";
+                return parameterizedTypeName + "[" + ((TypeReference.StaticArrayTypeReference) typeReference).getSize() + "]";
             } else {
                 throw new UnsupportedOperationException("Invalid type provided " + type.getName());
             }
@@ -79,12 +74,10 @@ public class Utils {
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Type> Class<T> getParameterizedTypeFromArray(
-            TypeReference typeReference) throws ClassNotFoundException {
+    static <T extends Type> Class<T> getParameterizedTypeFromArray(TypeReference typeReference) throws ClassNotFoundException {
 
         java.lang.reflect.Type type = typeReference.getType();
-        java.lang.reflect.Type[] typeArguments =
-                ((ParameterizedType) type).getActualTypeArguments();
+        java.lang.reflect.Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
 
         String parameterizedTypeName = ((Class) typeArguments[0]).getName();
         return (Class<T>) Class.forName(parameterizedTypeName);
@@ -94,22 +87,20 @@ public class Utils {
     public static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
         List<TypeReference<Type>> result = new ArrayList<TypeReference<Type>>(input.size());
 
-        for (TypeReference<?> typeReference:input) {
+        for (TypeReference<?> typeReference : input) {
             result.add((TypeReference<Type>) typeReference);
         }
 
         return result;
     }
 
-    public static <T, R extends Type<T>> List<R> typeMap(List<T> input, Class<R> destType)
-            throws TypeMappingException {
+    public static <T, R extends Type<T>> List<R> typeMap(List<T> input, Class<R> destType) throws TypeMappingException {
 
         List<R> result = new ArrayList<R>(input.size());
 
         if (!input.isEmpty()) {
             try {
-                Constructor<R> constructor = destType.getDeclaredConstructor(
-                        input.get(0).getClass());
+                Constructor<R> constructor = destType.getDeclaredConstructor(input.get(0).getClass());
                 for (T value : input) {
                     result.add(constructor.newInstance(value));
                 }

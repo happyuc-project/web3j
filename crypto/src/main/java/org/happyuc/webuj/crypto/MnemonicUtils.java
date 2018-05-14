@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.web3j.crypto.Hash.sha256;
+import static org.happyuc.webuj.crypto.Hash.sha256;
 
 /**
  * Provides utility methods to generate random mnemonics and also generate
@@ -76,8 +76,8 @@ public class MnemonicUtils {
      * to 2048 and HMAC-SHA512 is used as the pseudo-random function. The length of the
      * derived key is 512 bits (= 64 bytes).
      *
-     * @param mnemonic The input mnemonic which should be 128-160 bits in length containing
-     *                 only valid words
+     * @param mnemonic   The input mnemonic which should be 128-160 bits in length containing
+     *                   only valid words
      * @param passphrase The passphrase which will be used as part of salt for PBKDF2
      *                   function
      * @return Byte array representation of the generated seed
@@ -112,8 +112,7 @@ public class MnemonicUtils {
 
         int ent = initialEntropy.length * 8;
         if (ent < 128 || ent > 256 || ent % 32 != 0) {
-            throw new IllegalArgumentException("The allowed size of ENT is 128-256 bits of "
-                    + "multiples of 32");
+            throw new IllegalArgumentException("The allowed size of ENT is 128-256 bits of " + "multiples of 32");
         }
     }
 
@@ -145,7 +144,7 @@ public class MnemonicUtils {
         int value = 0;
         for (int i = 0; i < bits.length; i++) {
             boolean isSet = bits[i];
-            if (isSet)  {
+            if (isSet) {
                 value += 1 << bits.length - i - 1;
             }
         }
@@ -162,8 +161,7 @@ public class MnemonicUtils {
     }
 
     private static List<String> populateWordList() {
-        URL url = Thread.currentThread().getContextClassLoader()
-                .getResource("en-mnemonic-word-list.txt");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("en-mnemonic-word-list.txt");
         try {
             return readAllLines(url.toURI().getSchemeSpecificPart());
         } catch (Exception e) {

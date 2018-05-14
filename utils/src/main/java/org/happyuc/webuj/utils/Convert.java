@@ -29,13 +29,21 @@ public final class Convert {
         KWEI("kwei", 3),
         MWEI("mwei", 6),
         GWEI("gwei", 9),
-        SZABO("szabo", 12),
-        FINNEY("finney", 15),
-        ETHER("ether", 18),
-        KETHER("kether", 21),
-        METHER("mether", 24),
-        GETHER("gether", 27);
-
+        TWEI("twei", 12),
+        PWEI("pwei", 15),
+        HUC("huc", 18),
+        KHUC("khuc", 21),
+        MHUC("mhuc", 24),
+        GHUC("ghuc", 27),
+        THUC("thuc", 30),
+        PHUC("phuc", 33),
+        EHUC("ehuc", 36),
+        ZHUC("zhuc", 39),
+        YHUC("yhuc", 42),
+        NHUC("nhuc", 45),
+        DHUC("dhuc", 48),
+        VHUC("vhuc", 51),
+        UHUC("uhuc", 54);
         private String name;
         private BigDecimal weiFactor;
 

@@ -1,13 +1,13 @@
 package org.happyuc.webuj.console;
 
+import org.happyuc.webuj.crypto.CipherException;
+import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.crypto.WalletUtils;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
-
-import static org.web3j.codegen.Console.exitError;
+import static org.happyuc.webuj.codegen.Console.exitError;
 
 /**
  * Simple class for creating a wallet file.
@@ -45,18 +45,15 @@ public class WalletUpdater extends WalletManager {
         File destination = createDir(destinationDir);
 
         try {
-            String walletFileName = WalletUtils.generateWalletFile(
-                    newPassword, credentials.getEcKeyPair(), destination, true);
-            console.printf("New wallet file " + walletFileName
-                    + " successfully created in: " + destinationDir + "\n");
+            String walletFileName = WalletUtils.generateWalletFile(newPassword, credentials.getEcKeyPair(), destination, true);
+            console.printf("New wallet file " + walletFileName + " successfully created in: " + destinationDir + "\n");
         } catch (CipherException e) {
             exitError(e);
         } catch (IOException e) {
             exitError(e);
         }
 
-        String delete = console.readLine(
-                "Would you like to delete your existing wallet file (Y/N)? [N]: ");
+        String delete = console.readLine("Would you like to delete your existing wallet file (Y/N)? [N]: ");
         if (delete.toUpperCase().equals("Y")) {
             if (!walletFile.delete()) {
                 exitError("Unable to remove wallet file\n");

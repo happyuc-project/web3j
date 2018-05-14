@@ -12,7 +12,7 @@ import org.spongycastle.crypto.signers.HMacDSAKCalculator;
 import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Elliptic Curve SECP-256k1 generated key pair.
@@ -36,8 +36,9 @@ public class ECKeyPair {
 
     /**
      * Sign a hash with the private key of this key pair.
-     * @param transactionHash   the hash to sign
-     * @return  An {@link ECDSASignature} of the hash
+     *
+     * @param transactionHash the hash to sign
+     * @return An {@link ECDSASignature} of the hash
      */
     public ECDSASignature sign(byte[] transactionHash) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
@@ -59,8 +60,7 @@ public class ECKeyPair {
         // https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm for details
         // Additionally, as the first bit is a constant prefix (0x04) we ignore this value
         byte[] publicKeyBytes = publicKey.getQ().getEncoded(false);
-        BigInteger publicKeyValue =
-                new BigInteger(1, Arrays.copyOfRange(publicKeyBytes, 1, publicKeyBytes.length));
+        BigInteger publicKeyValue = new BigInteger(1, Arrays.copyOfRange(publicKeyBytes, 1, publicKeyBytes.length));
 
         return new ECKeyPair(privateKeyValue, publicKeyValue);
     }
@@ -84,13 +84,11 @@ public class ECKeyPair {
 
         ECKeyPair ecKeyPair = (ECKeyPair) o;
 
-        if (privateKey != null
-                ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null) {
+        if (privateKey != null ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null) {
             return false;
         }
 
-        return publicKey != null
-                ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
+        return publicKey != null ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
     }
 
     @Override

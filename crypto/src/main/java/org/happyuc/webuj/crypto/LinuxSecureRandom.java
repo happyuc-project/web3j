@@ -16,6 +16,9 @@
 
 package org.happyuc.webuj.crypto;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,9 +27,6 @@ import java.io.IOException;
 import java.security.Provider;
 import java.security.SecureRandomSpi;
 import java.security.Security;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implementation from
@@ -43,8 +43,7 @@ public class LinuxSecureRandom extends SecureRandomSpi {
 
     private static class LinuxSecureRandomProvider extends Provider {
         public LinuxSecureRandomProvider() {
-            super("LinuxSecureRandom", 1.0,
-                    "A Linux specific random number provider that uses /dev/urandom");
+            super("LinuxSecureRandom", "1.0", "A Linux specific random number provider that uses /dev/urandom");
             put("SecureRandom.LinuxSecureRandom", LinuxSecureRandom.class.getName());
         }
     }

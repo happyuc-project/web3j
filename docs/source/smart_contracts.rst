@@ -17,12 +17,12 @@ LISP Like Language (LLL)
 
 
 In order to deploy a smart contract onto the Ethereum blockchain, it must first be compiled into
-a bytecode format, then it can be sent as part of a transaction. web3j can do all of this for you
+a bytecode format, then it can be sent as part of a reqTransaction. webuj can do all of this for you
 with its :ref:`smart-contract-wrappers`. To understand what is happening behind the scenes, you
 can refer to the details in :ref:`creation-of-smart-contract`.
 
 Given that Solidity is the language of choice for writing smart contracts, it is the language
-supported by web3j, and is used for all subsequent examples.
+supported by webuj, and is used for all subsequent examples.
 
 
 Getting started with Solidity
@@ -35,7 +35,7 @@ good place to start:
   Ethereum Wiki
 - `Introduction to Smart Contracts <http://Solidity.readthedocs.io/en/develop/introduction-to-smart-contracts.html>`_
   in the Solidity project documentation
-- `Writing a contract <https://ethereum-homestead.readthedocs.io/en/latest/contracts-and-transactions/contracts.html#writing-a-contract>`_
+- `Writing a contract <https://ethereum-homestead.readthedocs.io/en/latest/contracts-and-repTransactions/contracts.html#writing-a-contract>`_
   in the Ethereum Homestead Guide
 
 .. _compiling-Solidity:
@@ -54,10 +54,10 @@ To compile the Solidity code run:
    $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
 
 The *--bin* and *--abi* compiler arguments are both required to take full advantage of working
-with smart contracts from web3j.
+with smart contracts from webuj.
 
 *--bin*
-  Outputs a Solidity binary file containing the hex-encoded binary to provide with the transaction
+  Outputs a Solidity binary file containing the hex-encoded binary to provide with the reqTransaction
   request.
 
 *--abi*
@@ -76,22 +76,22 @@ great for smaller smart contracts, but you may run into issues working with larg
 
 You can also compile Solidity code via Ethereum clients such as Geth and Parity, using the JSON-RPC
 method `eth_compileSolidity <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_compileSolidity>`_
-which is also supported in web3j. However, the Solidity compiler must be installed on the client
+which is also supported in webuj. However, the Solidity compiler must be installed on the client
 for this to work.
 
 There are further options available, please refer to the
-`relevant section <https://ethereum-homestead.readthedocs.io/en/latest/contracts-and-transactions/contracts.html#compiling-a-contract>`_
+`relevant section <https://ethereum-homestead.readthedocs.io/en/latest/contracts-and-repTransactions/contracts.html#compiling-a-contract>`_
 in the Homestead documentation.
 
 
 Deploying and interacting with smart contracts
 ----------------------------------------------
 
-If you want to avoid the underlying implementation detail for working with smart contracts, web3j
+If you want to avoid the underlying implementation detail for working with smart contracts, webuj
 provides :ref:`smart-contract-wrappers` which enable you to interact directly with all of a smart
 contract's methods via a generated wrapper object.
 
-Alternatively, if you wish to send regular transactions or have more control over your
+Alternatively, if you wish to send regular repTransactions or have more control over your
 interactions with your smart contracts, please refer to the sections
 :ref:`creation-of-smart-contract`, :ref:`transacting-with-contract` and :ref:`querying-state`
 for details.
@@ -100,12 +100,12 @@ for details.
 Smart contract examples
 -----------------------
 
-web3j provides a number of smart contract examples in the project directory
-`codegen/src/test/resources/solidity <https://github.com/web3j/web3j/tree/master/codegen/src/test/resources/solidity>`_
+webuj provides a number of smart contract examples in the project directory
+`codegen/src/test/resources/solidity <https://github.com/webuj/webuj/tree/master/codegen/src/test/resources/solidity>`_
 
 It also provides integration tests for demonstrating the deploying and working with those smart
 contracts in the
-`integration-tests/src/test/java/org/web3j/protocol/scenarios <https://github.com/web3j/web3j/tree/master/integration-tests/src/test/java/org/web3j/protocol/scenarios>`_
+`integration-tests/src/test/java/org/webuj/protocol/scenarios <https://github.com/webuj/webuj/tree/master/integration-tests/src/test/java/org/webuj/protocol/scenarios>`_
 module.
 
 .. image:: /images/smart_contract.png
@@ -122,7 +122,7 @@ standard functions that a smart contract providing tokens should implement.
 
 The EIP-20 standard provides function definitions, but does not provide an implementation example.
 However, there is an implementation provided in
-`codegen/src/test/resources/solidity/contracts <https://github.com/web3j/web3j/tree/master/codegen/src/test/resources/solidity/contracts>`_,
+`codegen/src/test/resources/solidity/contracts <https://github.com/webuj/webuj/tree/master/codegen/src/test/resources/solidity/contracts>`_,
 which has been taken from ConsenSys'
 `Tokens project <https://github.com/ConsenSys/Tokens>`_.
 
@@ -132,14 +132,14 @@ Open Zepplin also provide an example implementation on
 There are two integration tests that have been written to fully demonstrate the functionality of
 this token smart contract.
 
-`HumanStandardTokenGeneratedIT <https://github.com/web3j/web3j/tree/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/HumanStandardTokenGeneratedIT.java>`_
+`HumanStandardTokenGeneratedIT <https://github.com/webuj/webuj/tree/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/HumanStandardTokenGeneratedIT.java>`_
 uses the generated
-`HumanStandardTokenGenerated <https://github.com/web3j/web3j/tree/master/integration-tests/src/test/java/org/web3j/generated/HumanStandardTokenGenerated.java>`_
+`HumanStandardTokenGenerated <https://github.com/webuj/webuj/tree/master/integration-tests/src/test/java/org/webuj/generated/HumanStandardTokenGenerated.java>`_
 :ref:`smart contract wrapper <smart-contract-wrappers>` to demonstrate this.
 
 Alternatively, if you do not wish to use a smart contract wrapper and would like to work directly
 with the underlying JSON-RPC calls, please refer to
-`HumanStandardTokenIT <https://github.com/web3j/web3j/tree/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/HumanStandardTokenIT.java>`_.
+`HumanStandardTokenIT <https://github.com/webuj/webuj/tree/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/HumanStandardTokenIT.java>`_.
 
 
 .. _smart-contract-wrappers:
@@ -147,24 +147,24 @@ with the underlying JSON-RPC calls, please refer to
 Solidity smart contract wrappers
 --------------------------------
 
-web3j supports the auto-generation of smart contract function wrappers in Java from Solidity ABI
+webuj supports the auto-generation of smart contract function wrappers in Java from Solidity ABI
 files.
 
-The web3j :doc:`command_line` tools ship with a command line utility for generating the smart contract function wrappers:
+The webuj :doc:`command_line` tools ship with a command line utility for generating the smart contract function wrappers:
 
 .. code-block:: bash
 
-   $ web3j solidity generate [--javaTypes|--solidityTypes] /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   $ webuj solidity generate [--javaTypes|--solidityTypes] /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
-In versions prior to 3.x of web3j, the generated smart contract wrappers used native Solidity
-types. From web3j 3.x onwards, Java types are created by default. You can create Solidity types
+In versions prior to 3.x of webuj, the generated smart contract wrappers used native Solidity
+types. From webuj 3.x onwards, Java types are created by default. You can create Solidity types
 using the *--solidityTypes* command line argument.
 
 You can also generate the wrappers by calling the Java class directly:
 
 .. code-block:: bash
 
-   org.web3j.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   org.webuj.codegen.SolidityFunctionWrapperGenerator /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Where the *bin* and *abi* are obtained as per :ref:`compiling-Solidity`.
 
@@ -173,27 +173,27 @@ The native Java to Solidity type conversions used are detailed in the :doc:`abi`
 The smart contract wrappers support all common operations for working with smart contracts:
 
 - :ref:`construction-and-deployment`
-- :ref:`invoking-transactions`
+- :ref:`invoking-repTransactions`
 - :ref:`constant-methods`
 - :ref:`contract-validity`
 
 Any method calls that requires an underlying JSON-RPC call to take place will return a Future to
 avoid blocking.
 
-web3j also supports the generation of Java smart contract function wrappers directly from
+webuj also supports the generation of Java smart contract function wrappers directly from
 `Truffle's <http://truffleframework.com/>`_
 `Contract Schema <https://github.com/trufflesuite/truffle-contract-schema>`_
 via the :doc:`command_line` utility.
 
 .. code-block:: bash
 
-   $ web3j truffle generate [--javaTypes|--solidityTypes] /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+   $ webuj truffle generate [--javaTypes|--solidityTypes] /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
 
 And this also can be invoked by calling the Java class:
 
 .. code-block:: bash
 
-   org.web3j.codegen.TruffleJsonFunctionWrapperGenerator /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
+   org.webuj.codegen.TruffleJsonFunctionWrapperGenerator /path/to/<truffle-smart-contract-output>.json -o /path/to/src/main/java -p com.your.organisation.name
 
 A wrapper generated this way ia "enhanced" to expose the per-network deployed address of the
 contract.  These addresses are from the truffle deployment at the time the wrapper is generared.
@@ -206,7 +206,7 @@ Construction and deployment
 Construction and deployment of smart contracts happens with the *deploy* method::
 
    YourSmartContract contract = YourSmartContract.deploy(
-           <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT,
+           <webuj>, <credentials>, GAS_PRICE, GAS_LIMIT,
            [<initialValue>,]
            <param1>, ..., <paramN>).send();
 
@@ -223,7 +223,7 @@ smart contract. If you wish to construct an instance of a smart contract wrapper
 smart contract, simply pass in it's address::
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>|<ensName>", web3j, credentials, GAS_PRICE, GAS_LIMIT);
+           "0x<address>|<ensName>", webuj, credentials, GAS_PRICE, GAS_LIMIT);
 
 
 .. _contract-validity:
@@ -245,28 +245,28 @@ smart contract wrapper.::
 Transaction Managers
 --------------------
 
-web3j provides a
-`TransactionManager <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/TransactionManager.java>`_
+webuj provides a
+`TransactionManager <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/TransactionManager.java>`_
 abstraction to control the manner you connect to Ethereum clients with. The default mechanism uses
-web3j's
-`RawTransactionManager <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/RawTransactionManager.java>`_
-which works with Ethereum wallet files to sign transactions offline before submitting them to the
+webuj's
+`RawTransactionManager <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/RawTransactionManager.java>`_
+which works with Ethereum wallet files to sign repTransactions offline before submitting them to the
 network.
 
-However, you may wish to modify the transaction manager, which you can pass to the smart
+However, you may wish to modify the reqTransaction manager, which you can pass to the smart
 contract deployment and creation methods instead of a credentials object, i.e.::
 
    YourSmartContract contract = YourSmartContract.deploy(
-           <web3j>, <transactionManager>, GAS_PRICE, GAS_LIMIT,
+           <webuj>, <transactionManager>, GAS_PRICE, GAS_LIMIT,
            <param1>, ..., <paramN>).send();
 
-In addition to the RawTransactionManager, web3j provides a
-`ClientTransactionManager <https://github.com/web3j/web3j/blob/master/src/main/java/org/web3j/tx/ClientTransactionManager.java>`_
-which passes the responsibility of signing your transaction on to the Ethereum client you are
+In addition to the RawTransactionManager, webuj provides a
+`ClientTransactionManager <https://github.com/webuj/webuj/blob/master/src/main/java/org/webuj/tx/ClientTransactionManager.java>`_
+which passes the responsibility of signing your reqTransaction on to the Ethereum client you are
 connecting to.
 
 There is also a
-`ReadonlyTransactionManager <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ReadonlyTransactionManager.java>`_
+`ReadonlyTransactionManager <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/ReadonlyTransactionManager.java>`_
 for when you only want to retrieve data from a smart contract, but not transact with it.
 
 
@@ -274,68 +274,68 @@ Specifying the Chain Id on Transactions (EIP-155)
 -------------------------------------------------
 
 The RawTransactionManager takes an optional *chainId* parameter to specify the chain id to be used
-on transactions as per
-`EIP-155 <https://github.com/ethereum/EIPs/issues/155>`_. This prevents transactions from one chain
+on repTransactions as per
+`EIP-155 <https://github.com/ethereum/EIPs/issues/155>`_. This prevents repTransactions from one chain
 being re-broadcast onto another chain, such as from Ropsten to Mainnet::
 
    TransactionManager transactionManager = new RawTransactionManager(
-           web3j, credentials, ChainId.MAIN_NET);
+           webuj, credentials, ChainId.MAIN_NET);
 
 In order to avoid having to change config or code to specify which chain you are working with,
-web3j's default behaviour is to not specify chain ids on transactions to simplify working with the
+webuj's default behaviour is to not specify chain ids on repTransactions to simplify working with the
 library. However, the recommendation of the Ethereum community is to use them.
 
 You can obtain the chain id of the network that your Ethereum client is connected to with the
 following request::
 
-   web3j.netVersion().send().getNetVersion();
+   webuj.netVersion().send().getNetVersion();
 
 
-.. transaction-processors:
+.. reqTransaction-processors:
 
 Transaction Receipt Processors
 ------------------------------
 
-By default, when a new transaction is submitted by web3j to an Ethereum client, web3j will
+By default, when a new reqTransaction is submitted by webuj to an Ethereum client, webuj will
 continually poll the client until it receives a
-`TransactionReceipt <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/methods/response/TransactionReceipt.java>`_,
-indicating that the transaction has been added to the blockchain. If you are sending a number of
-transactions asynchronously with web3j, this can result in a number of threads polling the client
+`TransactionReceipt <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/protocol/core/methods/response/TransactionReceipt.java>`_,
+indicating that the reqTransaction has been added to the blockchain. If you are sending a number of
+repTransactions asynchronously with webuj, this can result in a number of threads polling the client
 concurrently.
 
-To reduce this polling overhead, web3j provides configurable
-`TransactionReceiptProcessors <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/TransactionReceiptProcessor.java>`_.
+To reduce this polling overhead, webuj provides configurable
+`TransactionReceiptProcessors <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/TransactionReceiptProcessor.java>`_.
 
-There are a number of processors provided in web3j:
+There are a number of processors provided in webuj:
 
-- `PollingTransactionReceiptProcessor <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/PollingTransactionReceiptProcessor.java>`_
-  is the default processor used in web3j, which polls periodically for a transaction receipt for
-  each individual pending transaction.
-- `QueuingTransactionReceiptProcessor <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/QueuingTransactionReceiptProcessor.java>`_
-  has an internal queue of all pending transactions. It contains a worker that runs periodically
-  to query if a transaction receipt is available yet. If a receipt is found, a callback to the
+- `PollingTransactionReceiptProcessor <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/PollingTransactionReceiptProcessor.java>`_
+  is the default processor used in webuj, which polls periodically for a reqTransaction receipt for
+  each individual pending reqTransaction.
+- `QueuingTransactionReceiptProcessor <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/QueuingTransactionReceiptProcessor.java>`_
+  has an internal queue of all pending repTransactions. It contains a worker that runs periodically
+  to query if a reqTransaction receipt is available yet. If a receipt is found, a callback to the
   client is invoked.
-- `NoOpProcessor <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/NoOpProcessor.java>`_
+- `NoOpProcessor <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/NoOpProcessor.java>`_
   provides an
-  `EmptyTransactionReceipt <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/EmptyTransactionReceipt.java>`_
-  to clients which only contains the transaction hash. This is for clients who do not want web3j
-  to perform any polling for a transaction receipt.
+  `EmptyTransactionReceipt <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/EmptyTransactionReceipt.java>`_
+  to clients which only contains the reqTransaction hash. This is for clients who do not want webuj
+  to perform any polling for a reqTransaction receipt.
 
 **Note:** the
-`EmptyTransactionReceipt <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/EmptyTransactionReceipt.java>`_
-is also provided in the the initial response from the `QueuingTransactionReceiptProcessor <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/QueuingTransactionReceiptProcessor.java>`_.
-This allows the caller to have the transaction hash for the transaction that was submitted to the
+`EmptyTransactionReceipt <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/EmptyTransactionReceipt.java>`_
+is also provided in the the initial response from the `QueuingTransactionReceiptProcessor <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/QueuingTransactionReceiptProcessor.java>`_.
+This allows the caller to have the reqTransaction hash for the reqTransaction that was submitted to the
 network.
 
 If you do not wish to use the default processor
-(`PollingTransactionReceiptProcessor <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/response/PollingTransactionReceiptProcessor.java>`_), you can
-specify the transaction receipt processor to use as follows::
+(`PollingTransactionReceiptProcessor <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/response/PollingTransactionReceiptProcessor.java>`_), you can
+specify the reqTransaction receipt processor to use as follows::
 
    TransactionReceiptProcessor transactionReceiptProcessor =
-           new QueuingTransactionReceiptProcessor(web3j, new Callback() {
+           new QueuingTransactionReceiptProcessor(webuj, new Callback() {
                     @Override
-                    public void accept(TransactionReceipt transactionReceipt) {
-                        // process transactionReceipt
+                    public void accept(TransactionReceipt repTransactionReceipt) {
+                        // process repTransactionReceipt
                     }
 
                     @Override
@@ -343,44 +343,44 @@ specify the transaction receipt processor to use as follows::
                         // handle exception
                     }
    TransactionManager transactionManager = new RawTransactionManager(
-           web3j, credentials, ChainId.MAIN_NET, transactionReceiptProcessor);
+           webuj, credentials, ChainId.MAIN_NET, transactionReceiptProcessor);
 
 
 If you require further information, the
-`FastRawTransactionManagerIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/FastRawTransactionManagerIT.java>`_
+`FastRawTransactionManagerIT <https://github.com/webuj/webuj/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/FastRawTransactionManagerIT.java>`_
 demonstrates the polling and queuing approaches.
 
 
-.. _invoking-transactions:
+.. _invoking-repTransactions:
 
-Invoking transactions and events
+Invoking repTransactions and events
 --------------------------------
 
 All transactional smart contract methods are named identically to their Solidity methods, taking
 the same parameter values. Transactional calls do not return any values, regardless of the return
 type specified on the method. Hence, for all transactional methods the
 `Transaction Receipt <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt>`_
-associated with the transaction is returned.::
+associated with the reqTransaction is returned.::
 
-   TransactionReceipt transactionReceipt = contract.someMethod(
+   TransactionReceipt repTransactionReceipt = contract.someMethod(
                 <param1>,
                 ...).send();
 
 
-The transaction receipt is useful for two reasons:
+The reqTransaction receipt is useful for two reasons:
 
-#. It provides details of the mined block that the transaction resides in
+#. It provides details of the mined block that the reqTransaction resides in
 #. `Solidity events <http://Solidity.readthedocs.io/en/develop/contracts.html?highlight=events#events>`_
-   that are called will be logged as part of the transaction, which can then be extracted
+   that are called will be logged as part of the reqTransaction, which can then be extracted
 
 Any events defined within a smart contract will be represented in the smart contract wrapper with
 a method named *process<Event Name>Event*, which takes the Transaction Receipt and from this
 extracts the indexed and non-indexed event parameters, which are returned decoded in an instance of
 the
-`EventValues <https://github.com/web3j/web3j/blob/master/abi/src/main/java/org/web3j/abi/EventValues.java>`_
+`EventValues <https://github.com/webuj/webuj/blob/master/abi/src/main/java/org/webuj/abi/EventValues.java>`_
 object.::
 
-   EventValues eventValues = contract.processSomeEvent(transactionReceipt);
+   EventValues eventValues = contract.processSomeEvent(repTransactionReceipt);
 
 Alternatively you can use an Observable filter instead which will listen for events associated with
 the smart contract::

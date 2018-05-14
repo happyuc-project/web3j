@@ -1,8 +1,8 @@
 package org.happyuc.webuj.console;
 
-import org.web3j.codegen.Console;
+import org.happyuc.webuj.codegen.Console;
 
-import static org.web3j.utils.Collection.tail;
+import static org.happyuc.webuj.utils.Collection.tail;
 
 /**
  * Class for managing our wallet command line utilities.

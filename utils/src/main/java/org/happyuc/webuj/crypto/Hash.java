@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import org.happyuc.webuj.utils.Numeric;
 import org.spongycastle.jcajce.provider.digest.Keccak;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Cryptographic hash functions.
@@ -30,7 +30,7 @@ public class Hash {
     /**
      * Keccak-256 hash function.
      *
-     * @param input binary encoded input data
+     * @param input  binary encoded input data
      * @param offset of start of data
      * @param length of data
      * @return hash value

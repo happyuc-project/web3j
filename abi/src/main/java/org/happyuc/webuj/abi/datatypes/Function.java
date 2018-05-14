@@ -2,9 +2,9 @@ package org.happyuc.webuj.abi.datatypes;
 
 import java.util.List;
 
-import org.web3j.abi.TypeReference;
+import org.happyuc.webuj.abi.TypeReference;
 
-import static org.web3j.abi.Utils.convert;
+import static org.happyuc.webuj.abi.Utils.convert;
 
 /**
  * Function type.
@@ -14,8 +14,7 @@ public class Function {
     private List<Type> inputParameters;
     private List<TypeReference<Type>> outputParameters;
 
-    public Function(String name, List<Type> inputParameters,
-                    List<TypeReference<?>> outputParameters) {
+    public Function(String name, List<Type> inputParameters, List<TypeReference<?>> outputParameters) {
         this.name = name;
         this.inputParameters = inputParameters;
         this.outputParameters = convert(outputParameters);

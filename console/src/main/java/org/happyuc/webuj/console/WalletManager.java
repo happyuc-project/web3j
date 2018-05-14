@@ -1,14 +1,14 @@
 package org.happyuc.webuj.console;
 
+import org.happyuc.webuj.crypto.CipherException;
+import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.crypto.WalletUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
-
-import static org.web3j.codegen.Console.exitError;
+import static org.happyuc.webuj.codegen.Console.exitError;
 
 /**
  * Common functions used by the wallet console tools.
@@ -21,8 +21,7 @@ abstract class WalletManager {
         console = new ConsoleDevice();
 
         if (console == null) {
-            exitError("Unable to access console - please ensure you are running "
-                    + "from the command line");
+            exitError("Unable to access console - please ensure you are running " + "from the command line");
         }
     }
 
@@ -45,8 +44,7 @@ abstract class WalletManager {
 
     String getDestinationDir() {
         String defaultDir = WalletUtils.getTestnetKeyDirectory();
-        String destinationDir = console.readLine(
-                "Please enter a destination directory location [" + defaultDir + "]: ");
+        String destinationDir = console.readLine("Please enter a destination directory location [" + defaultDir + "]: ");
         if (destinationDir.equals("")) {
             return defaultDir;
         } else if (destinationDir.startsWith("~")) {
@@ -62,8 +60,7 @@ abstract class WalletManager {
         if (!destination.exists()) {
             console.printf("Creating directory: " + destinationDir + " ...");
             if (!destination.mkdirs()) {
-                exitError("Unable to create destination directory ["
-                        + destinationDir + "], exiting...");
+                exitError("Unable to create destination directory [" + destinationDir + "], exiting...");
             } else {
                 console.printf("complete\n");
             }
@@ -81,8 +78,7 @@ abstract class WalletManager {
 
     private Credentials loadWalletFile(File walletFile) {
         while (true) {
-            char[] password = console.readPassword(
-                    "Please enter your existing wallet file password: ");
+            char[] password = console.readPassword("Please enter your existing wallet file password: ");
             String currentPassword = new String(password);
             try {
                 return WalletUtils.loadCredentials(currentPassword, walletFile);

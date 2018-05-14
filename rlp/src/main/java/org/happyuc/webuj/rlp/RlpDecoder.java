@@ -149,8 +149,7 @@ public class RlpDecoder {
                     int listLen = calcLength(lenOfListLen, data, startPos);
 
                     RlpList newLevelList = new RlpList(new ArrayList<RlpType>());
-                    traverse(data, startPos + lenOfListLen + 1,
-                            startPos + lenOfListLen + listLen + 1, newLevelList);
+                    traverse(data, startPos + lenOfListLen + 1, startPos + lenOfListLen + listLen + 1, newLevelList);
                     rlpList.getValues().add(newLevelList);
 
                     startPos += lenOfListLen + listLen + 1;

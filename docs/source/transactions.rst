@@ -1,23 +1,23 @@
 Transactions
 ============
 
-Broadly speaking there are three types transactions supported on Ethereum:
+Broadly speaking there are three types repTransactions supported on Ethereum:
 
 #. :ref:`transfer-of-ether`
 #. :ref:`creation-of-smart-contract`
 #. :ref:`transacting-with-contract`
 
-To undertake any of these transactions, it is necessary to have Ether (the fuel of the Ethereum
-blockchain) residing in the Ethereum account which the transactions are taking place from. This is
-to pay for the :ref:`Gas` costs, which is the transaction execution cost for the Ethereum client that
-performs the transaction on your behalf, comitting the result to the Ethereum blockchain.
+To undertake any of these repTransactions, it is necessary to have Ether (the fuel of the Ethereum
+blockchain) residing in the Ethereum account which the repTransactions are taking place from. This is
+to pay for the :ref:`Gas` costs, which is the reqTransaction execution cost for the Ethereum client that
+performs the reqTransaction on your behalf, comitting the result to the Ethereum blockchain.
 Instructions for obtaining Ether are described below in :ref:`obtaining-ether`.
 
 Additionally, it is possible to query the state of a smart contract, this is described in
 :ref:`querying-state`.
 
 .. image:: /images/web3j_transaction.png
-   :scale: 20%
+:scale: 20%
 
 
 .. _obtaining-ether:
@@ -54,7 +54,7 @@ There are a number of dedicated test networks in Ethereum, which are supported b
 - Ropsten (Geth and Parity)
 
 For development, its recommended you use the Rinkeby or Kovan test networks. This is because they
-use a Proof of Authority (PoA) consensus mechanism, ensuring transactions and blocks are created in
+use a Proof of Authority (PoA) consensus mechanism, ensuring repTransactions and blocks are created in
 a consistent and timely manner. The Ropsten testnet, although closest to the Mainnet as it uses
 Proof of Work (PoW) consensus, has been subject to attacks in the past and tends to be more
 problematic for developers.
@@ -66,7 +66,7 @@ Details of how to request Ether for the Kovan testnet are available
 `here <https://github.com/kovan-testnet/faucet>`_.
 
 If you need some Ether on the Ropsten testnet to get started, please post a message with your
-wallet address to the `web3j Gitter channel <https://gitter.im/web3j/web3j>`_ and you will be
+wallet address to the `webuj Gitter channel <https://gitter.im/webuj/webuj>`_ and you will be
 sent some.
 
 
@@ -96,13 +96,13 @@ test networks.
 Gas
 ---
 
-When a transaction takes place in Ethereum, a transaction cost must be paid to the client that
-executes the transaction on your behalf, committing the output of this transaction to the Ethereum
+When a reqTransaction takes place in Ethereum, a reqTransaction cost must be paid to the client that
+executes the reqTransaction on your behalf, committing the output of this reqTransaction to the Ethereum
 blockchain.
 
-This cost is measure in gas, where gas is the number of instructions used to execute a transaction
+This cost is measure in gas, where gas is the number of instructions used to execute a reqTransaction
 in the Ethereum Virtual Machine. Please refer to the
-`Homestead documentation <http://ethdocs.org/en/latest/contracts-and-transactions/account-types-gas-and-transactions.html?highlight=gas#what-is-gas>`__
+`Homestead documentation <http://ethdocs.org/en/latest/contracts-and-repTransactions/account-types-gas-and-repTransactions.html?highlight=gas#what-is-gas>`__
 for further information.
 
 What this means for you when working with Ethereum clients is that there are two parameters which
@@ -110,25 +110,25 @@ are used to dictate how much Ether you wish to spend in order for a tranaction t
 
 *Gas price*
 
-  This is the amount you are prepared in Ether per unit of gas. web3j uses a default price
+  This is the amount you are prepared in Ether per unit of gas. webuj uses a default price
   of 22,000,000,000 Wei
   (22 x 10\ :sup:`-8` Ether). This is defined in
-  `ManagedTransaction <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/ManagedTransaction.java>`_.
+  `ManagedTransaction <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/ManagedTransaction.java>`_.
 
 
 *Gas limit*
 
-  This is the total amount of gas you are happy to spend on the transaction execution. There is an
-  upper limit of how large a single transaction can be in an Ethereum block which restricts this
+  This is the total amount of gas you are happy to spend on the reqTransaction execution. There is an
+  upper limit of how large a single reqTransaction can be in an Ethereum block which restricts this
   value typically to less then 6,700,000. The current gas limit is visible at https://ethstats.net/.
 
 
 These parameters taken together dictate the maximum amount of Ether you are willing to spend on
-transaction costs. i.e. you can spend no more then *gas price * gas limit*. The gas price can also
-affect how quickly a transaction takes place depending on what other transactions are available
+reqTransaction costs. i.e. you can spend no more then *gas price * gas limit*. The gas price can also
+affect how quickly a reqTransaction takes place depending on what other repTransactions are available
 with a more profitable gas price for miners.
 
-You may need to adjust these parameters to ensure that transactions take place in a timely manner.
+You may need to adjust these parameters to ensure that repTransactions take place in a timely manner.
 
 
 Transaction mechanisms
@@ -140,7 +140,7 @@ transact with Ethereum.
 #. :ref:`signing-via-client`
 #. :ref:`offline-signing`
 
-Both mechanisms are supported via web3j.
+Both mechanisms are supported via webuj.
 
 
 .. _signing-via-client:
@@ -160,66 +160,66 @@ via:
   for `Parity <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module#personal_newaccount>`_
   or `Geth <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_newaccount>`_
 
-With your wallet file created, you can unlock your account via web3j by first of all creating an
-instance of web3j that supports Parity/Geth admin commands::
+With your wallet file created, you can unlock your account via webuj by first of all creating an
+instance of webuj that supports Parity/Geth admin commands::
 
-   Admin web3j = Admin.build(new HttpService());
+   Admin webuj = Admin.build(new HttpService());
 
-Then you can unlock the account, and providing this was successful, send a transaction::
+Then you can unlock the account, and providing this was successful, send a reqTransaction::
 
-   PersonalUnlockAccount personalUnlockAccount = web3j.personalUnlockAccount("0x000...", "a password").send();
+   PersonalUnlockAccount personalUnlockAccount = webuj.personalUnlockAccount("0x000...", "a password").send();
    if (personalUnlockAccount.accountUnlocked()) {
-       // send a transaction
+       // send a reqTransaction
    }
 
 
 Transactions for sending in this manner should be created via
-`EthSendTransaction <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/methods/response/EthSendTransaction.java>`_,
-with the `Transaction <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/methods/request/Transaction.java>`_ type::
+`EthSendTransaction <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/protocol/core/methods/response/EthSendTransaction.java>`_,
+with the `Transaction <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/protocol/core/methods/request/Transaction.java>`_ type::
 
-  Transaction transaction = Transaction.createContractTransaction(
+  Transaction reqTransaction = Transaction.createContractTransaction(
                 <from address>,
                 <nonce>,
                 BigInteger.valueOf(<gas price>),  // we use default gas limit
                 "0x...<smart contract code to execute>"
         );
 
-        org.web3j.protocol.core.methods.response.EthSendTransaction
-                transactionResponse = parity.ethSendTransaction(ethSendTransaction)
+        org.webuj.protocol.core.methods.response.EthSendTransaction
+                transactionResponse = parity.hucSendRepTransaction(hucSendRepTransaction)
                 .send();
 
         String transactionHash = transactionResponse.getTransactionHash();
 
-        // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
+        // poll for reqTransaction response via org.webuj.protocol.Web3j.hucGetRepTransactionReceipt(<txHash>)
 
 Where the *<nonce>* value is obtained as per :ref:`below <nonce>`.
 
 Please refer to the integration test
-`DeployContractIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/DeployContractIT.java>`_
+`DeployContractIT <https://github.com/webuj/webuj/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/DeployContractIT.java>`_
 and its superclass
-`Scenario <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/Scenario.java>`_
-for further details of this transaction workflow.
+`Scenario <https://github.com/webuj/webuj/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/Scenario.java>`_
+for further details of this reqTransaction workflow.
 
-Further details of working with the different admin commands supported by web3j are available in
+Further details of working with the different admin commands supported by webuj are available in
 the section :doc:`management_apis`.
 
 
 .. _offline-signing:
 
-Offline transaction signing
+Offline reqTransaction signing
 ---------------------------
 
 If you'd prefer not to manage your own Ethereum client, or do not want to provide wallet details
-such as your password to an Ethereum client, then offline transaction signing is the way to go.
+such as your password to an Ethereum client, then offline reqTransaction signing is the way to go.
 
-Offline transaction signing allows you to sign a transaction using your Ethereum Ethereum wallet
-within web3j, allowing you to have complete control over your private credentials. A transaction
+Offline reqTransaction signing allows you to sign a reqTransaction using your Ethereum Ethereum wallet
+within webuj, allowing you to have complete control over your private credentials. A reqTransaction
 created offline can then be sent to any Ethereum client on the network, which will propagate the
-transaction out to other nodes, provided it is a valid transaction.
+reqTransaction out to other nodes, provided it is a valid reqTransaction.
 
-You can also perform out of process transaction signing if required. This can be achieved by
+You can also perform out of process reqTransaction signing if required. This can be achieved by
 overriding the *sign* method in
-`ECKeyPair <https://github.com/web3j/web3j/blob/master/crypto/src/main/java/org/web3j/crypto/ECKeyPair.java#L41>`_.
+`ECKeyPair <https://github.com/webuj/webuj/blob/master/crypto/src/main/java/org/webuj/crypto/ECKeyPair.java#L41>`_.
 
 
 .. _wallet-files:
@@ -227,10 +227,10 @@ overriding the *sign* method in
 Creating and working with wallet files
 --------------------------------------
 
-In order to sign transactions offline, you need to have either your Ethereum wallet file or the
+In order to sign repTransactions offline, you need to have either your Ethereum wallet file or the
 public and private keys associated with an Ethereum wallet/account.
 
-web3j is able to both generate a new secure Ethereum wallet file for you, or work with an existing
+webuj is able to both generate a new secure Ethereum wallet file for you, or work with an existing
 wallet file.
 
 To create a new wallet file::
@@ -245,22 +245,22 @@ To load the credentials from a wallet file::
            "your password",
            "/path/to/walletfile");
 
-These credentials are then used to sign transactions.
+These credentials are then used to sign repTransactions.
 
 Please refer to the
 `Web3 Secret Storage Definition <https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition>`_
 for the full wallet file specification.
 
 
-Signing transactions
+Signing repTransactions
 --------------------
 
 Transactions to be used in an offline signing capacity, should use the
-`RawTransaction <https://github.com/web3j/web3j/blob/master/crypto/src/main/java/org/web3j/crypto/RawTransaction.java>`_
+`RawTransaction <https://github.com/webuj/webuj/blob/master/crypto/src/main/java/org/webuj/crypto/RawTransaction.java>`_
 type for this purpose. The RawTransaction is similar to the previously mentioned Transaction type,
 however it does not require a *from* address, as this can be inferred from the signature.
 
-In order to create and sign a raw transaction, the sequence of events is as follows:
+In order to create and sign a raw reqTransaction, the sequence of events is as follows:
 
 #. Identify the next available :ref:`nonce <nonce>` for the sender account
 #. Create the RawTransaction object
@@ -268,53 +268,53 @@ In order to create and sign a raw transaction, the sequence of events is as foll
 #. Sign the RawTransaction object
 #. Send the RawTransaction object to a node for processing
 
-The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
-can only be used once and until a transaction is mined, it is possible to send multiple versions of
-a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
+The nonce is an increasing numeric value which is used to uniquely identify repTransactions. A nonce
+can only be used once and until a reqTransaction is mined, it is possible to send multiple versions of
+a reqTransaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
 
 Once you have obtained the next available :ref:`nonce <nonce>`, the value can then be used to
-create your transaction object::
+create your reqTransaction object::
 
    RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
 
-The transaction can then be signed and encoded::
+The reqTransaction can then be signed and encoded::
 
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <credentials>);
    String hexValue = Numeric.toHexString(signedMessage);
 
 Where the credentials are those loaded as per :ref:`wallet-files`.
 
-The transaction is then sent using `eth_sendRawTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction>`_::
+The reqTransaction is then sent using `eth_sendRawTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction>`_::
 
-   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
-   String transactionHash = ethSendTransaction.getTransactionHash();
-   // poll for transaction response via org.web3j.protocol.Web3j.ethGetTransactionReceipt(<txHash>)
+   EthSendTransaction hucSendRepTransaction = webuj.hucSendRawRepTransaction(hexValue).sendAsync().get();
+   String transactionHash = hucSendRepTransaction.getTransactionHash();
+   // poll for reqTransaction response via org.webuj.protocol.Web3j.hucGetRepTransactionReceipt(<txHash>)
 
 
 Please refer to the integration test
-`CreateRawTransactionIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/scenarios/CreateRawTransactionIT.java>`_
-for a full example of creating and sending a raw transaction.
+`CreateRawTransactionIT <https://github.com/webuj/webuj/blob/master/integration-tests/src/test/java/org/webuj/protocol/scenarios/CreateRawTransactionIT.java>`_
+for a full example of creating and sending a raw reqTransaction.
 
 
 .. _nonce:
 
-The transaction nonce
+The reqTransaction nonce
 ---------------------
 
-The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
-can only be used once and until a transaction is mined, it is possible to send multiple versions of
-a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
+The nonce is an increasing numeric value which is used to uniquely identify repTransactions. A nonce
+can only be used once and until a reqTransaction is mined, it is possible to send multiple versions of
+a reqTransaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
 
 You can obtain the next available nonce via the
 `eth_getTransactionCount <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount>`_ method::
 
-   EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+   EthGetTransactionCount hucGetRepTransactionCount = webuj.hucGetRepTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
-        BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+        BigInteger nonce = hucGetRepTransactionCount.getTransactionCount();
 
-The nonce can then be used to create your transaction object::
+The nonce can then be used to create your reqTransaction object::
 
    RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
@@ -325,16 +325,16 @@ The nonce can then be used to create your transaction object::
 Transaction types
 -----------------
 
-The different types of transaction in web3j work with both Transaction and RawTransaction objects.
+The different types of reqTransaction in webuj work with both Transaction and RawTransaction objects.
 The key difference is that Transaction objects must always have a from address, so that the
 Ethereum client which processes the
 `eth_sendTransaction <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction>`_
-request know which wallet to use in order to sign and send the transaction on the message senders
-behalf. As mentioned :ref:`above <offline-signing>`, this is not necessary for raw transactions
+request know which wallet to use in order to sign and send the reqTransaction on the message senders
+behalf. As mentioned :ref:`above <offline-signing>`, this is not necessary for raw repTransactions
 which are signed offline.
 
-The subsequent sections outline the key transaction attributes required for the different
-transaction types. The following attributes remain constant for all:
+The subsequent sections outline the key reqTransaction attributes required for the different
+reqTransaction types. The following attributes remain constant for all:
 
 - Gas price
 - Gas limit
@@ -349,7 +349,7 @@ Transaction and RawTransaction objects are used interchangeably in all of the su
 Transfer of Ether from one party to another
 -------------------------------------------
 
-The sending of Ether between two parties requires a minimal number of details of the transaction
+The sending of Ether between two parties requires a minimal number of details of the reqTransaction
 object:
 
 *to*
@@ -366,13 +366,13 @@ object:
    // send...
 
 However, it is recommended that you use the
-`Transfer class <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java>`_
+`Transfer class <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/Transfer.java>`_
 for sending Ether, which takes care of the nonce management and polling for a
 response for you::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
-   TransactionReceipt transactionReceipt = Transfer.sendFunds(
+   TransactionReceipt repTransactionReceipt = Transfer.sendFunds(
            web3, credentials, "0x<address>|<ensName>",
            BigDecimal.valueOf(1.0), Convert.Unit.ETHER).send();
 
@@ -382,7 +382,7 @@ Recommended approach for working with smart contracts
 
 When working with smart contract wrappers as outlined below, you will have to perform all of
 the conversions from Solidity to native Java types manually. It is far more effective to use
-web3j's :ref:`smart-contract-wrappers` which take care of all code generation and this conversion
+webuj's :ref:`smart-contract-wrappers` which take care of all code generation and this conversion
 for you.
 
 
@@ -401,7 +401,7 @@ To deploy a new smart contract, the following attributes will need to be provide
 
 ::
 
-   // using a raw transaction
+   // using a raw reqTransaction
    RawTransaction rawTransaction = RawTransaction.createContractTransaction(
            <nonce>,
            <gasPrice>,
@@ -411,11 +411,11 @@ To deploy a new smart contract, the following attributes will need to be provide
    // send...
 
    // get contract address
-   EthGetTransactionReceipt transactionReceipt =
-                web3j.ethGetTransactionReceipt(transactionHash).send();
+   EthGetTransactionReceipt repTransactionReceipt =
+                webuj.hucGetRepTransactionReceipt(transactionHash).send();
 
-   if (transactionReceipt.getTransactionReceipt.isPresent()) {
-       String contractAddress = transactionReceipt.get().getContractAddress();
+   if (repTransactionReceipt.getTransactionReceipt.isPresent()) {
+       String contractAddress = repTransactionReceipt.get().getContractAddress();
    } else {
        // try again
    }
@@ -427,8 +427,8 @@ encoded and appended to the *compiled smart contract code*::
    String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Arrays.asList(new Type(value), ...));
 
-   // using a regular transaction
-   Transaction transaction = Transaction.createContractTransaction(
+   // using a regular reqTransaction
+   Transaction reqTransaction = Transaction.createContractTransaction(
            <fromAddress>,
            <nonce>,
            <gasPrice>,
@@ -457,7 +457,7 @@ To transact with an existing smart contract, the following attributes will need 
 *data*
   the encoded function selector and parameter arguments
 
-web3j takes care of the function encoding for you, for further details on the implementation refer
+webuj takes care of the function encoding for you, for further details on the implementation refer
 to the :doc:`abi` section.
 
 ::
@@ -468,11 +468,11 @@ to the :doc:`abi` section.
                 Arrays.asList(new TypeReference<Type>() {}, ...));
 
    String encodedFunction = FunctionEncoder.encode(function)
-   Transaction transaction = Transaction.createFunctionCallTransaction(
+   Transaction reqTransaction = Transaction.createFunctionCallTransaction(
                 <from>, <gasPrice>, <gasLimit>, contractAddress, <funds>, encodedFunction);
 
-   org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
-                web3j.ethSendTransaction(transaction).sendAsync().get();
+   org.webuj.protocol.core.methods.response.EthSendTransaction transactionResponse =
+                webuj.hucSendRepTransaction(reqTransaction).sendAsync().get();
 
    String transactionHash = transactionResponse.getTransactionHash();
 
@@ -491,7 +491,7 @@ Querying the state of a smart contract
 This functionality is facilitated by the `eth_call <https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call>`_
 JSON-RPC call.
 
-eth_call allows you to call a method on a smart contract to query a value. There is no transaction
+eth_call allows you to call a method on a smart contract to query a value. There is no reqTransaction
 cost associated with this function, this is because it does not change the state of any smart
 contract method's called, it simply returns the value from them::
 
@@ -501,7 +501,7 @@ contract method's called, it simply returns the value from them::
                 Arrays.asList(new TypeReference<Type>() {}, ...));
 
    String encodedFunction = FunctionEncoder.encode(function)
-   org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
+   org.webuj.protocol.core.methods.response.EthCall response = webuj.hucCall(
                 Transaction.createEthCallTransaction(<from>, contractAddress, encodedFunction),
                 DefaultBlockParameterName.LATEST)
                 .sendAsync().get();

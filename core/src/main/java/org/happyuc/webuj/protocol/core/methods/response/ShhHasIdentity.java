@@ -1,6 +1,6 @@
 package org.happyuc.webuj.protocol.core.methods.response;
 
-import org.web3j.protocol.core.Response;
+import org.happyuc.webuj.protocol.core.Response;
 
 /**
  * shh_hasIdentity.

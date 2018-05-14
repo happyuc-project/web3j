@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.utils.Version.DEFAULT;
-import static org.web3j.utils.Version.getTimestamp;
-import static org.web3j.utils.Version.getVersion;
+import static org.happyuc.webuj.utils.Version.DEFAULT;
+import static org.happyuc.webuj.utils.Version.getTimestamp;
+import static org.happyuc.webuj.utils.Version.getVersion;
 
 public class VersionTest {
 

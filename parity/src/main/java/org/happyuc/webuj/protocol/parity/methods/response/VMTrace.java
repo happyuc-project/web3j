@@ -6,9 +6,9 @@ import java.util.List;
 /**
  * VMTrace used in following methods.
  * <ol>
- *     <li>trace_call</li>
- *     <li>trace_rawTransaction</li>
- *     <li>trace_replayTransaction</li>
+ * <li>trace_call</li>
+ * <li>trace_rawTransaction</li>
+ * <li>trace_replayTransaction</li>
  * </ol>
  */
 public class VMTrace {
@@ -70,12 +70,10 @@ public class VMTrace {
 
                     Mem mem = (Mem) o;
 
-                    if (getData() != null ? !getData().equals(mem.getData())
-                            : mem.getData() != null) {
+                    if (getData() != null ? !getData().equals(mem.getData()) : mem.getData() != null) {
                         return false;
                     }
-                    return getOff() != null ? getOff().equals(mem.getOff())
-                            : mem.getOff() == null;
+                    return getOff() != null ? getOff().equals(mem.getOff()) : mem.getOff() == null;
                 }
 
                 @Override
@@ -87,10 +85,7 @@ public class VMTrace {
 
                 @Override
                 public String toString() {
-                    return "Mem{"
-                            + "data='" + getData() + '\''
-                            + ", off=" + getOff()
-                            + '}';
+                    return "Mem{" + "data='" + getData() + '\'' + ", off=" + getOff() + '}';
                 }
             }
 
@@ -134,12 +129,10 @@ public class VMTrace {
 
                     Store store = (Store) o;
 
-                    if (getKey() != null ? !getKey().equals(store.getKey())
-                            : store.getKey() != null) {
+                    if (getKey() != null ? !getKey().equals(store.getKey()) : store.getKey() != null) {
                         return false;
                     }
-                    return getVal() != null ? getVal().equals(store.getVal())
-                            : store.getVal() == null;
+                    return getVal() != null ? getVal().equals(store.getVal()) : store.getVal() == null;
                 }
 
                 @Override
@@ -151,10 +144,7 @@ public class VMTrace {
 
                 @Override
                 public String toString() {
-                    return "Store{"
-                            + "key='" + getKey() + '\''
-                            + ", val='" + getVal() + '\''
-                            + '}';
+                    return "Store{" + "key='" + getKey() + '\'' + ", val='" + getVal() + '\'' + '}';
                 }
             }
 
@@ -211,20 +201,16 @@ public class VMTrace {
 
                 Ex ex = (Ex) o;
 
-                if (getMem() != null ? !getMem().equals(ex.getMem())
-                        : ex.getMem() != null) {
+                if (getMem() != null ? !getMem().equals(ex.getMem()) : ex.getMem() != null) {
                     return false;
                 }
-                if (getPush() != null ? !getPush().equals(ex.getPush())
-                        : ex.getPush() != null) {
+                if (getPush() != null ? !getPush().equals(ex.getPush()) : ex.getPush() != null) {
                     return false;
                 }
-                if (getStore() != null ? !getStore().equals(ex.getStore())
-                        : ex.getStore() != null) {
+                if (getStore() != null ? !getStore().equals(ex.getStore()) : ex.getStore() != null) {
                     return false;
                 }
-                return getUsed() != null ? getUsed().equals(ex.getUsed())
-                        : ex.getUsed() == null;
+                return getUsed() != null ? getUsed().equals(ex.getUsed()) : ex.getUsed() == null;
             }
 
             @Override
@@ -238,12 +224,7 @@ public class VMTrace {
 
             @Override
             public String toString() {
-                return "Ex{"
-                        + "mem=" + getMem()
-                        + ", push=" + getPush()
-                        + ", store=" + getStore()
-                        + ", used=" + getUsed()
-                        + '}';
+                return "Ex{" + "mem=" + getMem() + ", push=" + getPush() + ", store=" + getStore() + ", used=" + getUsed() + '}';
             }
         }
 
@@ -323,12 +304,7 @@ public class VMTrace {
 
         @Override
         public String toString() {
-            return "VMOperation{"
-                    + "sub=" + getSub()
-                    + ", cost=" + getCost()
-                    + ", ex=" + getEx()
-                    + ", pc=" + getPc()
-                    + '}';
+            return "VMOperation{" + "sub=" + getSub() + ", cost=" + getCost() + ", ex=" + getEx() + ", pc=" + getPc() + '}';
         }
     }
 
@@ -382,9 +358,6 @@ public class VMTrace {
 
     @Override
     public String toString() {
-        return "VMTrace{"
-                + "code='" + getCode() + '\''
-                + ", ops=" + getOps()
-                + '}';
+        return "VMTrace{" + "code='" + getCode() + '\'' + ", ops=" + getOps() + '}';
     }
 }

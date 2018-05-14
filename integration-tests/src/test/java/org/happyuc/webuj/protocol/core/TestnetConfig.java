@@ -7,11 +7,7 @@ import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.TypeReference;
 import org.happyuc.webuj.abi.datatypes.Event;
 import org.happyuc.webuj.abi.datatypes.Uint;
-import org.web3j.abi.EventEncoder;
-import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Event;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 
 /**
  * Mordon Testnet Configuration.
@@ -20,7 +16,8 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String validBlockHash() {
-        https://testnet.etherscan.io/block/1627453
+        https:
+        //testnet.etherscan.io/block/1627453
         return "0xd67e59db999c3bd78bd4c2ba54689dba0c372ebcad09c8b9677970f37d64ca46";
     }
 
@@ -63,13 +60,9 @@ public class TestnetConfig implements IntegrationTestConfig {
     }
 
     @Override
-    public Transaction buildTransaction() {
-        return Transaction.createContractTransaction(
-                validAccount(),
-                BigInteger.ZERO,  // nonce
-                Transaction.DEFAULT_GAS,
-                validContractCode()
-        );
+    public ReqTransaction buildTransaction() {
+        return ReqTransaction.createContractTransaction(validAccount(), BigInteger.ZERO,  // nonce
+                ReqTransaction.DEFAULT_GAS, validContractCode());
     }
 
     @Override
@@ -89,9 +82,7 @@ public class TestnetConfig implements IntegrationTestConfig {
 
     @Override
     public String encodedEvent() {
-        Event event = new Event("Notify",
-                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {}),
-                Collections.<TypeReference<?>>singletonList((new TypeReference<Uint>() {})));
+        Event event = new Event("Notify", Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {}), Collections.<TypeReference<?>>singletonList((new TypeReference<Uint>() {})));
 
         return EventEncoder.encode(event);
     }

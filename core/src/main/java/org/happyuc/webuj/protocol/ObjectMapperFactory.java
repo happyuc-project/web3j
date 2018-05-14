@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.protocol.deserializer.RawResponseDeserializer;
-import org.web3j.protocol.core.Response;
-import org.web3j.protocol.deserializer.RawResponseDeserializer;
+import org.happyuc.webuj.protocol.core.Response;
+import org.happyuc.webuj.protocol.deserializer.RawResponseDeserializer;
 
 /**
  * Factory for managing our ObjectMapper instances.
@@ -42,15 +42,12 @@ public class ObjectMapperFactory {
         return DEFAULT_OBJECT_MAPPER.reader();
     }
 
-    private static ObjectMapper configureObjectMapper(
-            ObjectMapper objectMapper, boolean shouldIncludeRawResponses) {
+    private static ObjectMapper configureObjectMapper(ObjectMapper objectMapper, boolean shouldIncludeRawResponses) {
         if (shouldIncludeRawResponses) {
             SimpleModule module = new SimpleModule();
             module.setDeserializerModifier(new BeanDeserializerModifier() {
                 @Override
-                public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config,
-                                                              BeanDescription beanDesc,
-                                                              JsonDeserializer<?> deserializer) {
+                public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription beanDesc, JsonDeserializer<?> deserializer) {
                     if (Response.class.isAssignableFrom(beanDesc.getBeanClass())) {
                         return new RawResponseDeserializer(deserializer);
                     }

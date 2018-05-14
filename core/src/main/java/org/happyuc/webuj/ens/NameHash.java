@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 import org.happyuc.webuj.crypto.Hash;
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.crypto.Hash;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.crypto.Hash;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * ENS name hash implementation.
@@ -31,7 +31,7 @@ public class NameHash {
         } else {
             String[] tail;
             if (labels.length == 1) {
-                tail = new String[] { };
+                tail = new String[]{};
             } else {
                 tail = Arrays.copyOfRange(labels, 1, labels.length);
             }
@@ -56,8 +56,7 @@ public class NameHash {
      */
     static String normalise(String ensName) {
         try {
-            return IDN.toASCII(ensName, IDN.USE_STD3_ASCII_RULES)
-                    .toLowerCase();
+            return IDN.toASCII(ensName, IDN.USE_STD3_ASCII_RULES).toLowerCase();
         } catch (IllegalArgumentException e) {
             throw new EnsResolutionException("Invalid ENS name provided: " + ensName);
         } catch (StringIndexOutOfBoundsException e) {

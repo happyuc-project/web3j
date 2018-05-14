@@ -1,29 +1,20 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.RawTransaction;
 import org.happyuc.webuj.crypto.TransactionEncoder;
-import org.happyuc.webuj.protocol.Web3j;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.response.EthGetTransactionCount;
-import org.happyuc.webuj.protocol.core.methods.response.EthSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
 import org.happyuc.webuj.utils.Numeric;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.RawTransaction;
-import org.web3j.crypto.TransactionEncoder;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.tx.response.TransactionReceiptProcessor;
-import org.web3j.utils.Numeric;
+
+import java.io.IOException;
+import java.math.BigInteger;
 
 /**
- * TransactionManager implementation using Ethereum wallet file to create and sign transactions
+ * TransactionManager implementation using Happyuc wallet file to create and sign transactions
  * locally.
  *
  * <p>This transaction manager provides support for specifying the chain id for transactions as per
@@ -31,77 +22,63 @@ import org.web3j.utils.Numeric;
  */
 public class RawTransactionManager extends TransactionManager {
 
-    private final Web3j web3j;
+    private final Webuj webuj;
     final Credentials credentials;
 
     private final byte chainId;
 
-    public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
-        super(web3j, credentials.getAddress());
+    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId) {
+        super(webuj, credentials.getAddress());
 
-        this.web3j = web3j;
+        this.webuj = webuj;
         this.credentials = credentials;
 
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
+    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId, TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
-        this.web3j = web3j;
+        this.webuj = webuj;
         this.credentials = credentials;
 
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
-        super(web3j, attempts, sleepDuration, credentials.getAddress());
+    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
+        super(webuj, attempts, sleepDuration, credentials.getAddress());
 
-        this.web3j = web3j;
+        this.webuj = webuj;
         this.credentials = credentials;
 
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(Web3j web3j, Credentials credentials) {
-        this(web3j, credentials, ChainId.NONE);
+    public RawTransactionManager(Webuj webuj, Credentials credentials) {
+        this(webuj, credentials, ChainId.NONE);
     }
 
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
-        this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
+    public RawTransactionManager(Webuj webuj, Credentials credentials, int attempts, int sleepDuration) {
+        this(webuj, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
     protected BigInteger getNonce() throws IOException {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        HucGetRepTransactionCount hucGetRepTransactionCount = webuj.hucGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
 
-        return ethGetTransactionCount.getTransactionCount();
+        return hucGetRepTransactionCount.getTransactionCount();
     }
 
     @Override
-    public EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value) throws IOException {
+    public HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
 
         BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction = RawTransaction.createTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                to,
-                value,
-                data);
+        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
 
         return signAndSend(rawTransaction);
     }
 
-    public EthSendTransaction signAndSend(RawTransaction rawTransaction)
-            throws IOException {
+    public HucSendRepTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
 
         byte[] signedMessage;
 
@@ -113,6 +90,6 @@ public class RawTransactionManager extends TransactionManager {
 
         String hexValue = Numeric.toHexString(signedMessage);
 
-        return web3j.ethSendRawTransaction(hexValue).send();
+        return webuj.hucSendRawTransaction(hexValue).send();
     }
 }

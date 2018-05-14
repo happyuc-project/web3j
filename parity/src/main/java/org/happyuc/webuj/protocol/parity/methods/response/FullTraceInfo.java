@@ -6,9 +6,9 @@ import java.util.Map;
 /**
  * FullTraceInfo used in following methods.
  * <ol>
- *     <li>trace_call</li>
- *     <li>trace_rawTransaction</li>
- *     <li>trace_replayTransaction</li>
+ * <li>trace_call</li>
+ * <li>trace_rawTransaction</li>
+ * <li>trace_replayTransaction</li>
  * </ol>
  */
 public class FullTraceInfo {
@@ -21,8 +21,7 @@ public class FullTraceInfo {
     public FullTraceInfo() {
     }
 
-    public FullTraceInfo(String output, Map<String, StateDiff> stateDiff,
-            List<Trace> trace, VMTrace vmTrace) {
+    public FullTraceInfo(String output, Map<String, StateDiff> stateDiff, List<Trace> trace, VMTrace vmTrace) {
         this.output = output;
         this.stateDiff = stateDiff;
         this.trace = trace;
@@ -72,20 +71,16 @@ public class FullTraceInfo {
 
         FullTraceInfo that = (FullTraceInfo) o;
 
-        if (getOutput() != null ? !getOutput().equals(that.getOutput())
-                : that.getOutput() != null) {
+        if (getOutput() != null ? !getOutput().equals(that.getOutput()) : that.getOutput() != null) {
             return false;
         }
-        if (getStateDiff() != null ? !getStateDiff().equals(that.getStateDiff())
-                : that.getStateDiff() != null) {
+        if (getStateDiff() != null ? !getStateDiff().equals(that.getStateDiff()) : that.getStateDiff() != null) {
             return false;
         }
-        if (getTrace() != null ? !getTrace().equals(that.getTrace())
-                : that.getTrace() != null) {
+        if (getTrace() != null ? !getTrace().equals(that.getTrace()) : that.getTrace() != null) {
             return false;
         }
-        return getVmTrace() != null ? getVmTrace().equals(that.getVmTrace())
-                : that.getVmTrace() == null;
+        return getVmTrace() != null ? getVmTrace().equals(that.getVmTrace()) : that.getVmTrace() == null;
     }
 
     @Override

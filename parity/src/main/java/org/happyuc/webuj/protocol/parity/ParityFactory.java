@@ -1,14 +1,13 @@
 package org.happyuc.webuj.protocol.parity;
 
-import org.happyuc.webuj.protocol.Web3jService;
-import org.web3j.protocol.Web3jService;
+import org.happyuc.webuj.protocol.WebujService;
 
 /**
- * web3j Parity client factory.
+ * webuj Parity client factory.
  */
 public class ParityFactory {
 
-    public static Parity build(Web3jService web3jService) {
-        return new JsonRpc2_0Parity(web3jService);
+    public static Parity build(WebujService webujService) {
+        return new JsonRpc2_0Parity(webujService);
     }
 }

@@ -1,4 +1,4 @@
-Using Infura with web3j
+Using Infura with webuj
 =======================
 
 Signing up
@@ -29,22 +29,22 @@ For obtaining ether to use in these networks, you can refer to :ref:`ethereum-te
 InfuraHttpClient
 ----------------
 
-The web3j infura module provides an Infura HTTP client
-(`InfuraHttpService <https://github.com/web3j/web3j/blob/master/infura/src/main/java/org/web3j/protocol/infura/InfuraHttpService.java>`_)
+The webuj infura module provides an Infura HTTP client
+(`InfuraHttpService <https://github.com/webuj/webuj/blob/master/infura/src/main/java/org/webuj/protocol/infura/InfuraHttpService.java>`_)
 which provides support for the Infura specific *Infura-Ethereum-Preferred-Client* header. This
 allows you to specify whether you want a Geth or Parity client to respond to your request. You
 can create the client just like the regular HTTPClient::
 
    Web3j web3 = Web3j.build(new HttpService("https://rinkeby.infura.io/<your-token>"));
-   Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
-   System.out.println(web3ClientVersion.getWeb3ClientVersion());
+   Web3ClientVersion webuClientVersion = web3.webuClientVersion().send();
+   System.out.println(webuClientVersion.getWeb3ClientVersion());
 
 .. code-block:: bash
 
    Geth/v1.7.2-stable-1db4ecdc/darwin-amd64/go1.9.1
 
 If you want to test a number of the JSON-RPC calls against Infura, update the integration test
-`CoreIT <https://github.com/web3j/web3j/blob/master/integration-tests/src/test/java/org/web3j/protocol/core/CoreIT.java>`_
+`CoreIT <https://github.com/webuj/webuj/blob/master/integration-tests/src/test/java/org/webuj/protocol/core/CoreIT.java>`_
 with your Infura URL & run it.
 
 For further information, refer to the
@@ -54,7 +54,7 @@ For further information, refer to the
 Transactions
 ------------
 
-In order to transact with Infura nodes, you will need to create and sign transactions offline
+In order to transact with Infura nodes, you will need to create and sign repTransactions offline
 before sending them, as Infura nodes have no visibility of your encrypted Ethereum key files, which
 are required to unlock accounts via the Personal Geth/Parity admin commands.
 

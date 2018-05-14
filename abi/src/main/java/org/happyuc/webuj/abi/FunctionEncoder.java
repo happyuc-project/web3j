@@ -8,12 +8,12 @@ import org.happyuc.webuj.abi.datatypes.Function;
 import org.happyuc.webuj.abi.datatypes.StaticArray;
 import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.crypto.Hash;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.abi.datatypes.Function;
+import org.happyuc.webuj.abi.datatypes.StaticArray;
+import org.happyuc.webuj.abi.datatypes.Type;
+import org.happyuc.webuj.abi.datatypes.Uint;
+import org.happyuc.webuj.crypto.Hash;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) encoding for functions.
@@ -45,12 +45,11 @@ public class FunctionEncoder {
         int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
         StringBuilder dynamicData = new StringBuilder();
 
-        for (Type parameter:parameters) {
+        for (Type parameter : parameters) {
             String encodedValue = TypeEncoder.encode(parameter);
 
             if (TypeEncoder.isDynamic(parameter)) {
-                String encodedDataOffset = TypeEncoder.encodeNumeric(
-                        new Uint(BigInteger.valueOf(dynamicDataOffset)));
+                String encodedDataOffset = TypeEncoder.encodeNumeric(new Uint(BigInteger.valueOf(dynamicDataOffset)));
                 result.append(encodedDataOffset);
                 dynamicData.append(encodedValue);
                 dynamicDataOffset += encodedValue.length() >> 1;
@@ -65,7 +64,7 @@ public class FunctionEncoder {
 
     private static int getLength(List<Type> parameters) {
         int count = 0;
-        for (Type type:parameters) {
+        for (Type type : parameters) {
             if (type instanceof StaticArray) {
                 count += ((StaticArray) type).getValue().size();
             } else {

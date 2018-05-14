@@ -5,8 +5,8 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 import org.happyuc.webuj.exceptions.MessageDecodingException;
-import org.web3j.exceptions.MessageDecodingException;
-import org.web3j.exceptions.MessageEncodingException;
+import org.happyuc.webuj.exceptions.MessageDecodingException;
+import org.happyuc.webuj.exceptions.MessageEncodingException;
 
 /**
  * <p>Message codec functions.</p>
@@ -113,7 +113,7 @@ public final class Numeric {
     public static String toHexStringWithPrefixZeroPadded(BigInteger value, int size) {
         return toHexStringZeroPadded(value, size, true);
     }
-    
+
     public static String toHexStringWithPrefixSafe(BigInteger value) {
         String result = toHexStringNoPrefix(value);
         if (result.length() < 2) {
@@ -131,8 +131,7 @@ public final class Numeric {
 
         int length = result.length();
         if (length > size) {
-            throw new UnsupportedOperationException(
-                    "Value " + result + "is larger then length " + size);
+            throw new UnsupportedOperationException("Value " + result + "is larger then length " + size);
         } else if (value.signum() < 0) {
             throw new UnsupportedOperationException("Value cannot be negative");
         }
@@ -177,7 +176,7 @@ public final class Numeric {
         int len = cleanInput.length();
 
         if (len == 0) {
-            return new byte[] {};
+            return new byte[]{};
         }
 
         byte[] data;
@@ -192,8 +191,7 @@ public final class Numeric {
         }
 
         for (int i = startIdx; i < len; i += 2) {
-            data[(i + 1) / 2] = (byte) ((Character.digit(cleanInput.charAt(i), 16) << 4)
-                    + Character.digit(cleanInput.charAt(i + 1), 16));
+            data[(i + 1) / 2] = (byte) ((Character.digit(cleanInput.charAt(i), 16) << 4) + Character.digit(cleanInput.charAt(i + 1), 16));
         }
         return data;
     }
@@ -219,8 +217,6 @@ public final class Numeric {
     }
 
     public static boolean isIntegerValue(BigDecimal value) {
-        return value.signum() == 0
-                || value.scale() <= 0
-                || value.stripTrailingZeros().scale() <= 0;
+        return value.signum() == 0 || value.scale() <= 0 || value.stripTrailingZeros().scale() <= 0;
     }
 }

@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.happyuc.webuj.abi.datatypes.Event;
 import org.happyuc.webuj.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Event;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.crypto.Hash;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.abi.datatypes.Event;
+import org.happyuc.webuj.abi.datatypes.Type;
+import org.happyuc.webuj.crypto.Hash;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * <p>Ethereum filter encoding.
@@ -24,15 +24,12 @@ public class EventEncoder {
         List<TypeReference<Type>> indexedParameters = function.getIndexedParameters();
         List<TypeReference<Type>> nonIndexedParameters = function.getNonIndexedParameters();
 
-        String methodSignature = buildMethodSignature(function.getName(),
-                indexedParameters, nonIndexedParameters);
+        String methodSignature = buildMethodSignature(function.getName(), indexedParameters, nonIndexedParameters);
 
         return buildEventSignature(methodSignature);
     }
 
-    static <T extends Type> String buildMethodSignature(
-            String methodName, List<TypeReference<T>> indexParameters,
-            List<TypeReference<T>> nonIndexedParameters) {
+    static <T extends Type> String buildMethodSignature(String methodName, List<TypeReference<T>> indexParameters, List<TypeReference<T>> nonIndexedParameters) {
 
         List<TypeReference<T>> parameters = new ArrayList<TypeReference<T>>(indexParameters);
         parameters.addAll(nonIndexedParameters);

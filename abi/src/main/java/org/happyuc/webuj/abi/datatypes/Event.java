@@ -2,9 +2,9 @@ package org.happyuc.webuj.abi.datatypes;
 
 import java.util.List;
 
-import org.web3j.abi.TypeReference;
+import org.happyuc.webuj.abi.TypeReference;
 
-import static org.web3j.abi.Utils.convert;
+import static org.happyuc.webuj.abi.Utils.convert;
 
 /**
  * Event wrapper type.
@@ -14,8 +14,7 @@ public class Event {
     private List<TypeReference<Type>> indexedParameters;
     private List<TypeReference<Type>> nonIndexedParameters;
 
-    public Event(String name, List<TypeReference<?>> indexedParameters,
-                 List<TypeReference<?>> nonIndexedParameters) {
+    public Event(String name, List<TypeReference<?>> indexedParameters, List<TypeReference<?>> nonIndexedParameters) {
         this.name = name;
         this.indexedParameters = convert(indexedParameters);
         this.nonIndexedParameters = convert(nonIndexedParameters);

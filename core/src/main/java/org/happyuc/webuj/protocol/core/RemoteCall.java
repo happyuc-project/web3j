@@ -6,7 +6,7 @@ import java.util.concurrent.Future;
 import rx.Observable;
 import rx.Subscriber;
 
-import org.web3j.utils.Async;
+import org.happyuc.webuj.utils.Async;
 
 /**
  * A common type for wrapping remote requests.
@@ -51,18 +51,16 @@ public class RemoteCall<T> {
      * @return an observable
      */
     public Observable<T> observable() {
-        return Observable.create(
-                new Observable.OnSubscribe<T>() {
-                    @Override
-                    public void call(Subscriber<? super T> subscriber) {
-                        try {
-                            subscriber.onNext(RemoteCall.this.send());
-                            subscriber.onCompleted();
-                        } catch (Exception e) {
-                            subscriber.onError(e);
-                        }
-                    }
+        return Observable.create(new Observable.OnSubscribe<T>() {
+            @Override
+            public void call(Subscriber<? super T> subscriber) {
+                try {
+                    subscriber.onNext(RemoteCall.this.send());
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(e);
                 }
-        );
+            }
+        });
     }
 }

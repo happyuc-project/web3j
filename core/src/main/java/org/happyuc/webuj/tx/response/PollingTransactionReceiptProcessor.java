@@ -2,12 +2,9 @@ package org.happyuc.webuj.tx.response;
 
 import java.io.IOException;
 
-import org.happyuc.webuj.protocol.Web3j;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
 
 /**
  * With each provided transaction hash, poll until we obtain a transaction receipt.
@@ -17,41 +14,34 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
     private final long sleepDuration;
     private final int attempts;
 
-    public PollingTransactionReceiptProcessor(Web3j web3j, long sleepDuration, int attempts) {
+    public PollingTransactionReceiptProcessor(Webuj web3j, long sleepDuration, int attempts) {
         super(web3j);
         this.sleepDuration = sleepDuration;
         this.attempts = attempts;
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(
-            String transactionHash)
-            throws IOException, TransactionException {
+    public RepTransactionReceipt waitForTransactionReceipt(String transactionHash) throws IOException, TransactionException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
-    private TransactionReceipt getTransactionReceipt(
-            String transactionHash, long sleepDuration, int attempts)
-            throws IOException, TransactionException {
+    private RepTransactionReceipt getTransactionReceipt(String transactionHash, long sleepDuration, int attempts) throws IOException, TransactionException {
 
-        TransactionReceipt transactionReceipt =
-                sendTransactionReceiptRequest(transactionHash);
+        RepTransactionReceipt repTransactionReceipt = sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
-            if (transactionReceipt == null) {
+            if (repTransactionReceipt == null) {
                 try {
                     Thread.sleep(sleepDuration);
                 } catch (InterruptedException e) {
                     throw new TransactionException(e);
                 }
-                transactionReceipt = sendTransactionReceiptRequest(transactionHash);
+                repTransactionReceipt = sendTransactionReceiptRequest(transactionHash);
             } else {
-                return transactionReceipt;
+                return repTransactionReceipt;
             }
         }
 
-        throw new TransactionException("Transaction receipt was not generated after "
-                + ((sleepDuration * attempts) / 1000
-                + " seconds for transaction: " + transactionHash));
+        throw new TransactionException("ReqTransaction receipt was not generated after " + ((sleepDuration * attempts) / 1000 + " seconds for transaction: " + transactionHash));
     }
 }

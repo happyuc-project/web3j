@@ -14,15 +14,15 @@ import org.happyuc.webuj.TempFileProvider;
 import org.happyuc.webuj.utils.Strings;
 import org.junit.Test;
 
-import org.web3j.TempFileProvider;
-import org.web3j.utils.Strings;
+import org.happyuc.webuj.TempFileProvider;
+import org.happyuc.webuj.utils.Strings;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.JAVA_TYPES_ARG;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
-import static org.web3j.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
+import static org.happyuc.webuj.codegen.SolidityFunctionWrapperGenerator.JAVA_TYPES_ARG;
+import static org.happyuc.webuj.codegen.SolidityFunctionWrapperGenerator.SOLIDITY_TYPES_ARG;
+import static org.happyuc.webuj.codegen.SolidityFunctionWrapperGenerator.getFileNameNoExtension;
 
 
 public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
@@ -81,50 +81,31 @@ public class SolidityFunctionWrapperGeneratorTest extends TempFileProvider {
         testCodeGenerationSolidityTypes("shipit", "ShipIt");
     }
 
-    private void testCodeGenerationJvmTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationJvmTypes(String contractName, String inputFileName) throws Exception {
 
-        testCodeGeneration(
-                contractName, inputFileName, "org.web3j.unittests.java", FunctionWrapperGenerator.JAVA_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, "org.happyuc.webuj.unittests.java", FunctionWrapperGenerator.JAVA_TYPES_ARG);
 
     }
 
-    private void testCodeGenerationSolidityTypes(
-            String contractName, String inputFileName) throws Exception {
+    private void testCodeGenerationSolidityTypes(String contractName, String inputFileName) throws Exception {
 
-        testCodeGeneration(
-                contractName, inputFileName, "org.web3j.unittests.solidity", FunctionWrapperGenerator.SOLIDITY_TYPES_ARG);
+        testCodeGeneration(contractName, inputFileName, "org.happyuc.webuj.unittests.solidity", FunctionWrapperGenerator.SOLIDITY_TYPES_ARG);
     }
 
-    private void testCodeGeneration(
-            String contractName, String inputFileName, String packageName, String types)
-            throws Exception {
+    private void testCodeGeneration(String contractName, String inputFileName, String packageName, String types) throws Exception {
 
-        SolidityFunctionWrapperGenerator.main(Arrays.asList(
-                types,
-                solidityBaseDir + File.separator + contractName + File.separator
-                        + "build" + File.separator + inputFileName + ".bin",
-                solidityBaseDir + File.separator + contractName + File.separator
-                        + "build" + File.separator + inputFileName + ".abi",
-                "-p", packageName,
-                "-o", tempDirPath
-        ).toArray(new String[0])); // https://shipilev.net/blog/2016/arrays-wisdom-ancients/
+        SolidityFunctionWrapperGenerator.main(Arrays.asList(types, solidityBaseDir + File.separator + contractName + File.separator + "build" + File.separator + inputFileName + ".bin", solidityBaseDir + File.separator + contractName + File.separator + "build" + File.separator + inputFileName + ".abi", "-p", packageName, "-o", tempDirPath).toArray(new String[0])); // https://shipilev.net/blog/2016/arrays-wisdom-ancients/
 
-        verifyGeneratedCode(tempDirPath + File.separator
-                + packageName.replace('.', File.separatorChar) + File.separator
-                + Strings.capitaliseFirstLetter(inputFileName) + ".java");
+        verifyGeneratedCode(tempDirPath + File.separator + packageName.replace('.', File.separatorChar) + File.separator + Strings.capitaliseFirstLetter(inputFileName) + ".java");
     }
 
     private void verifyGeneratedCode(String sourceFile) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-        StandardJavaFileManager fileManager =
-                compiler.getStandardFileManager(diagnostics, null, null);
-        Iterable<? extends JavaFileObject> compilationUnits = fileManager
-                .getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
-        JavaCompiler.CompilationTask task = compiler.getTask(
-                null, fileManager, diagnostics, null, null, compilationUnits);
+        StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
+        Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromStrings(Arrays.asList(sourceFile));
+        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
         assertTrue("Generated contract contains compile time error", task.call());
     }
 }

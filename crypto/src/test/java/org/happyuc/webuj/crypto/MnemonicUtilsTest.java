@@ -1,17 +1,15 @@
 package org.happyuc.webuj.crypto;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.happyuc.webuj.utils.Strings;
-import org.spongycastle.util.encoders.Hex;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.spongycastle.util.encoders.Hex;
 
-import org.web3j.utils.Strings;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -37,7 +35,7 @@ public class MnemonicUtilsTest {
      * our parameterized tests.
      *
      * @return Collection of test vectors in which each vector is an array containing
-     *         initial entropy, expected mnemonic and expected seed.
+     * initial entropy, expected mnemonic and expected seed.
      * @throws IOException Shouldn't happen!
      */
     @Parameters
@@ -53,8 +51,7 @@ public class MnemonicUtilsTest {
         return parameters;
     }
 
-    private static String readAllLinesWithDeliminator(
-            String path, String delimiter) throws IOException {
+    private static String readAllLinesWithDeliminator(String path, String delimiter) throws IOException {
         return Strings.join(MnemonicUtils.readAllLines(path), delimiter);
     }
 

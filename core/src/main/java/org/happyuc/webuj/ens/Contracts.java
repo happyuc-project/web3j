@@ -1,6 +1,6 @@
 package org.happyuc.webuj.ens;
 
-import org.web3j.tx.ChainId;
+import org.happyuc.webuj.tx.ChainId;
 
 /**
  * ENS registry contract addresses.
@@ -20,8 +20,7 @@ public class Contracts {
             case ChainId.RINKEBY:
                 return RINKEBY;
             default:
-                throw new EnsResolutionException(
-                        "Unable to resolve ENS registry contract for network id: " + chainId);
+                throw new EnsResolutionException("Unable to resolve ENS registry contract for network id: " + chainId);
         }
     }
 }

@@ -10,7 +10,7 @@ Links and Useful Resources
 - `Solidity <http://solidity.readthedocs.io/en/develop/>`_ docs
 - `Layout of variables in storage <http://solidity.readthedocs.io/en/latest/miscellaneous.html#layout-of-state-variables-in-storage>`_
 - `Ethereum tests <https://github.com/ethereum/tests>`_ contains lots of common tests for clients
-- `Etherscan <https://etherscan.io>`_ is very useful for exploring blocks and transactions, it also
+- `Etherscan <https://etherscan.io>`_ is very useful for exploring blocks and repTransactions, it also
   has a `testnet site <https://testnet.etherscan.io>`_
 - `Ethstats <https://ethstats.net/>`_ provides a useful network dashboard. There is also a
   dedicated `Parity dashboard <https://stats.parity.io/>`_,

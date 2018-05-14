@@ -4,23 +4,23 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 
 import org.happyuc.webuj.abi.datatypes.*;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.Bytes;
-import org.web3j.abi.datatypes.BytesType;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.NumericType;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.abi.datatypes.Address;
+import org.happyuc.webuj.abi.datatypes.Array;
+import org.happyuc.webuj.abi.datatypes.Bool;
+import org.happyuc.webuj.abi.datatypes.Bytes;
+import org.happyuc.webuj.abi.datatypes.BytesType;
+import org.happyuc.webuj.abi.datatypes.DynamicArray;
+import org.happyuc.webuj.abi.datatypes.DynamicBytes;
+import org.happyuc.webuj.abi.datatypes.NumericType;
+import org.happyuc.webuj.abi.datatypes.StaticArray;
+import org.happyuc.webuj.abi.datatypes.Type;
+import org.happyuc.webuj.abi.datatypes.Ufixed;
+import org.happyuc.webuj.abi.datatypes.Uint;
+import org.happyuc.webuj.abi.datatypes.Utf8String;
+import org.happyuc.webuj.utils.Numeric;
 
-import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
-import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
+import static org.happyuc.webuj.abi.datatypes.Type.MAX_BIT_LENGTH;
+import static org.happyuc.webuj.abi.datatypes.Type.MAX_BYTE_LENGTH;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) encoding for types.
@@ -33,9 +33,7 @@ public class TypeEncoder {
     private TypeEncoder() { }
 
     static boolean isDynamic(Type parameter) {
-        return parameter instanceof DynamicBytes
-                || parameter instanceof Utf8String
-                || parameter instanceof DynamicArray;
+        return parameter instanceof DynamicBytes || parameter instanceof Utf8String || parameter instanceof DynamicArray;
     }
 
     @SuppressWarnings("unchecked")
@@ -57,8 +55,7 @@ public class TypeEncoder {
         } else if (parameter instanceof DynamicArray) {
             return encodeDynamicArray((DynamicArray) parameter);
         } else {
-            throw new UnsupportedOperationException(
-                    "Type cannot be encoded: " + parameter.getClass());
+            throw new UnsupportedOperationException("Type cannot be encoded: " + parameter.getClass());
         }
     }
 
@@ -76,10 +73,7 @@ public class TypeEncoder {
             }
         }
 
-        System.arraycopy(
-                rawValue, 0,
-                paddedRawValue, Type.MAX_BYTE_LENGTH - rawValue.length,
-                rawValue.length);
+        System.arraycopy(rawValue, 0, paddedRawValue, Type.MAX_BYTE_LENGTH - rawValue.length, rawValue.length);
         return Numeric.toHexStringNoPrefix(paddedRawValue);
     }
 
@@ -148,7 +142,7 @@ public class TypeEncoder {
 
     static <T extends Type> String encodeArrayValues(Array<T> value) {
         StringBuilder result = new StringBuilder();
-        for (Type type:value.getValue()) {
+        for (Type type : value.getValue()) {
             result.append(TypeEncoder.encode(type));
         }
         return result.toString();

@@ -20,9 +20,9 @@ import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.spongycastle.crypto.generators.SCrypt;
 import org.spongycastle.crypto.params.KeyParameter;
 
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.utils.Numeric;
 
-import static org.web3j.crypto.SecureRandomUtils.secureRandom;
+import static org.happyuc.webuj.crypto.SecureRandomUtils.secureRandom;
 
 /**
  * <p>Ethereum wallet file management. For reference, refer to
@@ -67,41 +67,33 @@ public class Wallet {
     static final String AES_128_CTR = "pbkdf2";
     static final String SCRYPT = "scrypt";
 
-    public static WalletFile create(String password, ECKeyPair ecKeyPair, int n, int p)
-            throws CipherException {
+    public static WalletFile create(String password, ECKeyPair ecKeyPair, int n, int p) throws CipherException {
 
         byte[] salt = generateRandomBytes(32);
 
-        byte[] derivedKey = generateDerivedScryptKey(
-                password.getBytes(Charset.forName("UTF-8")), salt, n, R, p, DKLEN);
+        byte[] derivedKey = generateDerivedScryptKey(password.getBytes(Charset.forName("UTF-8")), salt, n, R, p, DKLEN);
 
         byte[] encryptKey = Arrays.copyOfRange(derivedKey, 0, 16);
         byte[] iv = generateRandomBytes(16);
 
-        byte[] privateKeyBytes =
-                Numeric.toBytesPadded(ecKeyPair.getPrivateKey(), Keys.PRIVATE_KEY_SIZE);
+        byte[] privateKeyBytes = Numeric.toBytesPadded(ecKeyPair.getPrivateKey(), Keys.PRIVATE_KEY_SIZE);
 
-        byte[] cipherText = performCipherOperation(
-                    Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes);
+        byte[] cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes);
 
         byte[] mac = generateMac(derivedKey, cipherText);
 
         return createWalletFile(ecKeyPair, cipherText, iv, salt, mac, n, p);
     }
 
-    public static WalletFile createStandard(String password, ECKeyPair ecKeyPair)
-            throws CipherException {
+    public static WalletFile createStandard(String password, ECKeyPair ecKeyPair) throws CipherException {
         return create(password, ecKeyPair, N_STANDARD, P_STANDARD);
     }
 
-    public static WalletFile createLight(String password, ECKeyPair ecKeyPair)
-            throws CipherException {
+    public static WalletFile createLight(String password, ECKeyPair ecKeyPair) throws CipherException {
         return create(password, ecKeyPair, N_LIGHT, P_LIGHT);
     }
 
-    private static WalletFile createWalletFile(
-            ECKeyPair ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
-            int n, int p) {
+    private static WalletFile createWalletFile(ECKeyPair ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac, int n, int p) {
 
         WalletFile walletFile = new WalletFile();
         walletFile.setAddress(Keys.getAddress(ecKeyPair));
@@ -132,13 +124,11 @@ public class Wallet {
         return walletFile;
     }
 
-    private static byte[] generateDerivedScryptKey(
-            byte[] password, byte[] salt, int n, int r, int p, int dkLen) throws CipherException {
+    private static byte[] generateDerivedScryptKey(byte[] password, byte[] salt, int n, int r, int p, int dkLen) throws CipherException {
         return SCrypt.generate(password, salt, n, r, p, dkLen);
     }
 
-    private static byte[] generateAes128CtrDerivedKey(
-            byte[] password, byte[] salt, int c, String prf) throws CipherException {
+    private static byte[] generateAes128CtrDerivedKey(byte[] password, byte[] salt, int c, String prf) throws CipherException {
 
         if (!prf.equals("hmac-sha256")) {
             throw new CipherException("Unsupported prf:" + prf);
@@ -152,8 +142,7 @@ public class Wallet {
         return ((KeyParameter) gen.generateDerivedParameters(256)).getKey();
     }
 
-    private static byte[] performCipherOperation(
-            int mode, byte[] iv, byte[] encryptKey, byte[] text) throws CipherException {
+    private static byte[] performCipherOperation(int mode, byte[] iv, byte[] encryptKey, byte[] text) throws CipherException {
 
         try {
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
@@ -190,8 +179,7 @@ public class Wallet {
         return Hash.sha3(result);
     }
 
-    public static ECKeyPair decrypt(String password, WalletFile walletFile)
-            throws CipherException {
+    public static ECKeyPair decrypt(String password, WalletFile walletFile) throws CipherException {
 
         validate(walletFile);
 
@@ -205,24 +193,20 @@ public class Wallet {
 
         WalletFile.KdfParams kdfParams = crypto.getKdfparams();
         if (kdfParams instanceof WalletFile.ScryptKdfParams) {
-            WalletFile.ScryptKdfParams scryptKdfParams =
-                    (WalletFile.ScryptKdfParams) crypto.getKdfparams();
+            WalletFile.ScryptKdfParams scryptKdfParams = (WalletFile.ScryptKdfParams) crypto.getKdfparams();
             int dklen = scryptKdfParams.getDklen();
             int n = scryptKdfParams.getN();
             int p = scryptKdfParams.getP();
             int r = scryptKdfParams.getR();
             byte[] salt = Numeric.hexStringToByteArray(scryptKdfParams.getSalt());
-            derivedKey = generateDerivedScryptKey(
-                    password.getBytes(Charset.forName("UTF-8")), salt, n, r, p, dklen);
+            derivedKey = generateDerivedScryptKey(password.getBytes(Charset.forName("UTF-8")), salt, n, r, p, dklen);
         } else if (kdfParams instanceof WalletFile.Aes128CtrKdfParams) {
-            WalletFile.Aes128CtrKdfParams aes128CtrKdfParams =
-                    (WalletFile.Aes128CtrKdfParams) crypto.getKdfparams();
+            WalletFile.Aes128CtrKdfParams aes128CtrKdfParams = (WalletFile.Aes128CtrKdfParams) crypto.getKdfparams();
             int c = aes128CtrKdfParams.getC();
             String prf = aes128CtrKdfParams.getPrf();
             byte[] salt = Numeric.hexStringToByteArray(aes128CtrKdfParams.getSalt());
 
-            derivedKey = generateAes128CtrDerivedKey(
-                    password.getBytes(Charset.forName("UTF-8")), salt, c, prf);
+            derivedKey = generateAes128CtrDerivedKey(password.getBytes(Charset.forName("UTF-8")), salt, c, prf);
         } else {
             throw new CipherException("Unable to deserialize params: " + crypto.getKdf());
         }

@@ -7,7 +7,7 @@ import java.util.Arrays;
  * RLP string type.
  */
 public class RlpString implements RlpType {
-    private static final byte[] EMPTY = new byte[]{ };
+    private static final byte[] EMPTY = new byte[]{};
 
     private final byte[] value;
 
@@ -24,7 +24,7 @@ public class RlpString implements RlpType {
     }
 
     public static RlpString create(byte value) {
-        return new RlpString(new byte[]{ value });
+        return new RlpString(new byte[]{value});
     }
 
     public static RlpString create(BigInteger value) {

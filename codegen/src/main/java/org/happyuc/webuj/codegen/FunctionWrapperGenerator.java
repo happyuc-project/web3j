@@ -2,7 +2,7 @@ package org.happyuc.webuj.codegen;
 
 import java.io.File;
 
-import static org.web3j.codegen.Console.exitError;
+import static org.happyuc.webuj.codegen.Console.exitError;
 
 /**
  * Abstract base class for the concrete function wrapper generators.
@@ -16,10 +16,7 @@ abstract class FunctionWrapperGenerator {
     final String basePackageName;
     final boolean useJavaNativeTypes;
 
-    FunctionWrapperGenerator(
-            String destinationDirLocation,
-            String basePackageName,
-            boolean useJavaNativeTypes) {
+    FunctionWrapperGenerator(String destinationDirLocation, String basePackageName, boolean useJavaNativeTypes) {
 
         this.destinationDirLocation = new File(destinationDirLocation);
         this.basePackageName = basePackageName;
@@ -49,8 +46,7 @@ abstract class FunctionWrapperGenerator {
     static String parseParameterArgument(String[] args, String... parameters) {
         for (String parameter : parameters) {
             for (int i = 0; i < args.length; i++) {
-                if (args[i].equals(parameter)
-                        && i + 1 < args.length) {
+                if (args[i].equals(parameter) && i + 1 < args.length) {
                     String parameterValue = args[i + 1];
                     if (!parameterValue.startsWith("-")) {
                         return parameterValue;

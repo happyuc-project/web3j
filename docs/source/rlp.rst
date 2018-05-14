@@ -20,20 +20,20 @@ The list type can be nested an arbitrary number of times allowing complex data s
 encoded.
 
 
-The `RLP module <https://github.com/web3j/web3j/tree/master/rlp>`_ in web3j provides RLP encoding
+The `RLP module <https://github.com/webuj/webuj/tree/master/rlp>`_ in webuj provides RLP encoding
 capabilities, with the
-`RlpEncoderTest <https://github.com/web3j/web3j/blob/master/rlp/src/test/java/org/web3j/rlp/RlpEncoderTest.java>`_
+`RlpEncoderTest <https://github.com/webuj/webuj/blob/master/rlp/src/test/java/org/webuj/rlp/RlpEncoderTest.java>`_
 demonstrating encoding of a number of different values.
 
 
 Transaction encoding
 --------------------
 
-Within web3j, RLP encoding is used to encode Ethereum transaction objects into a byte array which
-is signed before submission to the network. The transaction types and signing logic are located
+Within webuj, RLP encoding is used to encode Ethereum reqTransaction objects into a byte array which
+is signed before submission to the network. The reqTransaction types and signing logic are located
 within the Crypto module, with the
-`TransactionEncoderTest <https://github.com/web3j/web3j/blob/master/crypto/src/test/java/org/web3j/crypto/TransactionEncoderTest.java>`_
-providing examples of transaction signing and encoding.
+`TransactionEncoderTest <https://github.com/webuj/webuj/blob/master/crypto/src/test/java/org/webuj/crypto/TransactionEncoderTest.java>`_
+providing examples of reqTransaction signing and encoding.
 
 
 Dependencies

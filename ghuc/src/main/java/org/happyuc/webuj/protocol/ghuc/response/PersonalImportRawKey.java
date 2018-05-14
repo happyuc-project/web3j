@@ -1,6 +1,6 @@
 package org.happyuc.webuj.protocol.ghuc.response;
 
-import org.web3j.protocol.core.Response;
+import org.happyuc.webuj.protocol.core.Response;
 
 /**
  * personal_importRawKey.

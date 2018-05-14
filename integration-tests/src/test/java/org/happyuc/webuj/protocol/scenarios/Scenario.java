@@ -1,32 +1,27 @@
 package org.happyuc.webuj.protocol.scenarios;
 
+import org.happyuc.webuj.abi.TypeReference;
+import org.happyuc.webuj.abi.datatypes.Function;
+import org.happyuc.webuj.abi.datatypes.Type;
+import org.happyuc.webuj.abi.datatypes.Uint;
+import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.protocol.admin.Admin;
+import org.happyuc.webuj.protocol.admin.AdminFactory;
+import org.happyuc.webuj.protocol.admin.methods.response.PersonalUnlockAccount;
+import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
+import org.happyuc.webuj.protocol.http.HttpService;
+import org.happyuc.webuj.utils.Files;
+import org.junit.Before;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
-
-import org.happyuc.webuj.abi.TypeReference;
-import org.happyuc.webuj.abi.datatypes.Function;
-import org.happyuc.webuj.abi.datatypes.Type;
-import org.happyuc.webuj.abi.datatypes.Uint;
-import org.junit.Before;
-
-import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.admin.Admin;
-import org.web3j.protocol.admin.AdminFactory;
-import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.utils.Files;
 
 import static junit.framework.TestCase.fail;
 
@@ -42,17 +37,15 @@ public class Scenario {
     private static final String WALLET_PASSWORD = "";
 
     /*
-    If you want to use regular Ethereum wallet addresses, provide a WALLET address variable
+    If you want to use regular Happyuc wallet addresses, provide a WALLET address variable
     "0x..." // 20 bytes (40 hex characters) & replace instances of ALICE.getAddress() with this
     WALLET address variable you've defined.
     */
-    static final Credentials ALICE = Credentials.create(
-            "",  // 32 byte hex value
+    static final Credentials ALICE = Credentials.create("",  // 32 byte hex value
             "0x"  // 64 byte hex value
     );
 
-    static final Credentials BOB = Credentials.create(
-            "",  // 32 byte hex value
+    static final Credentials BOB = Credentials.create("",  // 32 byte hex value
             "0x"  // 64 byte hex value
     );
 
@@ -61,41 +54,34 @@ public class Scenario {
     private static final int SLEEP_DURATION = 15000;
     private static final int ATTEMPTS = 40;
 
-    Admin web3j;
+    Admin webuj;
 
     public Scenario() { }
 
     @Before
     public void setUp() {
-        this.web3j = AdminFactory.build(new HttpService());
+        this.webuj = AdminFactory.build(new HttpService());
     }
 
     boolean unlockAccount() throws Exception {
-        PersonalUnlockAccount personalUnlockAccount =
-                web3j.personalUnlockAccount(
-                        ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION)
-                        .sendAsync().get();
+        PersonalUnlockAccount personalUnlockAccount = webuj.personalUnlockAccount(ALICE.getAddress(), WALLET_PASSWORD, ACCOUNT_UNLOCK_DURATION).sendAsync().get();
         return personalUnlockAccount.accountUnlocked();
     }
 
-    TransactionReceipt waitForTransactionReceipt(
-            String transactionHash) throws Exception {
+    RepTransactionReceipt waitForTransactionReceipt(String transactionHash) throws Exception {
 
-        TransactionReceipt transactionReceipt =
-                getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
+        RepTransactionReceipt repTransactionReceipt = getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
 
-        if (transactionReceipt == null) {
-            fail("Transaction reciept not generated after " + ATTEMPTS + " attempts");
+        if (repTransactionReceipt == null) {
+            fail("ReqTransaction reciept not generated after " + ATTEMPTS + " attempts");
         }
 
-        return transactionReceipt;
+        return repTransactionReceipt;
     }
 
-    private TransactionReceipt getTransactionReceipt(
-            String transactionHash, int sleepDuration, int attempts) throws Exception {
+    private RepTransactionReceipt getTransactionReceipt(String transactionHash, int sleepDuration, int attempts) throws Exception {
 
-        TransactionReceipt receiptOptional =
-                sendTransactionReceiptRequest(transactionHash);
+        RepTransactionReceipt receiptOptional = sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (receiptOptional == null) {
                 Thread.sleep(sleepDuration);
@@ -108,26 +94,20 @@ public class Scenario {
         return receiptOptional;
     }
 
-    private TransactionReceipt sendTransactionReceiptRequest(
-            String transactionHash) throws Exception {
-        EthGetTransactionReceipt transactionReceipt =
-                web3j.ethGetTransactionReceipt(transactionHash).sendAsync().get();
+    private RepTransactionReceipt sendTransactionReceiptRequest(String transactionHash) throws Exception {
+        HucGetRepTransactionReceipt transactionReceipt = webuj.hucGetTransactionReceipt(transactionHash).sendAsync().get();
 
         return transactionReceipt.getTransactionReceipt();
     }
 
     BigInteger getNonce(String address) throws Exception {
-        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
-                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+        HucGetRepTransactionCount hucGetRepTransactionCount = webuj.hucGetTransactionCount(address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
-        return ethGetTransactionCount.getTransactionCount();
+        return hucGetRepTransactionCount.getTransactionCount();
     }
 
     Function createFibonacciFunction() {
-        return new Function(
-                "fibonacciNotify",
-                Collections.<Type>singletonList(new Uint(BigInteger.valueOf(7))),
-                Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {}));
+        return new Function("fibonacciNotify", Collections.<Type>singletonList(new Uint(BigInteger.valueOf(7))), Collections.<TypeReference<?>>singletonList(new TypeReference<Uint>() {}));
     }
 
     static String load(String filePath) throws URISyntaxException, IOException {

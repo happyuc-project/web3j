@@ -7,11 +7,11 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.web3j.utils.Collection.EMPTY_STRING_ARRAY;
-import static org.web3j.utils.Collection.Function;
-import static org.web3j.utils.Collection.create;
-import static org.web3j.utils.Collection.join;
-import static org.web3j.utils.Collection.tail;
+import static org.happyuc.webuj.utils.Collection.EMPTY_STRING_ARRAY;
+import static org.happyuc.webuj.utils.Collection.Function;
+import static org.happyuc.webuj.utils.Collection.create;
+import static org.happyuc.webuj.utils.Collection.join;
+import static org.happyuc.webuj.utils.Collection.tail;
 
 public class CollectionTest {
 
@@ -24,9 +24,9 @@ public class CollectionTest {
 
     @Test
     public void testCreate() {
-        assertThat(create("a"), is(new String[] { "a" }));
-        assertThat(create(""), is(new String[] { "" }));
-        assertThat(create("a", "b"), is(new String[] { "a", "b" }));
+        assertThat(create("a"), is(new String[]{"a"}));
+        assertThat(create(""), is(new String[]{""}));
+        assertThat(create("a", "b"), is(new String[]{"a", "b"}));
     }
 
     @Test
@@ -39,10 +39,7 @@ public class CollectionTest {
 
     @Test
     public void testJoinWithFunction() {
-        final List<FakeSpec> specs1 = Arrays.asList(
-                new FakeSpec("a"),
-                new FakeSpec("b"),
-                new FakeSpec("c"));
+        final List<FakeSpec> specs1 = Arrays.asList(new FakeSpec("a"), new FakeSpec("b"), new FakeSpec("c"));
         assertThat(join(specs1, ",", new Function<FakeSpec, String>() {
             @Override
             public String apply(FakeSpec fakeSpec) {
@@ -50,10 +47,7 @@ public class CollectionTest {
             }
         }), is("a,b,c"));
 
-        final List<FakeSpec> specs2 = Arrays.asList(
-                new FakeSpec("a"),
-                new FakeSpec("b"),
-                new FakeSpec("c"));
+        final List<FakeSpec> specs2 = Arrays.asList(new FakeSpec("a"), new FakeSpec("b"), new FakeSpec("c"));
         assertThat(join(specs2, ", ", new Function<FakeSpec, String>() {
             @Override
             public String apply(FakeSpec fakeSpec) {
@@ -61,10 +55,7 @@ public class CollectionTest {
             }
         }), is("a, b, c"));
 
-        final List<FakeSpec> specs3 = Arrays.asList(
-                new FakeSpec(" a"),
-                new FakeSpec("b  "),
-                new FakeSpec(" c "));
+        final List<FakeSpec> specs3 = Arrays.asList(new FakeSpec(" a"), new FakeSpec("b  "), new FakeSpec(" c "));
         assertThat(join(specs3, ",", new Function<FakeSpec, String>() {
             @Override
             public String apply(FakeSpec fakeSpec) {
@@ -72,10 +63,7 @@ public class CollectionTest {
             }
         }), is("a,b,c"));
 
-        final List<FakeSpec> specs4 = Arrays.asList(
-                new FakeSpec(" a"),
-                new FakeSpec("b  "),
-                new FakeSpec(" c "));
+        final List<FakeSpec> specs4 = Arrays.asList(new FakeSpec(" a"), new FakeSpec("b  "), new FakeSpec(" c "));
         assertThat(join(specs4, ", ", new Function<FakeSpec, String>() {
             @Override
             public String apply(FakeSpec fakeSpec) {

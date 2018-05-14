@@ -11,19 +11,12 @@ import com.squareup.javapoet.TypeSpec;
  */
 class Generator {
     void write(String packageName, TypeSpec typeSpec, String destinationDir) throws IOException {
-        JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
-                .indent("    ")
-                .skipJavaLangImports(true)
-                .build();
+        JavaFile javaFile = JavaFile.builder(packageName, typeSpec).indent("    ").skipJavaLangImports(true).build();
 
         javaFile.writeTo(new File(destinationDir));
     }
 
     static String buildWarning(Class cls) {
-        return "Auto generated code.\n"
-                + "<p><strong>Do not modifiy!</strong>\n"
-                + "<p>Please use " + cls.getName() + " in the \n"
-                + "<a href=\"https://github.com/web3j/web3j/tree/master/codegen\">"
-                + "codegen module</a> to update.\n";
+        return "Auto generated code.\n" + "<p><strong>Do not modifiy!</strong>\n" + "<p>Please use " + cls.getName() + " in the \n" + "<a href=\"https://github.com/webuj/webuj/tree/master/codegen\">" + "codegen module</a> to update.\n";
     }
 }

@@ -1,23 +1,21 @@
 package org.happyuc.webuj.protocol.deserializer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ResolvableDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.happyuc.webuj.protocol.core.Response;
 
-import org.web3j.protocol.core.Response;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 
 /**
  * A jackson deserializer that sets the rawResponse variable of Response objects.
  */
-public class RawResponseDeserializer
-        extends StdDeserializer<Response> implements ResolvableDeserializer {
+public class RawResponseDeserializer extends StdDeserializer<Response> implements ResolvableDeserializer {
 
     private final JsonDeserializer<?> defaultDeserializer;
 

@@ -1,11 +1,11 @@
 package org.happyuc.webuj.tuples.generated;
 
-import org.web3j.tuples.Tuple;
+import org.happyuc.webuj.tuples.Tuple;
 
 /**
  * Auto generated code.
  * <p><strong>Do not modifiy!</strong>
- * <p>Please use org.web3j.codegen.TupleGenerator in the 
+ * <p>Please use org.happyuc.webuj.codegen.TupleGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  */
 public final class Tuple3<T1, T2, T3> implements Tuple {
@@ -68,10 +68,6 @@ public final class Tuple3<T1, T2, T3> implements Tuple {
 
     @Override
     public String toString() {
-        return "Tuple3{" +
-                "value1=" + value1 +
-                ", value2=" + value2 +
-                ", value3=" + value3 +
-                "}";
+        return "Tuple3{" + "value1=" + value1 + ", value2=" + value2 + ", value3=" + value3 + "}";
     }
 }

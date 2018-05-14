@@ -1,7 +1,7 @@
 Getting Started
 ===============
 
-Add the latest web3j version to your project build configuration.
+Add the latest webuj version to your project build configuration.
 
 Maven
 -----
@@ -11,7 +11,7 @@ Java 8:
 .. code-block:: xml
 
    <dependency>
-     <groupId>org.web3j</groupId>
+     <groupId>org.webuj</groupId>
      <artifactId>core</artifactId>
      <version>3.2.0</version>
    </dependency>
@@ -21,7 +21,7 @@ Android:
 .. code-block:: xml
 
    <dependency>
-     <groupId>org.web3j</groupId>
+     <groupId>org.webuj</groupId>
      <artifactId>core</artifactId>
      <version>3.1.1-android</version>
    </dependency>
@@ -33,13 +33,13 @@ Java 8:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.2.0')
+   compile ('org.webuj:core:3.2.0')
 
 Android:
 
 .. code-block:: groovy
 
-   compile ('org.web3j:core:3.1.1-android')
+   compile ('org.webuj:core:3.1.1-android')
 
 
 Start a client
@@ -76,19 +76,19 @@ Start sending requests
 To send synchronous requests::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
-   String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+   Web3ClientVersion webuClientVersion = web3.webuClientVersion().send();
+   String clientVersion = webuClientVersion.getWeb3ClientVersion();
 
 To send asynchronous requests using a CompletableFuture (Future on Android)::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().sendAsync().get();
-   String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+   Web3ClientVersion webuClientVersion = web3.webuClientVersion().sendAsync().get();
+   String clientVersion = webuClientVersion.getWeb3ClientVersion();
 
 To use an RxJava Observable::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
-   web3.web3ClientVersion().observable().subscribe(x -> {
+   web3.webuClientVersion().observable().subscribe(x -> {
        String clientVersion = x.getWeb3ClientVersion();
        ...
    });
@@ -102,8 +102,8 @@ To use an RxJava Observable::
 IPC
 ---
 
-web3j also supports fast inter-process communication (IPC) via file sockets to clients running on
-the same host as web3j. To connect simply use the relevant *IpcService* implementation instead of
+webuj also supports fast inter-process communication (IPC) via file sockets to clients running on
+the same host as webuj. To connect simply use the relevant *IpcService* implementation instead of
 *HttpService* when you create your service:
 
 .. code-block:: java
@@ -116,7 +116,7 @@ the same host as web3j. To connect simply use the relevant *IpcService* implemen
    Web3j web3 = Web3j.build(new WindowsIpcService("/path/to/namedpipefile"));
    ...
 
-**Note:** IPC is not available on *web3j-android*.
+**Note:** IPC is not available on *webuj-android*.
 
 
 .. _smart-contract-wrappers-summary:
@@ -124,7 +124,7 @@ the same host as web3j. To connect simply use the relevant *IpcService* implemen
 Working with smart contracts with Java smart contract wrappers
 --------------------------------------------------------------
 
-web3j can auto-generate smart contract wrapper code to deploy and interact with smart contracts
+webuj can auto-generate smart contract wrapper code to deploy and interact with smart contracts
 without leaving the JVM.
 
 To generate the wrapper code, compile your smart contract:
@@ -133,11 +133,11 @@ To generate the wrapper code, compile your smart contract:
 
    $ solc <contract>.sol --bin --abi --optimize -o <output-dir>/
 
-Then generate the wrapper code using web3j's :doc:`command_line`:
+Then generate the wrapper code using webuj's :doc:`command_line`:
 
 .. code-block:: bash
 
-   web3j solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
+   webuj solidity generate /path/to/<smart-contract>.bin /path/to/<smart-contract>.abi -o /path/to/src/main/java -p com.your.organisation.name
 
 Now you can create and deploy your smart contract::
 
@@ -145,18 +145,18 @@ Now you can create and deploy your smart contract::
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
 
    YourSmartContract contract = YourSmartContract.deploy(
-           <web3j>, <credentials>,
+           <webuj>, <credentials>,
            GAS_PRICE, GAS_LIMIT,
            <param1>, ..., <paramN>).send();  // constructor params
 
 Or use an existing contract::
 
    YourSmartContract contract = YourSmartContract.load(
-           "0x<address>|<ensName>", <web3j>, <credentials>, GAS_PRICE, GAS_LIMIT);
+           "0x<address>|<ensName>", <webuj>, <credentials>, GAS_PRICE, GAS_LIMIT);
 
 To transact with a smart contract::
 
-   TransactionReceipt transactionReceipt = contract.someMethod(
+   TransactionReceipt repTransactionReceipt = contract.someMethod(
                 <param1>,
                 ...).send();
 
@@ -170,25 +170,25 @@ For more information refer to :ref:`smart-contract-wrappers`.
 Filters
 -------
 
-web3j functional-reactive nature makes it really simple to setup observers that notify subscribers
+webuj functional-reactive nature makes it really simple to setup observers that notify subscribers
 of events taking place on the blockchain.
 
 To receive all new blocks as they are added to the blockchain::
 
-   Subscription subscription = web3j.blockObservable(false).subscribe(block -> {
+   Subscription subscription = webuj.blockObservable(false).subscribe(block -> {
        ...
    });
 
-To receive all new transactions as they are added to the blockchain::
+To receive all new repTransactions as they are added to the blockchain::
 
-   Subscription subscription = web3j.transactionObservable().subscribe(tx -> {
+   Subscription subscription = webuj.transactionObservable().subscribe(tx -> {
        ...
    });
 
-To receive all pending transactions as they are submitted to the network (i.e. before they have
+To receive all pending repTransactions as they are submitted to the network (i.e. before they have
 been grouped into a block together)::
 
-   Subscription subscription = web3j.pendingTransactionObservable().subscribe(tx -> {
+   Subscription subscription = webuj.pendingTransactionObservable().subscribe(tx -> {
        ...
    });
 
@@ -201,14 +201,14 @@ blocks being created::
                ...
    });
 
-There are a number of other transaction and block replay Observables described in :doc:`filters`.
+There are a number of other reqTransaction and block replay Observables described in :doc:`filters`.
 
 Topic filters are also supported::
 
    EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST,
            DefaultBlockParameterName.LATEST, <contract-address>)
                 .addSingleTopic(...)|.addOptionalTopics(..., ...)|...;
-   web3j.ethLogObservable(filter).subscribe(log -> {
+   webuj.ethLogObservable(filter).subscribe(log -> {
        ...
    });
 
@@ -219,69 +219,69 @@ Subscriptions should always be cancelled when no longer required::
 **Note:** filters are not supported on Infura.
 
 For further information refer to :doc:`filters` and the
-`Web3jRx <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/rx/Web3jRx.java>`_
+`Web3jRx <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/protocol/rx/Web3jRx.java>`_
 interface.
 
 
 Transactions
 ------------
 
-web3j provides support for both working with Ethereum wallet files (*recommended*) and Ethereum
-client admin commands for sending transactions.
+webuj provides support for both working with Ethereum wallet files (*recommended*) and Ethereum
+client admin commands for sending repTransactions.
 
 To send Ether to another party using your Ethereum wallet file::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
-   TransactionReceipt transactionReceipt = Transfer.sendFunds(
+   TransactionReceipt repTransactionReceipt = Transfer.sendFunds(
            web3, credentials, "0x<address>|<ensName>",
            BigDecimal.valueOf(1.0), Convert.Unit.ETHER)
            .send();
 
-Or if you wish to create your own custom transaction::
+Or if you wish to create your own custom reqTransaction::
 
    Web3j web3 = Web3j.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
 
    // get the next available nonce
-   EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+   EthGetTransactionCount hucGetRepTransactionCount = webuj.hucGetRepTransactionCount(
                 address, DefaultBlockParameterName.LATEST).send();
-   BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+   BigInteger nonce = hucGetRepTransactionCount.getTransactionCount();
 
-   // create our transaction
+   // create our reqTransaction
    RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
 
-   // sign & send our transaction
+   // sign & send our reqTransaction
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
    String hexValue = Numeric.toHexString(signedMessage);
-   EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
+   EthSendTransaction hucSendRepTransaction = webuj.hucSendRawRepTransaction(hexValue).send();
    // ...
 
-Although it's far simpler using web3j's `Transfer <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/tx/Transfer.java>`_
+Although it's far simpler using webuj's `Transfer <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/tx/Transfer.java>`_
 for transacting with Ether.
 
 Using an Ethereum client's admin commands (make sure you have your wallet in the client's
 keystore)::
 
-   Admin web3j = Admin.build(new HttpService());  // defaults to http://localhost:8545/
-   PersonalUnlockAccount personalUnlockAccount = web3j.personalUnlockAccount("0x000...", "a password").sendAsync().get();
+   Admin webuj = Admin.build(new HttpService());  // defaults to http://localhost:8545/
+   PersonalUnlockAccount personalUnlockAccount = webuj.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
-       // send a transaction
+       // send a reqTransaction
    }
 
 If you want to make use of Parity's
 `Personal <https://github.com/paritytech/parity/wiki/JSONRPC-personal-module>`__ or
 `Trace <https://github.com/paritytech/parity/wiki/JSONRPC-trace-module>`_, or Geth's
 `Personal <https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal>`__ client APIs,
-you can use the *org.web3j:parity* and *org.web3j:geth* modules respectively.
+you can use the *org.webuj:parity* and *org.webuj:geth* modules respectively.
 
 
 Command line tools
 ------------------
 
-A web3j fat jar is distributed with each release providing command line tools. The command line
-tools allow you to use some of the functionality of web3j from the command line:
+A webuj fat jar is distributed with each release providing command line tools. The command line
+tools allow you to use some of the functionality of webuj from the command line:
 
 - Wallet creation
 - Wallet password management
@@ -296,26 +296,26 @@ Further details
 ---------------
 In the Java 8 build:
 
-- web3j provides type safe access to all responses. Optional or null responses
+- webuj provides type safe access to all responses. Optional or null responses
   are wrapped in Java 8's
   `Optional <https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html>`_ type.
 - Asynchronous requests are wrapped in a Java 8
   `CompletableFutures <https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>`_.
-  web3j provides a wrapper around all async requests to ensure that any exceptions during
+  webuj provides a wrapper around all async requests to ensure that any exceptions during
   execution will be captured rather then silently discarded. This is due to the lack of support
   in *CompletableFutures* for checked exceptions, which are often rethrown as unchecked exception
   causing problems with detection. See the
-  `Async.run() <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/utils/Async.java>`_ and its associated
-  `test <https://github.com/web3j/web3j/blob/master/core/src/test/java/org/web3j/utils/AsyncTest.java>`_ for details.
+  `Async.run() <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/utils/Async.java>`_ and its associated
+  `test <https://github.com/webuj/webuj/blob/master/core/src/test/java/org/webuj/utils/AsyncTest.java>`_ for details.
 
 In both the Java 8 and Android builds:
 
 - Quantity payload types are returned as `BigIntegers <https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html>`_.
   For simple results, you can obtain the quantity as a String via
-  `Response <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/core/Response.java>`_.getResult().
+  `Response <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/protocol/core/Response.java>`_.getResult().
 - It's also possible to include the raw JSON payload in responses via the *includeRawResponse*
   parameter, present in the
-  `HttpService <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/http/HttpService.java>`_
+  `HttpService <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/protocol/http/HttpService.java>`_
   and
-  `IpcService <https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/protocol/ipc/IpcService.java>`_
+  `IpcService <https://github.com/webuj/webuj/blob/master/core/src/main/java/org/webuj/protocol/ipc/IpcService.java>`_
   classes.

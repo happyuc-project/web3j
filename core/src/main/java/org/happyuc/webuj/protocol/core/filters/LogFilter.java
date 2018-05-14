@@ -1,53 +1,48 @@
 package org.happyuc.webuj.protocol.core.filters;
 
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucLog;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
+import org.happyuc.webuj.protocol.core.methods.response.Log;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-
-import org.happyuc.webuj.protocol.core.methods.request.EthFilter;
-import org.happyuc.webuj.protocol.core.methods.response.EthLog;
-import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthFilter;
-import org.web3j.protocol.core.methods.response.EthLog;
-import org.web3j.protocol.core.methods.response.Log;
 
 /**
  * Log filter handler.
  */
 public class LogFilter extends Filter<Log> {
 
-    private final EthFilter ethFilter;
+    private final HucReqFilter hucReqFilter;
 
-    public LogFilter(
-            Web3j web3j, Callback<Log> callback,
-            EthFilter ethFilter) {
+    public LogFilter(Webuj web3j, Callback<Log> callback, HucReqFilter hucReqFilter) {
         super(web3j, callback);
-        this.ethFilter = ethFilter;
+        this.hucReqFilter = hucReqFilter;
     }
 
 
     @Override
-    org.happyuc.webuj.protocol.core.methods.response.EthFilter sendRequest() throws IOException {
-        return web3j.ethNewFilter(ethFilter).send();
+    HucRepFilter sendRequest() throws IOException {
+        return webuj.hucNewFilter(hucReqFilter).send();
     }
 
     @Override
-    void process(List<EthLog.LogResult> logResults) {
-        for (EthLog.LogResult logResult : logResults) {
-            if (logResult instanceof EthLog.LogObject) {
-                Log log = ((EthLog.LogObject) logResult).get();
+    void process(List<HucLog.LogResult> logResults) {
+        for (HucLog.LogResult logResult : logResults) {
+            if (logResult instanceof HucLog.LogObject) {
+                Log log = ((HucLog.LogObject) logResult).get();
                 callback.onEvent(log);
             } else {
-                throw new FilterException(
-                        "Unexpected result type: " + logResult.get() + " required LogObject");
+                throw new FilterException("Unexpected result type: " + logResult.get() + " required LogObject");
             }
         }
     }
 
     @Override
-    protected Request<?, EthLog> getFilterLogs(BigInteger filterId) {
-        return web3j.ethGetFilterLogs(filterId);
+    protected Request<?, HucLog> getFilterLogs(BigInteger filterId) {
+        return webuj.hucGetFilterLogs(filterId);
     }
 }

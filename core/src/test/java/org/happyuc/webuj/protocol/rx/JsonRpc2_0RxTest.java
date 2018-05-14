@@ -1,14 +1,17 @@
 package org.happyuc.webuj.protocol.rx;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.happyuc.webuj.protocol.ObjectMapperFactory;
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.WebujFactory;
+import org.happyuc.webuj.protocol.WebujService;
+import org.happyuc.webuj.protocol.core.DefaultBlockParameterNumber;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
+import org.happyuc.webuj.protocol.core.methods.response.HucLog;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
+import org.happyuc.webuj.utils.Numeric;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -17,17 +20,13 @@ import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
-import org.web3j.protocol.ObjectMapperFactory;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.Web3jFactory;
-import org.web3j.protocol.Web3jService;
-import org.web3j.protocol.core.DefaultBlockParameterNumber;
-import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthFilter;
-import org.web3j.protocol.core.methods.response.EthLog;
-import org.web3j.protocol.core.methods.response.EthUninstallFilter;
-import org.web3j.utils.Numeric;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -42,60 +41,52 @@ public class JsonRpc2_0RxTest {
 
     private final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
-    private Web3j web3j;
+    private Webuj webuj;
 
-    private Web3jService web3jService;
+    private WebujService webujService;
 
     @Before
     public void setUp() {
-        web3jService = mock(Web3jService.class);
-        web3j = Web3jFactory.build(
-                web3jService, 1000, Executors.newSingleThreadScheduledExecutor());
+        webujService = mock(WebujService.class);
+        webuj = WebujFactory.build(webujService, 1000, Executors.newSingleThreadScheduledExecutor());
     }
 
     @Test
     public void testReplayBlocksObservable() throws Exception {
 
-        List<EthBlock> ethBlocks = Arrays.asList(createBlock(0), createBlock(1), createBlock(2));
+        List<HucBlock> hucBlocks = Arrays.asList(createBlock(0), createBlock(1), createBlock(2));
 
-        OngoingStubbing<EthBlock> stubbing =
-                when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
-            stubbing = stubbing.thenReturn(ethBlock);
+        OngoingStubbing<HucBlock> stubbing = when(webujService.send(any(Request.class), eq(HucBlock.class)));
+        for (HucBlock hucBlock : hucBlocks) {
+            stubbing = stubbing.thenReturn(hucBlock);
         }
 
-        Observable<EthBlock> observable = web3j.replayBlocksObservable(
-                new DefaultBlockParameterNumber(BigInteger.ZERO),
-                new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
-                false);
+        Observable<HucBlock> observable = webuj.replayBlocksObservable(new DefaultBlockParameterNumber(BigInteger.ZERO), new DefaultBlockParameterNumber(BigInteger.valueOf(2)), false);
 
-        final CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
+        final CountDownLatch transactionLatch = new CountDownLatch(hucBlocks.size());
         final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        final List<EthBlock> results = new ArrayList<EthBlock>(ethBlocks.size());
-        Subscription subscription = observable.subscribe(
-                new Action1<EthBlock>() {
-                    @Override
-                    public void call(EthBlock result) {
-                        results.add(result);
-                        transactionLatch.countDown();
-                    }
-                },
-                new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        fail(throwable.getMessage());
-                    }
-                },
-                new Action0() {
-                    @Override
-                    public void call() {
-                        completedLatch.countDown();
-                    }
-                });
+        final List<HucBlock> results = new ArrayList<HucBlock>(hucBlocks.size());
+        Subscription subscription = observable.subscribe(new Action1<HucBlock>() {
+            @Override
+            public void call(HucBlock result) {
+                results.add(result);
+                transactionLatch.countDown();
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                completedLatch.countDown();
+            }
+        });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(ethBlocks));
+        assertThat(results, equalTo(hucBlocks));
 
         subscription.unsubscribe();
 
@@ -106,46 +97,39 @@ public class JsonRpc2_0RxTest {
     @Test
     public void testReplayBlocksDescendingObservable() throws Exception {
 
-        List<EthBlock> ethBlocks = Arrays.asList(createBlock(2), createBlock(1), createBlock(0));
+        List<HucBlock> hucBlocks = Arrays.asList(createBlock(2), createBlock(1), createBlock(0));
 
-        OngoingStubbing<EthBlock> stubbing =
-                when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
-            stubbing = stubbing.thenReturn(ethBlock);
+        OngoingStubbing<HucBlock> stubbing = when(webujService.send(any(Request.class), eq(HucBlock.class)));
+        for (HucBlock hucBlock : hucBlocks) {
+            stubbing = stubbing.thenReturn(hucBlock);
         }
 
-        Observable<EthBlock> observable = web3j.replayBlocksObservable(
-                new DefaultBlockParameterNumber(BigInteger.ZERO),
-                new DefaultBlockParameterNumber(BigInteger.valueOf(2)),
-                false, false);
+        Observable<HucBlock> observable = webuj.replayBlocksObservable(new DefaultBlockParameterNumber(BigInteger.ZERO), new DefaultBlockParameterNumber(BigInteger.valueOf(2)), false, false);
 
-        final CountDownLatch transactionLatch = new CountDownLatch(ethBlocks.size());
+        final CountDownLatch transactionLatch = new CountDownLatch(hucBlocks.size());
         final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        final List<EthBlock> results = new ArrayList<EthBlock>(ethBlocks.size());
-        Subscription subscription = observable.subscribe(
-                new Action1<EthBlock>() {
-                    @Override
-                    public void call(EthBlock result) {
-                        results.add(result);
-                        transactionLatch.countDown();
-                    }
-                },
-                new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        fail(throwable.getMessage());
-                    }
-                },
-                new Action0() {
-                    @Override
-                    public void call() {
-                        completedLatch.countDown();
-                    }
-                });
+        final List<HucBlock> results = new ArrayList<HucBlock>(hucBlocks.size());
+        Subscription subscription = observable.subscribe(new Action1<HucBlock>() {
+            @Override
+            public void call(HucBlock result) {
+                results.add(result);
+                transactionLatch.countDown();
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                completedLatch.countDown();
+            }
+        });
 
         transactionLatch.await(1, TimeUnit.SECONDS);
-        assertThat(results, equalTo(ethBlocks));
+        assertThat(results, equalTo(hucBlocks));
 
         subscription.unsubscribe();
 
@@ -155,75 +139,50 @@ public class JsonRpc2_0RxTest {
 
     @Test
     public void testCatchUpToLatestAndSubscribeToNewBlockObservable() throws Exception {
-        List<EthBlock> expected = Arrays.asList(
-                createBlock(0), createBlock(1), createBlock(2),
-                createBlock(3), createBlock(4), createBlock(5),
-                createBlock(6));
+        List<HucBlock> expected = Arrays.asList(createBlock(0), createBlock(1), createBlock(2), createBlock(3), createBlock(4), createBlock(5), createBlock(6));
 
-        List<EthBlock> ethBlocks = Arrays.asList(
-                expected.get(2),  // greatest block
-                expected.get(0), expected.get(1), expected.get(2),
-                expected.get(4), // greatest block
-                expected.get(3), expected.get(4),
-                expected.get(4),  // greatest block
-                expected.get(5),  // initial response from ethGetFilterLogs call
+        List<HucBlock> hucBlocks = Arrays.asList(expected.get(2),  // greatest block
+                expected.get(0), expected.get(1), expected.get(2), expected.get(4), // greatest block
+                expected.get(3), expected.get(4), expected.get(4),  // greatest block
+                expected.get(5),  // initial response from hucGetFilterLogs call
                 expected.get(6)); // subsequent block from new block observable
 
-        OngoingStubbing<EthBlock> stubbing =
-                when(web3jService.send(any(Request.class), eq(EthBlock.class)));
-        for (EthBlock ethBlock : ethBlocks) {
-            stubbing = stubbing.thenReturn(ethBlock);
+        OngoingStubbing<HucBlock> stubbing = when(webujService.send(any(Request.class), eq(HucBlock.class)));
+        for (HucBlock hucBlock : hucBlocks) {
+            stubbing = stubbing.thenReturn(hucBlock);
         }
 
-        EthFilter ethFilter = objectMapper.readValue(
-                "{\n"
-                        + "  \"id\":1,\n"
-                        + "  \"jsonrpc\": \"2.0\",\n"
-                        + "  \"result\": \"0x1\"\n"
-                        + "}", EthFilter.class);
-        EthLog ethLog = objectMapper.readValue(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":["
-                        + "\"0x31c2342b1e0b8ffda1507fbffddf213c4b3c1e819ff6a84b943faabb0ebf2403\""
-                        + "]}",
-                EthLog.class);
-        EthUninstallFilter ethUninstallFilter = objectMapper.readValue(
-                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", EthUninstallFilter.class);
+        HucRepFilter hucRepFilter = objectMapper.readValue("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0x1\"\n" + "}", HucRepFilter.class);
+        HucLog hucLog = objectMapper.readValue("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":[" + "\"0x31c2342b1e0b8ffda1507fbffddf213c4b3c1e819ff6a84b943faabb0ebf2403\"" + "]}", HucLog.class);
+        HucUninstallFilter hucUninstallFilter = objectMapper.readValue("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", HucUninstallFilter.class);
 
-        when(web3jService.send(any(Request.class), eq(EthFilter.class)))
-                .thenReturn(ethFilter);
-        when(web3jService.send(any(Request.class), eq(EthLog.class)))
-                .thenReturn(ethLog);
-        when(web3jService.send(any(Request.class), eq(EthUninstallFilter.class)))
-                .thenReturn(ethUninstallFilter);
+        when(webujService.send(any(Request.class), eq(HucRepFilter.class))).thenReturn(hucRepFilter);
+        when(webujService.send(any(Request.class), eq(HucLog.class))).thenReturn(hucLog);
+        when(webujService.send(any(Request.class), eq(HucUninstallFilter.class))).thenReturn(hucUninstallFilter);
 
-        Observable<EthBlock> observable = web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(
-                new DefaultBlockParameterNumber(BigInteger.ZERO),
-                false);
+        Observable<HucBlock> observable = webuj.catchUpToLatestAndSubscribeToNewBlocksObservable(new DefaultBlockParameterNumber(BigInteger.ZERO), false);
 
         final CountDownLatch transactionLatch = new CountDownLatch(expected.size());
         final CountDownLatch completedLatch = new CountDownLatch(1);
 
-        final List<EthBlock> results = new ArrayList<EthBlock>(expected.size());
-        Subscription subscription = observable.subscribe(
-                new Action1<EthBlock>() {
-                    @Override
-                    public void call(EthBlock result) {
-                        results.add(result);
-                        transactionLatch.countDown();
-                    }
-                },
-                new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        fail(throwable.getMessage());
-                    }
-                },
-                new Action0() {
-                    @Override
-                    public void call() {
-                        completedLatch.countDown();
-                    }
-                });
+        final List<HucBlock> results = new ArrayList<HucBlock>(expected.size());
+        Subscription subscription = observable.subscribe(new Action1<HucBlock>() {
+            @Override
+            public void call(HucBlock result) {
+                results.add(result);
+                transactionLatch.countDown();
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                fail(throwable.getMessage());
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+                completedLatch.countDown();
+            }
+        });
 
         transactionLatch.await(1250, TimeUnit.MILLISECONDS);
         assertThat(results, equalTo(expected));
@@ -234,12 +193,12 @@ public class JsonRpc2_0RxTest {
         assertTrue(subscription.isUnsubscribed());
     }
 
-    private EthBlock createBlock(int number) {
-        EthBlock ethBlock = new EthBlock();
-        EthBlock.Block block = new EthBlock.Block();
+    private HucBlock createBlock(int number) {
+        HucBlock hucBlock = new HucBlock();
+        HucBlock.Block block = new HucBlock.Block();
         block.setNumber(Numeric.encodeQuantity(BigInteger.valueOf(number)));
 
-        ethBlock.setResult(block);
-        return ethBlock;
+        hucBlock.setResult(block);
+        return hucBlock;
     }
 }

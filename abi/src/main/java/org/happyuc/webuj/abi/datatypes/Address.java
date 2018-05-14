@@ -3,8 +3,8 @@ package org.happyuc.webuj.abi.datatypes;
 import java.math.BigInteger;
 
 import org.happyuc.webuj.abi.datatypes.generated.Uint160;
-import org.web3j.abi.datatypes.generated.Uint160;
-import org.web3j.utils.Numeric;
+import org.happyuc.webuj.abi.datatypes.generated.Uint160;
+import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Address type, which is equivalent to uint160.
@@ -41,8 +41,7 @@ public class Address implements Type<String> {
 
     @Override
     public String toString() {
-        return Numeric.toHexStringWithPrefixZeroPadded(
-                value.getValue(), LENGTH_IN_HEX);
+        return Numeric.toHexStringWithPrefixZeroPadded(value.getValue(), LENGTH_IN_HEX);
     }
 
     @Override
