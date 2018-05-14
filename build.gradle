@@ -36,15 +36,15 @@ apply plugin: 'idea'
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'jacoco'
 
-description 'web3j base project'
+description 'webuj base project'
 
 allprojects {
 
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
 
-    group 'org.web3j'
-    version '3.3.1-android'
+    group 'org.happyuc.webuj'
+    version '1.0.0-android'
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
@@ -154,14 +154,14 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
                 }
 
                 pom.project {
-                    name 'web3j'
+                    name 'webuj'
                     packaging 'jar'
                     description project.description
-                    url 'https://web3j.io'
+                    url 'https://webuj.io'
 
                     scm {
-                        connection 'scm:git:https://github.com/web3j/web3j.git'
-                        url 'https://github.com/web3j/web3j.git'
+                        connection 'scm:git:https://github.com/happyuc-project/webu.java.git'
+                        url 'https://github.com/happyuc-project/webu.java.git'
                     }
 
                     licenses {
@@ -173,9 +173,9 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
 
                     developers {
                         developer {
-                            id 'conor10'
-                            name 'Conor Svensson'
-                            email 'conor10@gmail.com'
+                            id 'happyuc'
+                            name 'Happyuc Project'
+                            email 'npm@ounun.com'
                         }
                     }
                 }
@@ -194,14 +194,14 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         publications = ['mavenJava']
         publish = true
         pkg {
-            repo = 'maven'
-            name = 'org.web3j'
+            repo = 'happyuc'
+            name = 'webuj'
             desc = project.description
-            userOrg = 'web3j'
+            userOrg = 'webuj'
             licenses = ['Apache-2.0']
-            issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
-            vcsUrl = 'https://github.com/web3j/web3j.git'
-            websiteUrl = 'https://web3j.io'
+            issueTrackerUrl = 'https://github.com/happyuc-project/webu.java/issues'
+            vcsUrl = 'https://github.com/happyuc-project/webu.java.git'
+            websiteUrl = 'https://webuj.io'
             publicDownloadNumbers = true
         }
     }
@@ -242,9 +242,9 @@ task jacocoRootTestReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: [
-                            'org/web3j/abi/datatypes/generated/**',
-                            'org/web3j/tuples/generated/**',
-                            'org/web3j/ens/contracts/generated/**'
+                            'org/happyuc/webuj/abi/datatypes/generated/**',
+                            'org/happyuc/webuj/tuples/generated/**',
+                            'org/happyuc/webuj/ens/contracts/generated/**'
                     ])
         })
     }
