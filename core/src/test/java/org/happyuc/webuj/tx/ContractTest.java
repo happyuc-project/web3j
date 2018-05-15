@@ -19,7 +19,6 @@ import org.happyuc.webuj.protocol.core.RemoteCall;
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.EthCall;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;

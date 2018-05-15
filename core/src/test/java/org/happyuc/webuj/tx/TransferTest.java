@@ -30,12 +30,12 @@ public class TransferTest extends ManagedReqRepTransactionTester {
 
     @Test
     public void testSendFunds() throws Exception {
-        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.ETHER).send(), is(repTransactionReceipt));
+        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.EHUC).send(), is(repTransactionReceipt));
     }
 
     @Test
     public void testSendFundsAsync() throws Exception {
-        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.ETHER).send(), is(repTransactionReceipt));
+        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.EHUC).send(), is(repTransactionReceipt));
     }
 
     @Test(expected = UnsupportedOperationException.class)

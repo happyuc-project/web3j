@@ -2,7 +2,6 @@ package org.happyuc.webuj.tx.response;
 
 import org.happyuc.webuj.protocol.core.methods.response.Log;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigInteger;
 import java.util.List;
