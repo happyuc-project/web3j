@@ -11,7 +11,7 @@ import org.happyuc.webuj.utils.Numeric;
  * https://github.com/happyuc-project/wiki/wiki/JSON-RPC#shh_post
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ShhPost {
+public class ShhReqPost {
     private String from;
     private String to;
     private List<String> topics;
@@ -19,14 +19,14 @@ public class ShhPost {
     private BigInteger priority;
     private BigInteger ttl;
 
-    public ShhPost(List<String> topics, String payload, BigInteger priority, BigInteger ttl) {
+    public ShhReqPost(List<String> topics, String payload, BigInteger priority, BigInteger ttl) {
         this.topics = topics;
         this.payload = payload;
         this.priority = priority;
         this.ttl = ttl;
     }
 
-    public ShhPost(String from, String to, List<String> topics, String payload, BigInteger priority, BigInteger ttl) {
+    public ShhReqPost(String from, String to, List<String> topics, String payload, BigInteger priority, BigInteger ttl) {
         this.from = from;
         this.to = to;
         this.topics = topics;

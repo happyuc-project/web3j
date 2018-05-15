@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.junit.Test;
 
 import org.happyuc.webuj.crypto.WalletFile;
@@ -15,7 +16,6 @@ import org.happyuc.webuj.protocol.RequestTester;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterNumber;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
 import org.happyuc.webuj.protocol.http.HttpService;
 import org.happyuc.webuj.protocol.parity.methods.request.Derivation;
 import org.happyuc.webuj.protocol.parity.methods.request.TraceFilter;
@@ -294,8 +294,8 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testTraceCall() throws Exception {
-        Transaction transaction = Transaction.createFunctionCallTransaction("0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e", BigInteger.ONE, Numeric.toBigInt("0x9184e72a000"), Numeric.toBigInt("0x76c0"), "0xb60e8dd61c5d32be8058bb8eb970870f07233155", Numeric.toBigInt("0x9184e72a"), "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb" + "970870f072445675058bb8eb970870f072445675");
-        webuj.traceCall(transaction, Arrays.asList("trace", "vmTrace", "stateDiff"), DefaultBlockParameterName.LATEST).send();
+        ReqTransaction reqTransaction = ReqTransaction.createFunctionCallTransaction("0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e", BigInteger.ONE, Numeric.toBigInt("0x9184e72a000"), Numeric.toBigInt("0x76c0"), "0xb60e8dd61c5d32be8058bb8eb970870f07233155", Numeric.toBigInt("0x9184e72a"), "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb" + "970870f072445675058bb8eb970870f072445675");
+        webuj.traceCall(reqTransaction, Arrays.asList("trace", "vmTrace", "stateDiff"), DefaultBlockParameterName.LATEST).send();
 
         //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"trace_call\"," + "\"params\":[" + "{\"from\":\"0xc171033d5cbff7175f29dfd3a63dda3d6f8f385e\"," + "\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\"," + "\"gas\":\"0x76c0\"," + "\"gasPrice\":\"0x9184e72a000\"," + "\"value\":\"0x9184e72a\"," + "\"data\":\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\"," + "\"nonce\":\"0x1\"}," + "[\"trace\",\"vmTrace\",\"stateDiff\"]," + "\"latest\"]," + "\"id\":1}");

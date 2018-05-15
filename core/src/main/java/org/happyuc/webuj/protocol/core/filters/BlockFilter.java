@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.Request;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 
 /**
@@ -20,7 +20,7 @@ public class BlockFilter extends Filter<String> {
     }
 
     @Override
-    HucFilter sendRequest() throws IOException {
+    HucRepFilter sendRequest() throws IOException {
         return webuj.hucNewBlockFilter().send();
     }
 

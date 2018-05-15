@@ -10,7 +10,7 @@ import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.ens.EnsResolver;
 import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.WebuClientVersion;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.protocol.http.HttpService;
@@ -52,9 +52,10 @@ public class WalletSendFunds extends WalletManager {
 
         confirmTransfer(amountToTransfer, transferUnit, amountInWei, destinationAddress);
 
-        TransactionReceipt transactionReceipt = performTransfer(webuj, destinationAddress, credentials, amountInWei);
+        RepTransactionReceipt repTransactionReceipt = performTransfer(webuj, destinationAddress, credentials, amountInWei);
 
-        console.printf("Funds have been successfully transferred from %s to %s%n" + "Transaction hash: %s%nMined block number: %s%n", credentials.getAddress(), destinationAddress, transactionReceipt.getTransactionHash(), transactionReceipt.getBlockNumber());
+        console.printf("Funds have been successfully transferred from %s to %s%n" + "ReqTransaction hash: %s%nMined block number: %s%n", credentials.getAddress(), destinationAddress, repTransactionReceipt
+                .getTransactionHash(), repTransactionReceipt.getBlockNumber());
     }
 
     private BigDecimal getAmountToTransfer() {
@@ -89,11 +90,11 @@ public class WalletSendFunds extends WalletManager {
         }
     }
 
-    private TransactionReceipt performTransfer(Webuj webuj, String destinationAddress, Credentials credentials, BigDecimal amountInWei) {
+    private RepTransactionReceipt performTransfer(Webuj webuj, String destinationAddress, Credentials credentials, BigDecimal amountInWei) {
 
         console.printf("Commencing transfer (this may take a few minutes) ");
         try {
-            Future<TransactionReceipt> future = Transfer.sendFunds(webuj, credentials, destinationAddress, amountInWei, Convert.Unit.WEI).sendAsync();
+            Future<RepTransactionReceipt> future = Transfer.sendFunds(webuj, credentials, destinationAddress, amountInWei, Convert.Unit.WEI).sendAsync();
 
             while (!future.isDone()) {
                 console.printf(".");

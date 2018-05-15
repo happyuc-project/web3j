@@ -1,13 +1,12 @@
 package org.happyuc.webuj.contracts.token;
 
-import java.math.BigInteger;
-import java.util.List;
-
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
-
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import rx.Observable;
+
+import java.math.BigInteger;
+import java.util.List;
 
 /**
  * Describes the HappyUC "Basic" subset of the ERC-20 token standard.
@@ -26,9 +25,9 @@ public interface ERC20BasicInterface<T> {
 
     RemoteCall<BigInteger> balanceOf(String who);
 
-    RemoteCall<TransactionReceipt> transfer(String to, BigInteger value);
+    RemoteCall<RepTransactionReceipt> transfer(String to, BigInteger value);
 
-    List<T> getTransferEvents(TransactionReceipt transactionReceipt);
+    List<T> getTransferEvents(RepTransactionReceipt repTransactionReceipt);
 
     Observable<T> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
 

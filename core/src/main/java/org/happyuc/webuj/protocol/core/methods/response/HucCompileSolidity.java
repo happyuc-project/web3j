@@ -211,7 +211,7 @@ public class HucCompileSolidity extends Response<Map<String, HucCompileSolidity.
 
     public static class Documentation {
         // No documentation available
-        // See https://github.com/happyuc-project/wiki/wiki/JSON-RPC#eth_compilesolidity
+        // See https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_compilesolidity
         private Map<String, String> methods;  // unknown object type
 
         public Documentation() {

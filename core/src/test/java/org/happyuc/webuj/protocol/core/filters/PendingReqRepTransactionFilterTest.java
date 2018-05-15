@@ -7,7 +7,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PendingTransactionFilterTest extends FilterTester {
+public class PendingReqRepTransactionFilterTest extends FilterTester {
 
     @Test
     public void testPendingTransactionFilter() throws Exception {

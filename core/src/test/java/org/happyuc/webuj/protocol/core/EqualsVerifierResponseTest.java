@@ -2,6 +2,7 @@ package org.happyuc.webuj.protocol.core;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.junit.Test;
 
 import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
@@ -11,8 +12,7 @@ import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
 import org.happyuc.webuj.protocol.core.methods.response.ShhMessages;
-import org.happyuc.webuj.protocol.core.methods.response.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransaction;
 
 public class EqualsVerifierResponseTest {
 
@@ -23,12 +23,12 @@ public class EqualsVerifierResponseTest {
 
     @Test
     public void testTransaction() {
-        EqualsVerifier.forClass(Transaction.class).suppress(Warning.NONFINAL_FIELDS).suppress(Warning.STRICT_INHERITANCE).verify();
+        EqualsVerifier.forClass(RepTransaction.class).suppress(Warning.NONFINAL_FIELDS).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test
     public void testTransactionReceipt() {
-        EqualsVerifier.forClass(TransactionReceipt.class).suppress(Warning.NONFINAL_FIELDS).suppress(Warning.STRICT_INHERITANCE).verify();
+        EqualsVerifier.forClass(RepTransactionReceipt.class).suppress(Warning.NONFINAL_FIELDS).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.utils.Convert;
 import org.happyuc.webuj.utils.Numeric;
@@ -40,13 +40,13 @@ public class Transfer extends ManagedTransaction {
      *                              while waiting
      * @throws TransactionException if the transaction was not mined while waiting
      */
-    private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit) throws IOException, InterruptedException, TransactionException {
+    private RepTransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit) throws IOException, InterruptedException, TransactionException {
 
         BigInteger gasPrice = requestCurrentGasPrice();
         return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
     }
 
-    private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) throws IOException, InterruptedException, TransactionException {
+    private RepTransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) throws IOException, InterruptedException, TransactionException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
         if (!Numeric.isIntegerValue(weiValue)) {
@@ -57,7 +57,7 @@ public class Transfer extends ManagedTransaction {
         return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
     }
 
-    public static RemoteCall<TransactionReceipt> sendFunds(Webuj webuj, Credentials credentials, String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException, IOException, TransactionException {
+    public static RemoteCall<RepTransactionReceipt> sendFunds(Webuj webuj, Credentials credentials, String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException, IOException, TransactionException {
 
         TransactionManager transactionManager = new RawTransactionManager(webuj, credentials);
 
@@ -73,11 +73,11 @@ public class Transfer extends ManagedTransaction {
      * @param unit      of specified send
      * @return {@link RemoteCall} containing executing transaction
      */
-    public RemoteCall<TransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit) {
+    public RemoteCall<RepTransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit) {
         return new RemoteCall<>(() -> send(toAddress, value, unit));
     }
 
-    public RemoteCall<TransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) {
+    public RemoteCall<RepTransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) {
         return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, gasLimit));
     }
 }

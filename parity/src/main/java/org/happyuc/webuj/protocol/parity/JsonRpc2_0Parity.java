@@ -16,7 +16,7 @@ import org.happyuc.webuj.protocol.admin.methods.response.NewAccountIdentifier;
 import org.happyuc.webuj.protocol.admin.methods.response.PersonalSign;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.Request;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.protocol.parity.methods.request.Derivation;
 import org.happyuc.webuj.protocol.parity.methods.request.TraceFilter;
 import org.happyuc.webuj.protocol.parity.methods.response.ParityAddressesResponse;
@@ -176,8 +176,8 @@ public class JsonRpc2_0Parity extends JsonRpc2_0Admin implements Parity {
     // TRACE API
 
     @Override
-    public Request<?, ParityFullTraceResponse> traceCall(Transaction transaction, List<String> traces, DefaultBlockParameter blockParameter) {
-        return new Request<>("trace_call", Arrays.asList(transaction, traces, blockParameter), webujService, ParityFullTraceResponse.class);
+    public Request<?, ParityFullTraceResponse> traceCall(ReqTransaction reqTransaction, List<String> traces, DefaultBlockParameter blockParameter) {
+        return new Request<>("trace_call", Arrays.asList(reqTransaction, traces, blockParameter), webujService, ParityFullTraceResponse.class);
     }
 
     @Override

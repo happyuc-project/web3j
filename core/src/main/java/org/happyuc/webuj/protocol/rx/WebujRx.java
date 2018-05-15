@@ -1,12 +1,12 @@
 package org.happyuc.webuj.protocol.rx;
 
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import rx.Observable;
 
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.Transaction;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransaction;
 
 /**
  * The Observables JSON-RPC client event API.
@@ -16,10 +16,10 @@ public interface WebujRx {
     /**
      * Create an observable to filter for specific log events on the blockchain.
      *
-     * @param hucFilter filter criteria
+     * @param hucReqFilter filter criteria
      * @return Observable that emits all Log events matching the filter
      */
-    Observable<Log> hucLogObservable(HucFilter hucFilter);
+    Observable<Log> hucLogObservable(HucReqFilter hucReqFilter);
 
     /**
      * Create an Observable to emit block hashes.
@@ -42,7 +42,7 @@ public interface WebujRx {
      *
      * @return Observable to emit new transactions on the blockchain
      */
-    Observable<Transaction> transactionObservable();
+    Observable<RepTransaction> transactionObservable();
 
     /**
      * Create an Observable to emit all pending transactions that have yet to be placed into a
@@ -50,7 +50,7 @@ public interface WebujRx {
      *
      * @return Observable to emit pending transactions
      */
-    Observable<Transaction> pendingTransactionObservable();
+    Observable<RepTransaction> pendingTransactionObservable();
 
     /**
      * Create an Observable that emits newly created blocks on the blockchain.
@@ -95,7 +95,7 @@ public interface WebujRx {
      * @param endBlock   block number to finish with
      * @return Observable to emit these transactions in the order they appear in the blocks
      */
-    Observable<Transaction> replayTransactionsObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
+    Observable<RepTransaction> replayTransactionsObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
 
     /**
      * Create an Observable that emits all transactions from the blockchain starting with a
@@ -106,7 +106,7 @@ public interface WebujRx {
      * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(DefaultBlockParameter, boolean)}.
      *
      * @param startBlock             the block number we wish to request from
-     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
+     * @param fullTransactionObjects if we require full {@link RepTransaction} objects to be provided
      *                               in the {@link HucBlock} responses
      * @param onCompleteObservable   a subsequent Observable that we wish to run once we are caught
      *                               up with the latest block
@@ -119,7 +119,7 @@ public interface WebujRx {
      * current. Once it has emitted the most current block, onComplete is called.
      *
      * @param startBlock             the block number we wish to request from
-     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
+     * @param fullTransactionObjects if we require full {@link RepTransaction} objects to be provided
      *                               in the {@link HucBlock} responses
      * @return Observable to emit all requested blocks
      */
@@ -132,7 +132,7 @@ public interface WebujRx {
      * @param startBlock the block number we wish to request from
      * @return Observable to emit all requested transactions
      */
-    Observable<Transaction> catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock);
+    Observable<RepTransaction> catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock);
 
     /**
      * Creates an Observable that emits all blocks from the requested block number to the most
@@ -140,7 +140,7 @@ public interface WebujRx {
      * are created.
      *
      * @param startBlock             the block number we wish to request from
-     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
+     * @param fullTransactionObjects if we require full {@link RepTransaction} objects to be provided
      *                               in the {@link HucBlock} responses
      * @return Observable to emit all requested blocks and future
      */
@@ -154,5 +154,5 @@ public interface WebujRx {
      * @param startBlock the block number we wish to request from
      * @return Observable to emit all requested transactions and future
      */
-    Observable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameter startBlock);
+    Observable<RepTransaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameter startBlock);
 }

@@ -1,17 +1,5 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.EventValues;
 import org.happyuc.webuj.abi.FunctionEncoder;
@@ -26,13 +14,25 @@ import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.tx.exceptions.ContractCallException;
 import org.happyuc.webuj.utils.Numeric;
+
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -42,14 +42,14 @@ import org.happyuc.webuj.utils.Numeric;
 public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/happyuc/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
-    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
+    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_700_000);
     public static final String SUCCESSFUL_TRANSACTION_STATUS = "0x1";
 
     protected final String contractBinary;
     protected String contractAddress;
     protected BigInteger gasPrice;
     protected BigInteger gasLimit;
-    protected TransactionReceipt transactionReceipt;
+    protected RepTransactionReceipt repTransactionReceipt;
     protected Map<String, String> deployedAddresses;
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
 
@@ -85,8 +85,8 @@ public abstract class Contract extends ManagedTransaction {
         return contractAddress;
     }
 
-    public void setTransactionReceipt(TransactionReceipt transactionReceipt) {
-        this.transactionReceipt = transactionReceipt;
+    public void setRepTransactionReceipt(RepTransactionReceipt repTransactionReceipt) {
+        this.repTransactionReceipt = repTransactionReceipt;
     }
 
     public String getContractBinary() {
@@ -116,7 +116,7 @@ public abstract class Contract extends ManagedTransaction {
      * is in fact the contract you believe it is.
      *
      * <p>This method uses the
-     * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#eth_getcode">eth_getCode</a> method
+     * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_getcode">huc_getCode</a> method
      * to get the contract byte code and validates it against the byte code stored in this smart
      * contract wrapper.
      *
@@ -140,14 +140,14 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     /**
-     * If this Contract instance was created at deployment, the TransactionReceipt associated
+     * If this Contract instance was created at deployment, the RepTransactionReceipt associated
      * with the initial creation will be provided, e.g. via a <em>deploy</em> method. This will
      * not persist for Contracts instances constructed via a <em>load</em> method.
      *
-     * @return the TransactionReceipt generated at contract deployment
+     * @return the RepTransactionReceipt generated at contract deployment
      */
-    public Optional<TransactionReceipt> getTransactionReceipt() {
-        return Optional.ofNullable(transactionReceipt);
+    public Optional<RepTransactionReceipt> getRepTransactionReceipt() {
+        return Optional.ofNullable(repTransactionReceipt);
     }
 
     /**
@@ -168,7 +168,7 @@ public abstract class Contract extends ManagedTransaction {
      */
     private List<Type> executeCall(Function function) throws IOException {
         String encodedFunction = FunctionEncoder.encode(function);
-        org.happyuc.webuj.protocol.core.methods.response.HucCall hucCall = webuj.hucCall(Transaction.createHucCallTransaction(transactionManager.getFromAddress(), contractAddress, encodedFunction), defaultBlockParameter).send();
+        org.happyuc.webuj.protocol.core.methods.response.HucCall hucCall = webuj.hucCall(ReqTransaction.createHucCallTransaction(transactionManager.getFromAddress(), contractAddress, encodedFunction), defaultBlockParameter).send();
 
         String value = hucCall.getValue();
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
@@ -205,11 +205,11 @@ public abstract class Contract extends ManagedTransaction {
         return executeCall(function);
     }
 
-    protected TransactionReceipt executeTransaction(Function function) throws IOException, TransactionException {
+    protected RepTransactionReceipt executeTransaction(Function function) throws IOException, TransactionException {
         return executeTransaction(function, BigInteger.ZERO);
     }
 
-    private TransactionReceipt executeTransaction(Function function, BigInteger weiValue) throws IOException, TransactionException {
+    private RepTransactionReceipt executeTransaction(Function function, BigInteger weiValue) throws IOException, TransactionException {
         return executeTransaction(FunctionEncoder.encode(function), weiValue);
     }
 
@@ -222,12 +222,12 @@ public abstract class Contract extends ManagedTransaction {
      * @throws IOException          if the call to the node fails
      * @throws TransactionException if the transaction was not mined while waiting
      */
-    TransactionReceipt executeTransaction(String data, BigInteger weiValue) throws TransactionException, IOException {
+    RepTransactionReceipt executeTransaction(String data, BigInteger weiValue) throws TransactionException, IOException {
 
-        TransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
+        RepTransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
 
         if (receipt.getStatus() != null && !SUCCESSFUL_TRANSACTION_STATUS.equals(receipt.getStatus())) {
-            throw new TransactionException(String.format("Transaction has failed with status: %s. " + "Gas used: %d. (not-enough gas?)", receipt.getStatus(), receipt.getGasUsed()));
+            throw new TransactionException(String.format("ReqTransaction has failed with status: %s. " + "Gas used: %d. (not-enough gas?)", receipt.getStatus(), receipt.getGasUsed()));
         }
 
         return receipt;
@@ -245,23 +245,23 @@ public abstract class Contract extends ManagedTransaction {
         return new RemoteCall<>(() -> executeCallMultipleValueReturn(function));
     }
 
-    protected RemoteCall<TransactionReceipt> executeRemoteCallTransaction(Function function) {
+    protected RemoteCall<RepTransactionReceipt> executeRemoteCallTransaction(Function function) {
         return new RemoteCall<>(() -> executeTransaction(function));
     }
 
-    protected RemoteCall<TransactionReceipt> executeRemoteCallTransaction(Function function, BigInteger weiValue) {
+    protected RemoteCall<RepTransactionReceipt> executeRemoteCallTransaction(Function function, BigInteger weiValue) {
         return new RemoteCall<>(() -> executeTransaction(function, weiValue));
     }
 
     private static <T extends Contract> T create(T contract, String binary, String encodedConstructor, BigInteger value) throws IOException, TransactionException {
-        TransactionReceipt transactionReceipt = contract.executeTransaction(binary + encodedConstructor, value);
+        RepTransactionReceipt repTransactionReceipt = contract.executeTransaction(binary + encodedConstructor, value);
 
-        String contractAddress = transactionReceipt.getContractAddress();
+        String contractAddress = repTransactionReceipt.getContractAddress();
         if (contractAddress == null) {
             throw new RuntimeException("Empty contract address returned");
         }
         contract.setContractAddress(contractAddress);
-        contract.setTransactionReceipt(transactionReceipt);
+        contract.setRepTransactionReceipt(repTransactionReceipt);
 
         return contract;
     }
@@ -338,8 +338,8 @@ public abstract class Contract extends ManagedTransaction {
         return staticExtractEventParameters(event, log);
     }
 
-    protected List<EventValues> extractEventParameters(Event event, TransactionReceipt transactionReceipt) {
-        return transactionReceipt.getLogs().stream().map(log -> extractEventParameters(event, log)).filter(Objects::nonNull).collect(Collectors.toList());
+    protected List<EventValues> extractEventParameters(Event event, RepTransactionReceipt repTransactionReceipt) {
+        return repTransactionReceipt.getLogs().stream().map(log -> extractEventParameters(event, log)).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
@@ -347,8 +347,8 @@ public abstract class Contract extends ManagedTransaction {
         return (eventValues == null) ? null : new EventValuesWithLog(eventValues, log);
     }
 
-    protected List<EventValuesWithLog> extractEventParametersWithLog(Event event, TransactionReceipt transactionReceipt) {
-        return transactionReceipt.getLogs().stream().map(log -> extractEventParametersWithLog(event, log)).filter(Objects::nonNull).collect(Collectors.toList());
+    protected List<EventValuesWithLog> extractEventParametersWithLog(Event event, RepTransactionReceipt repTransactionReceipt) {
+        return repTransactionReceipt.getLogs().stream().map(log -> extractEventParametersWithLog(event, log)).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     /**

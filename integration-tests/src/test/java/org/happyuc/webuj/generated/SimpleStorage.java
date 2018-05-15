@@ -6,12 +6,11 @@ import java.util.Collections;
 
 import org.happyuc.webuj.abi.TypeReference;
 import org.happyuc.webuj.abi.datatypes.Function;
-import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
 
@@ -35,7 +34,7 @@ public class SimpleStorage extends Contract {
         super(BINARY, contractAddress, webuj, transactionManager, gasPrice, gasLimit);
     }
 
-    public RemoteCall<TransactionReceipt> set(BigInteger x) {
+    public RemoteCall<RepTransactionReceipt> set(BigInteger x) {
         final Function function = new Function("set", Arrays.asList(new org.happyuc.webuj.abi.datatypes.generated.Uint256(x)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }

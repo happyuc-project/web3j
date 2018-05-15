@@ -7,12 +7,11 @@ import java.util.Collections;
 import org.happyuc.webuj.abi.FunctionEncoder;
 import org.happyuc.webuj.abi.TypeReference;
 import org.happyuc.webuj.abi.datatypes.Function;
-import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.Utf8String;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
 
@@ -36,7 +35,7 @@ public class Greeter extends Contract {
         super(BINARY, contractAddress, webuj, transactionManager, gasPrice, gasLimit);
     }
 
-    public RemoteCall<TransactionReceipt> kill() {
+    public RemoteCall<RepTransactionReceipt> kill() {
         final Function function = new Function("kill", Arrays.asList(), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }

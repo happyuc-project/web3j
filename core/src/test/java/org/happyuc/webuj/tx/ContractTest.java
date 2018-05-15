@@ -1,20 +1,5 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.function.BiFunction;
-
-import org.happyuc.webuj.protocol.Webuj;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import org.junit.rules.ExpectedException;
-
 import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.EventValues;
 import org.happyuc.webuj.abi.FunctionEncoder;
@@ -27,20 +12,34 @@ import org.happyuc.webuj.abi.datatypes.Utf8String;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.SampleKeys;
+import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
 import org.happyuc.webuj.protocol.core.RemoteCall;
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.Response;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucCall;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.utils.Async;
 import org.happyuc.webuj.utils.Numeric;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.BiFunction;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -57,7 +56,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ContractTest extends ManagedTransactionTester {
+public class ContractTest extends ManagedReqRepTransactionTester {
 
     private static final String TEST_CONTRACT_BINARY = "12345";
 
@@ -80,35 +79,35 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test
     public void testGetContractTransactionReceipt() {
-        assertFalse(contract.getTransactionReceipt().isPresent());
+        assertFalse(contract.getRepTransactionReceipt().isPresent());
     }
 
     @Test
     public void testDeploy() throws Exception {
-        TransactionReceipt transactionReceipt = createTransactionReceipt();
-        Contract deployedContract = deployContract(transactionReceipt);
+        RepTransactionReceipt repTransactionReceipt = createTransactionReceipt();
+        Contract deployedContract = deployContract(repTransactionReceipt);
 
         assertThat(deployedContract.getContractAddress(), is(ADDRESS));
-        assertTrue(deployedContract.getTransactionReceipt().isPresent());
-        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
+        assertTrue(deployedContract.getRepTransactionReceipt().isPresent());
+        assertThat(deployedContract.getRepTransactionReceipt().get(), equalTo(repTransactionReceipt));
     }
 
     @Test
     public void testContractDeployFails() throws Exception {
         thrown.expect(TransactionException.class);
-        thrown.expectMessage("Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
-        TransactionReceipt transactionReceipt = createFailedTransactionReceipt();
-        deployContract(transactionReceipt);
+        thrown.expectMessage("ReqTransaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+        RepTransactionReceipt repTransactionReceipt = createFailedTransactionReceipt();
+        deployContract(repTransactionReceipt);
     }
 
     @Test
     public void testContractDeployWithNullStatusSucceeds() throws Exception {
-        TransactionReceipt transactionReceipt = createTransactionReceiptWithStatus(null);
-        Contract deployedContract = deployContract(transactionReceipt);
+        RepTransactionReceipt repTransactionReceipt = createTransactionReceiptWithStatus(null);
+        Contract deployedContract = deployContract(repTransactionReceipt);
 
         assertThat(deployedContract.getContractAddress(), is(ADDRESS));
-        assertTrue(deployedContract.getTransactionReceipt().isPresent());
-        assertThat(deployedContract.getTransactionReceipt().get(), equalTo(transactionReceipt));
+        assertTrue(deployedContract.getRepTransactionReceipt().isPresent());
+        assertThat(deployedContract.getRepTransactionReceipt().get(), equalTo(repTransactionReceipt));
     }
 
     @Test
@@ -137,10 +136,10 @@ public class ContractTest extends ManagedTransactionTester {
 
     @Test(expected = RuntimeException.class)
     public void testDeployInvalidContractAddress() throws Throwable {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt();
+        repTransactionReceipt.setTransactionHash(TRANSACTION_HASH);
 
-        prepareTransaction(transactionReceipt);
+        prepareTransaction(repTransactionReceipt);
 
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(new Uint256(BigInteger.TEN)));
 
@@ -198,37 +197,37 @@ public class ContractTest extends ManagedTransactionTester {
         Request<?, HucCall> request = mock(Request.class);
         when(request.send()).thenReturn(hucCall);
 
-        when(webuj.hucCall(any(Transaction.class), eq(DefaultBlockParameterName.LATEST))).thenReturn((Request) request);
+        when(webuj.hucCall(any(ReqTransaction.class), eq(DefaultBlockParameterName.LATEST))).thenReturn((Request) request);
     }
 
     @Test
     public void testTransaction() throws Exception {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setStatus("0x1");
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt();
+        repTransactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        repTransactionReceipt.setStatus("0x1");
 
-        prepareTransaction(transactionReceipt);
+        prepareTransaction(repTransactionReceipt);
 
-        assertThat(contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send(), is(transactionReceipt));
+        assertThat(contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send(), is(repTransactionReceipt));
     }
 
     @Test
     public void testTransactionFailed() throws Exception {
         thrown.expect(TransactionException.class);
-        thrown.expectMessage("Transaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
+        thrown.expectMessage("ReqTransaction has failed with status: 0x0. Gas used: 1. (not-enough gas?)");
 
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setStatus("0x0");
-        transactionReceipt.setGasUsed("0x1");
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt();
+        repTransactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        repTransactionReceipt.setStatus("0x0");
+        repTransactionReceipt.setGasUsed("0x1");
 
-        prepareTransaction(transactionReceipt);
+        prepareTransaction(repTransactionReceipt);
         contract.performTransaction(new Address(BigInteger.TEN), new Uint256(BigInteger.ONE)).send();
     }
 
     @Test
     public void testProcessEvent() {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt();
         Log log = new Log();
         log.setTopics(Arrays.asList(
                 // encoded function
@@ -238,9 +237,9 @@ public class ContractTest extends ManagedTransactionTester {
         // non-indexed value
         log.setData("0000000000000000000000000000000000000000000000000000000000000001");
 
-        transactionReceipt.setLogs(Arrays.asList(log));
+        repTransactionReceipt.setLogs(Arrays.asList(log));
 
-        EventValues eventValues = contract.processEvent(transactionReceipt).get(0);
+        EventValues eventValues = contract.processEvent(repTransactionReceipt).get(0);
 
         assertThat(eventValues.getIndexedValues(), equalTo(singletonList(new Address("0x3d6cb163f7c72d20b0fcd6baae5889329d138a4a"))));
         assertThat(eventValues.getNonIndexedValues(), equalTo(singletonList(new Uint256(BigInteger.ONE))));
@@ -262,11 +261,11 @@ public class ContractTest extends ManagedTransactionTester {
     public void testInvalidTransactionResponse() throws Throwable {
         prepareNonceRequest();
 
-        HucSendTransaction hucSendTransaction = new HucSendTransaction();
-        hucSendTransaction.setError(new Response.Error(1, "Invalid transaction"));
+        HucSendRepTransaction hucSendRepTransaction = new HucSendRepTransaction();
+        hucSendRepTransaction.setError(new Response.Error(1, "Invalid transaction"));
 
-        Request<?, HucSendTransaction> rawTransactionRequest = mock(Request.class);
-        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> hucSendTransaction));
+        Request<?, HucSendRepTransaction> rawTransactionRequest = mock(Request.class);
+        when(rawTransactionRequest.sendAsync()).thenReturn(Async.run(() -> hucSendRepTransaction));
         when(webuj.hucSendRawTransaction(any(String.class))).thenReturn((Request) rawTransactionRequest);
 
         testErrorScenario();
@@ -295,11 +294,11 @@ public class ContractTest extends ManagedTransactionTester {
         prepareNonceRequest();
         prepareTransactionRequest();
 
-        HucGetTransactionReceipt hucGetTransactionReceipt = new HucGetTransactionReceipt();
-        hucGetTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
+        HucGetRepTransactionReceipt hucGetRepTransactionReceipt = new HucGetRepTransactionReceipt();
+        hucGetRepTransactionReceipt.setError(new Response.Error(1, "Invalid transaction receipt"));
 
-        Request<?, HucGetTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
-        when(getTransactionReceiptRequest.sendAsync()).thenReturn(Async.run(() -> hucGetTransactionReceipt));
+        Request<?, HucGetRepTransactionReceipt> getTransactionReceiptRequest = mock(Request.class);
+        when(getTransactionReceiptRequest.sendAsync()).thenReturn(Async.run(() -> hucGetRepTransactionReceipt));
         when(webuj.hucGetTransactionReceipt(TRANSACTION_HASH)).thenReturn((Request) getTransactionReceiptRequest);
 
         testErrorScenario();
@@ -317,15 +316,17 @@ public class ContractTest extends ManagedTransactionTester {
 
         final List<Log> logs = Arrays.asList(logFactory.apply(0, testEvent1), logFactory.apply(1, testEvent2));
 
-        final TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setLogs(logs);
+        final RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt();
+        repTransactionReceipt.setLogs(logs);
 
-        final List<Contract.EventValuesWithLog> eventValuesWithLogs1 = contract.extractEventParametersWithLog(testEvent1, transactionReceipt);
+        final List<Contract.EventValuesWithLog> eventValuesWithLogs1 = contract.extractEventParametersWithLog(testEvent1,
+                                                                                                              repTransactionReceipt);
 
         assertEquals(eventValuesWithLogs1.size(), 1);
         assertEquals(eventValuesWithLogs1.get(0).getLog(), logs.get(0));
 
-        final List<Contract.EventValuesWithLog> eventValuesWithLogs2 = contract.extractEventParametersWithLog(testEvent2, transactionReceipt);
+        final List<Contract.EventValuesWithLog> eventValuesWithLogs2 = contract.extractEventParametersWithLog(testEvent2,
+                                                                                                              repTransactionReceipt);
 
         assertEquals(eventValuesWithLogs2.size(), 1);
         assertEquals(eventValuesWithLogs2.get(0).getLog(), logs.get(1));
@@ -341,26 +342,26 @@ public class ContractTest extends ManagedTransactionTester {
         }
     }
 
-    private TransactionReceipt createTransactionReceipt() {
+    private RepTransactionReceipt createTransactionReceipt() {
         return createTransactionReceiptWithStatus("0x1");
     }
 
-    private TransactionReceipt createFailedTransactionReceipt() {
+    private RepTransactionReceipt createFailedTransactionReceipt() {
         return createTransactionReceiptWithStatus("0x0");
     }
 
-    private TransactionReceipt createTransactionReceiptWithStatus(String status) {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        transactionReceipt.setTransactionHash(TRANSACTION_HASH);
-        transactionReceipt.setContractAddress(ADDRESS);
-        transactionReceipt.setStatus(status);
-        transactionReceipt.setGasUsed("0x1");
-        return transactionReceipt;
+    private RepTransactionReceipt createTransactionReceiptWithStatus(String status) {
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt();
+        repTransactionReceipt.setTransactionHash(TRANSACTION_HASH);
+        repTransactionReceipt.setContractAddress(ADDRESS);
+        repTransactionReceipt.setStatus(status);
+        repTransactionReceipt.setGasUsed("0x1");
+        return repTransactionReceipt;
     }
 
-    private Contract deployContract(TransactionReceipt transactionReceipt) throws Exception {
+    private Contract deployContract(RepTransactionReceipt repTransactionReceipt) throws Exception {
 
-        prepareTransaction(transactionReceipt);
+        prepareTransaction(repTransactionReceipt);
 
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(new Uint256(BigInteger.TEN)));
 
@@ -396,14 +397,14 @@ public class ContractTest extends ManagedTransactionTester {
             return executeRemoteCallMultipleValueReturn(function);
         }
 
-        public RemoteCall<TransactionReceipt> performTransaction(Address address, Uint256 amount) {
+        public RemoteCall<RepTransactionReceipt> performTransaction(Address address, Uint256 amount) {
             Function function = new Function("approve", Arrays.asList(address, amount), Collections.emptyList());
             return executeRemoteCallTransaction(function);
         }
 
-        public List<EventValues> processEvent(TransactionReceipt transactionReceipt) {
+        public List<EventValues> processEvent(RepTransactionReceipt repTransactionReceipt) {
             Event event = new Event("Event", Arrays.asList(new TypeReference<Address>() {}), Arrays.asList(new TypeReference<Uint256>() {}));
-            return extractEventParameters(event, transactionReceipt);
+            return extractEventParameters(event, repTransactionReceipt);
         }
     }
 }

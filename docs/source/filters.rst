@@ -5,10 +5,10 @@ Filters provide notifications of certain events taking place in the HappyUC netw
 three classes of filter supported in HappyUC:
 
 #. Block filters
-#. Pending transaction filters
+#. Pending reqTransaction filters
 #. Topic filters
 
-Block filters and pending transaction filters provide notification of the creation of new
+Block filters and pending reqTransaction filters provide notification of the creation of new
 transactions or blocks on the network.
 
 Topic filters are more flexible. These allow you to create a filter based on specific criteria
@@ -17,8 +17,8 @@ that you provide.
 Unfortunately, unless you are using a WebSocket connection to Ghuc, working with filters via the
 JSON-RPC API is a tedious process, where you need to poll the HappyUC client in order to find out
 if there are any updates to your filters due to the synchronous nature of HTTP and IPC requests.
-Additionally the block and transaction filters only provide the transaction or block hash, so a
-further request is required to obtain the actual transaction or block referred to by the hash.
+Additionally the block and reqTransaction filters only provide the reqTransaction or block hash, so a
+further request is required to obtain the actual reqTransaction or block referred to by the hash.
 
 Webuj's managed `Filter <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/filters/Filter.java>`_
 implementation address these issues, so you have a fully asynchronous event based API for working
@@ -30,7 +30,7 @@ functional composition.
 **Note:** filters are not supported on Infura.
 
 
-Block and transaction filters
+Block and reqTransaction filters
 -----------------------------
 
 To receive all new blocks as they are added to the blockchain (the false parameter specifies that
@@ -57,7 +57,7 @@ Subscriptions should always be cancelled when no longer required via *unsubscrib
 
    subscription.unsubscribe();
 
-Other callbacks are also provided which provide simply the block or transaction hashes,
+Other callbacks are also provided which provide simply the block or reqTransaction hashes,
 for details of these refer to the
 `webujRx <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/rx/webujRx.java>`_
 interface.
@@ -66,7 +66,7 @@ interface.
 Replay filters
 --------------
 
-Webuj also provides filters for replaying block and transaction history.
+Webuj also provides filters for replaying block and reqTransaction history.
 
 To replay a range of blocks from the blockchain::
 
@@ -121,7 +121,7 @@ Topic filters and EVM events
 ----------------------------
 
 Topic filters capture details of HappyUC Virtual Machine (EVM) events taking place in the network.
-These events are created by smart contracts and stored in the transaction log associated with a
+These events are created by smart contracts and stored in the reqTransaction log associated with a
 smart contract.
 
 The `Solidity documentation <http://solidity.readthedocs.io/en/develop/contracts.html#events>`_
@@ -137,7 +137,7 @@ on. Where the individual topics represent indexed parameters on the smart contra
            DefaultBlockParameterName.LATEST, <contract-address>)
                 [.addSingleTopic(...) | .addOptionalTopics(..., ...) | ...];
 
-This filter can then be created using a similar syntax to the block and transaction filters above::
+This filter can then be created using a similar syntax to the block and reqTransaction filters above::
 
    Webuj.hucLogObservable(filter).subscribe(log -> {
        ...

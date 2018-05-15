@@ -6,9 +6,9 @@ import java.util.List;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * TransactionReceipt object used by {@link HucGetTransactionReceipt}.
+ * RepTransactionReceipt object used by {@link HucGetRepTransactionReceipt}.
  */
-public class TransactionReceipt {
+public class RepTransactionReceipt {
     private String transactionHash;
     private String transactionIndex;
     private String blockHash;
@@ -25,10 +25,10 @@ public class TransactionReceipt {
     private List<Log> logs;
     private String logsBloom;
 
-    public TransactionReceipt() {
+    public RepTransactionReceipt() {
     }
 
-    public TransactionReceipt(String transactionHash, String transactionIndex, String blockHash, String blockNumber, String cumulativeGasUsed, String gasUsed, String contractAddress, String root, String status, String from, String to, List<Log> logs, String logsBloom) {
+    public RepTransactionReceipt(String transactionHash, String transactionIndex, String blockHash, String blockNumber, String cumulativeGasUsed, String gasUsed, String contractAddress, String root, String status, String from, String to, List<Log> logs, String logsBloom) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -169,11 +169,11 @@ public class TransactionReceipt {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof TransactionReceipt)) {
+        if (!(o instanceof RepTransactionReceipt)) {
             return false;
         }
 
-        TransactionReceipt that = (TransactionReceipt) o;
+        RepTransactionReceipt that = (RepTransactionReceipt) o;
 
         if (getTransactionHash() != null ? !getTransactionHash().equals(that.getTransactionHash()) : that.getTransactionHash() != null) {
             return false;
@@ -234,6 +234,6 @@ public class TransactionReceipt {
 
     @Override
     public String toString() {
-        return "TransactionReceipt{" + "transactionHash='" + transactionHash + '\'' + ", transactionIndex='" + transactionIndex + '\'' + ", blockHash='" + blockHash + '\'' + ", blockNumber='" + blockNumber + '\'' + ", cumulativeGasUsed='" + cumulativeGasUsed + '\'' + ", gasUsed='" + gasUsed + '\'' + ", contractAddress='" + contractAddress + '\'' + ", root='" + root + '\'' + ", status='" + status + '\'' + ", from='" + from + '\'' + ", to='" + to + '\'' + ", logs=" + logs + ", logsBloom='" + logsBloom + '\'' + '}';
+        return "RepTransactionReceipt{" + "transactionHash='" + transactionHash + '\'' + ", transactionIndex='" + transactionIndex + '\'' + ", blockHash='" + blockHash + '\'' + ", blockNumber='" + blockNumber + '\'' + ", cumulativeGasUsed='" + cumulativeGasUsed + '\'' + ", gasUsed='" + gasUsed + '\'' + ", contractAddress='" + contractAddress + '\'' + ", root='" + root + '\'' + ", status='" + status + '\'' + ", from='" + from + '\'' + ", to='" + to + '\'' + ", logs=" + logs + ", logsBloom='" + logsBloom + '\'' + '}';
     }
 }

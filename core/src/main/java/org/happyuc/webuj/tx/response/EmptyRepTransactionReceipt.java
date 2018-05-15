@@ -4,15 +4,15 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 
 /**
  * An empty transaction receipt object containing only the transaction hash. This is to support the
  * {@link QueuingTransactionReceiptProcessor} and {@link NoOpProcessor}.
  */
-public class EmptyTransactionReceipt extends TransactionReceipt {
+public class EmptyRepTransactionReceipt extends RepTransactionReceipt {
 
-    public EmptyTransactionReceipt(String transactionHash) {
+    public EmptyRepTransactionReceipt(String transactionHash) {
         super();
         this.setTransactionHash(transactionHash);
     }
@@ -176,11 +176,11 @@ public class EmptyTransactionReceipt extends TransactionReceipt {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof TransactionReceipt)) {
+        if (!(o instanceof RepTransactionReceipt)) {
             return false;
         }
 
-        TransactionReceipt that = (TransactionReceipt) o;
+        RepTransactionReceipt that = (RepTransactionReceipt) o;
 
         return getTransactionHash() != null ? getTransactionHash().equals(that.getTransactionHash()) : that.getTransactionHash() == null;
     }

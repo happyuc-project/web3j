@@ -21,7 +21,7 @@ You can initialise a new Webuj connector that supports this module using the fac
    Admin Webuj = Admin.build(new HttpService());  // defaults to http://localhost:8545/
    PersonalUnlockAccount personalUnlockAccount = admin.personalUnlockAccount("0x000...", "a password").send();
    if (personalUnlockAccount.accountUnlocked()) {
-       // send a transaction
+       // send a reqTransaction
    }
 
 For Ghuc specific methods, you can use the

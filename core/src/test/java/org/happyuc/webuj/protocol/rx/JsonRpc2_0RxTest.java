@@ -21,7 +21,7 @@ import org.happyuc.webuj.protocol.WebujService;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterNumber;
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
 import org.happyuc.webuj.utils.Numeric;
@@ -124,11 +124,11 @@ public class JsonRpc2_0RxTest {
             stubbing = stubbing.thenReturn(hucBlock);
         }
 
-        HucFilter hucFilter = objectMapper.readValue("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0x1\"\n" + "}", HucFilter.class);
+        HucRepFilter hucRepFilter = objectMapper.readValue("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0x1\"\n" + "}", HucRepFilter.class);
         HucLog hucLog = objectMapper.readValue("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":[" + "\"0x31c2342b1e0b8ffda1507fbffddf213c4b3c1e819ff6a84b943faabb0ebf2403\"" + "]}", HucLog.class);
         HucUninstallFilter hucUninstallFilter = objectMapper.readValue("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", HucUninstallFilter.class);
 
-        when(webujService.send(any(Request.class), eq(HucFilter.class))).thenReturn(hucFilter);
+        when(webujService.send(any(Request.class), eq(HucRepFilter.class))).thenReturn(hucRepFilter);
         when(webujService.send(any(Request.class), eq(HucLog.class))).thenReturn(hucLog);
         when(webujService.send(any(Request.class), eq(HucUninstallFilter.class))).thenReturn(hucUninstallFilter);
 

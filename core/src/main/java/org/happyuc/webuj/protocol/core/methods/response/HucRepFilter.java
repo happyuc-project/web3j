@@ -6,10 +6,10 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_getBlockTransactionCountByHash.
+ * huc_newFilter.
  */
-public class HucGetBlockTransactionCountByHash extends Response<String> {
-    public BigInteger getTransactionCount() {
+public class HucRepFilter extends Response<String> {
+    public BigInteger getFilterId() {
         return Numeric.decodeQuantity(getResult());
     }
 }

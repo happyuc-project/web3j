@@ -15,20 +15,20 @@ import org.happyuc.webuj.protocol.core.Response;
 /**
  * huc_getTransactionReceipt.
  */
-public class HucGetTransactionReceipt extends Response<TransactionReceipt> {
+public class HucGetRepTransactionReceipt extends Response<RepTransactionReceipt> {
 
-    public Optional<TransactionReceipt> getTransactionReceipt() {
+    public Optional<RepTransactionReceipt> getTransactionReceipt() {
         return Optional.ofNullable(getResult());
     }
 
-    public static class ResponseDeserialiser extends JsonDeserializer<TransactionReceipt> {
+    public static class ResponseDeserialiser extends JsonDeserializer<RepTransactionReceipt> {
 
         private ObjectReader objectReader = ObjectMapperFactory.getObjectReader();
 
         @Override
-        public TransactionReceipt deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        public RepTransactionReceipt deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
             if (jsonParser.getCurrentToken() != JsonToken.VALUE_NULL) {
-                return objectReader.readValue(jsonParser, TransactionReceipt.class);
+                return objectReader.readValue(jsonParser, RepTransactionReceipt.class);
             } else {
                 return null;  // null is wrapped by Optional in above getter
             }

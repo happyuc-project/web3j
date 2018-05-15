@@ -1,12 +1,5 @@
 package org.happyuc.webuj.protocol.scenarios;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.junit.Test;
-
 import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.FunctionEncoder;
 import org.happyuc.webuj.abi.FunctionReturnDecoder;
@@ -23,11 +16,18 @@ import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.RawTransaction;
 import org.happyuc.webuj.crypto.TransactionEncoder;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
 import org.happyuc.webuj.utils.Numeric;
+import org.junit.Test;
+
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
@@ -120,13 +120,13 @@ public class HumanStandardTokenIT extends Scenario {
         String createTransactionHash = sendCreateContractTransaction(credentials, initialSupply);
         assertFalse(createTransactionHash.isEmpty());
 
-        TransactionReceipt createTransactionReceipt = waitForTransactionReceipt(createTransactionHash);
+        RepTransactionReceipt createRepTransactionReceipt = waitForTransactionReceipt(createTransactionHash);
 
-        assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
+        assertThat(createRepTransactionReceipt.getTransactionHash(), is(createTransactionHash));
 
-        assertFalse("Contract execution ran out of gas", createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertFalse("Contract execution ran out of gas", createRepTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        String contractAddress = createTransactionReceipt.getContractAddress();
+        String contractAddress = createRepTransactionReceipt.getContractAddress();
 
         assertNotNull(contractAddress);
         return contractAddress;
@@ -142,7 +142,7 @@ public class HumanStandardTokenIT extends Scenario {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        HucSendTransaction transactionResponse = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
+        HucSendRepTransaction transactionResponse = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
@@ -152,10 +152,10 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = transfer(to, qty);
         String functionHash = execute(credentials, function, contractAddress);
 
-        TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
-        assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
+        RepTransactionReceipt transferRepTransactionReceipt = waitForTransactionReceipt(functionHash);
+        assertThat(transferRepTransactionReceipt.getTransactionHash(), is(functionHash));
 
-        List<Log> logs = transferTransactionReceipt.getLogs();
+        List<Log> logs = transferRepTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
         Log log = logs.get(0);
 
@@ -181,10 +181,10 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = approve(spender, value);
         String functionHash = execute(credentials, function, contractAddress);
 
-        TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
-        assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
+        RepTransactionReceipt transferRepTransactionReceipt = waitForTransactionReceipt(functionHash);
+        assertThat(transferRepTransactionReceipt.getTransactionHash(), is(functionHash));
 
-        List<Log> logs = transferTransactionReceipt.getLogs();
+        List<Log> logs = transferRepTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
         Log log = logs.get(0);
 
@@ -212,10 +212,10 @@ public class HumanStandardTokenIT extends Scenario {
         Function function = transferFrom(from, to, value);
         String functionHash = execute(credentials, function, contractAddress);
 
-        TransactionReceipt transferTransactionReceipt = waitForTransactionReceipt(functionHash);
-        assertThat(transferTransactionReceipt.getTransactionHash(), is(functionHash));
+        RepTransactionReceipt transferRepTransactionReceipt = waitForTransactionReceipt(functionHash);
+        assertThat(transferRepTransactionReceipt.getTransactionHash(), is(functionHash));
 
-        List<Log> logs = transferTransactionReceipt.getLogs();
+        List<Log> logs = transferRepTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
         Log log = logs.get(0);
 
@@ -244,7 +244,7 @@ public class HumanStandardTokenIT extends Scenario {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        HucSendTransaction transactionResponse = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
+        HucSendRepTransaction transactionResponse = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
@@ -252,7 +252,7 @@ public class HumanStandardTokenIT extends Scenario {
     private String callSmartContractFunction(Function function, String contractAddress) throws Exception {
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.happyuc.webuj.protocol.core.methods.response.HucCall response = webuj.hucCall(Transaction.createHucCallTransaction(ALICE.getAddress(), contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
+        org.happyuc.webuj.protocol.core.methods.response.HucCall response = webuj.hucCall(ReqTransaction.createHucCallTransaction(ALICE.getAddress(), contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return response.getValue();
     }

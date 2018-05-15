@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.junit.Before;
 
 import org.happyuc.webuj.abi.TypeReference;
@@ -18,9 +20,7 @@ import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.admin.Admin;
 import org.happyuc.webuj.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionCount;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
 import org.happyuc.webuj.protocol.http.HttpService;
 
 import static junit.framework.TestCase.fail;
@@ -68,20 +68,20 @@ public class Scenario {
         return personalUnlockAccount.accountUnlocked();
     }
 
-    TransactionReceipt waitForTransactionReceipt(String transactionHash) throws Exception {
+    RepTransactionReceipt waitForTransactionReceipt(String transactionHash) throws Exception {
 
-        Optional<TransactionReceipt> transactionReceiptOptional = getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
+        Optional<RepTransactionReceipt> transactionReceiptOptional = getTransactionReceipt(transactionHash, SLEEP_DURATION, ATTEMPTS);
 
         if (!transactionReceiptOptional.isPresent()) {
-            fail("Transaction receipt not generated after " + ATTEMPTS + " attempts");
+            fail("ReqTransaction receipt not generated after " + ATTEMPTS + " attempts");
         }
 
         return transactionReceiptOptional.get();
     }
 
-    private Optional<TransactionReceipt> getTransactionReceipt(String transactionHash, int sleepDuration, int attempts) throws Exception {
+    private Optional<RepTransactionReceipt> getTransactionReceipt(String transactionHash, int sleepDuration, int attempts) throws Exception {
 
-        Optional<TransactionReceipt> receiptOptional = sendTransactionReceiptRequest(transactionHash);
+        Optional<RepTransactionReceipt> receiptOptional = sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
                 Thread.sleep(sleepDuration);
@@ -94,16 +94,16 @@ public class Scenario {
         return receiptOptional;
     }
 
-    private Optional<TransactionReceipt> sendTransactionReceiptRequest(String transactionHash) throws Exception {
-        HucGetTransactionReceipt transactionReceipt = webuj.hucGetTransactionReceipt(transactionHash).sendAsync().get();
+    private Optional<RepTransactionReceipt> sendTransactionReceiptRequest(String transactionHash) throws Exception {
+        HucGetRepTransactionReceipt transactionReceipt = webuj.hucGetTransactionReceipt(transactionHash).sendAsync().get();
 
         return transactionReceipt.getTransactionReceipt();
     }
 
     BigInteger getNonce(String address) throws Exception {
-        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(address, DefaultBlockParameterName.LATEST).sendAsync().get();
+        HucGetRepTransactionCount hucGetRepTransactionCount = webuj.hucGetTransactionCount(address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
-        return hucGetTransactionCount.getTransactionCount();
+        return hucGetRepTransactionCount.getTransactionCount();
     }
 
     Function createFibonacciFunction() {

@@ -3,11 +3,11 @@ package org.happyuc.webuj.protocol.scenarios;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.junit.Test;
 
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.tx.Transfer;
 import org.happyuc.webuj.utils.Convert;
 
@@ -27,17 +27,17 @@ public class SendHucIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         BigInteger value = Convert.toWei("0.5", Convert.Unit.HUC).toBigInteger();
 
-        Transaction transaction = Transaction.createHucTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
+        ReqTransaction reqTransaction = ReqTransaction.createHucTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
 
-        HucSendTransaction hucSendTransaction = webuj.hucSendTransaction(transaction).sendAsync().get();
+        HucSendRepTransaction hucSendRepTransaction = webuj.hucSendTransaction(reqTransaction).sendAsync().get();
 
-        String transactionHash = hucSendTransaction.getTransactionHash();
+        String transactionHash = hucSendRepTransaction.getTransactionHash();
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
+        RepTransactionReceipt repTransactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
+        assertThat(repTransactionReceipt.getTransactionHash(), is(transactionHash));
     }
 
     /*
@@ -62,7 +62,7 @@ public class SendHucIT extends Scenario {
      */
     @Test
     public void testTransfer() throws Exception {
-        TransactionReceipt transactionReceipt = Transfer.sendFunds(webuj, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.HUC).send();
-        assertFalse(transactionReceipt.getBlockHash().isEmpty());
+        RepTransactionReceipt repTransactionReceipt = Transfer.sendFunds(webuj, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.HUC).send();
+        assertFalse(repTransactionReceipt.getBlockHash().isEmpty());
     }
 }

@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Sign transaction using HappyUC node.
  */
-public class SignTransactionIT extends Scenario {
+public class SignReqRepTransactionIT extends Scenario {
 
     @Test
     public void testSignTransaction() throws Exception {

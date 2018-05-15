@@ -1,16 +1,5 @@
 package org.happyuc.webuj.ens.contracts.generated;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import org.happyuc.webuj.abi.datatypes.generated.Bytes4;
-import rx.Observable;
-import rx.functions.Func1;
-
 import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.EventValues;
 import org.happyuc.webuj.abi.FunctionEncoder;
@@ -23,17 +12,24 @@ import org.happyuc.webuj.abi.datatypes.Function;
 import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.Utf8String;
 import org.happyuc.webuj.abi.datatypes.generated.Bytes32;
+import org.happyuc.webuj.abi.datatypes.generated.Bytes4;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
-import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tuples.generated.Tuple2;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
+import rx.Observable;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>Auto generated code.
@@ -55,9 +51,9 @@ public final class PublicResolver extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public List<AddrChangedEventResponse> getAddrChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<AddrChangedEventResponse> getAddrChangedEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("AddrChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<AddrChangedEventResponse> responses = new ArrayList<>(valueList.size());
         for (EventValues eventValues : valueList) {
             AddrChangedEventResponse typedResponse = new AddrChangedEventResponse();
@@ -70,7 +66,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<AddrChangedEventResponse> addrChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("AddrChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Address>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
@@ -81,9 +77,9 @@ public final class PublicResolver extends Contract {
         });
     }
 
-    public List<ContentChangedEventResponse> getContentChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<ContentChangedEventResponse> getContentChangedEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("ContentChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Bytes32>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<ContentChangedEventResponse> responses = new ArrayList<>(valueList.size());
         for (EventValues eventValues : valueList) {
             ContentChangedEventResponse typedResponse = new ContentChangedEventResponse();
@@ -96,7 +92,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<ContentChangedEventResponse> contentChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("ContentChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Bytes32>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
@@ -107,9 +103,9 @@ public final class PublicResolver extends Contract {
         });
     }
 
-    public List<NameChangedEventResponse> getNameChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<NameChangedEventResponse> getNameChangedEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("NameChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Utf8String>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<NameChangedEventResponse> responses = new ArrayList<>(valueList.size());
         for (EventValues eventValues : valueList) {
             NameChangedEventResponse typedResponse = new NameChangedEventResponse();
@@ -122,7 +118,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<NameChangedEventResponse> nameChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NameChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Utf8String>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
@@ -133,9 +129,9 @@ public final class PublicResolver extends Contract {
         });
     }
 
-    public List<ABIChangedEventResponse> getABIChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<ABIChangedEventResponse> getABIChangedEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("ABIChanged", Arrays.asList(new TypeReference<Bytes32>() {}, new TypeReference<Uint256>() {}), Arrays.asList());
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<ABIChangedEventResponse> responses = new ArrayList<>(valueList.size());
         for (EventValues eventValues : valueList) {
             ABIChangedEventResponse typedResponse = new ABIChangedEventResponse();
@@ -148,7 +144,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<ABIChangedEventResponse> aBIChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("ABIChanged", Arrays.asList(new TypeReference<Bytes32>() {}, new TypeReference<Uint256>() {}), Arrays.asList());
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
@@ -159,9 +155,9 @@ public final class PublicResolver extends Contract {
         });
     }
 
-    public List<PubkeyChangedEventResponse> getPubkeyChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<PubkeyChangedEventResponse> getPubkeyChangedEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("PubkeyChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<PubkeyChangedEventResponse> responses = new ArrayList<>(valueList.size());
         for (EventValues eventValues : valueList) {
             PubkeyChangedEventResponse typedResponse = new PubkeyChangedEventResponse();
@@ -175,7 +171,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<PubkeyChangedEventResponse> pubkeyChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("PubkeyChanged", Arrays.asList(new TypeReference<Bytes32>() {}), Arrays.asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
@@ -187,9 +183,9 @@ public final class PublicResolver extends Contract {
         });
     }
 
-    public List<TextChangedEventResponse> getTextChangedEvents(TransactionReceipt transactionReceipt) {
+    public List<TextChangedEventResponse> getTextChangedEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("TextChanged", Arrays.asList(new TypeReference<Bytes32>() {}, new TypeReference<Utf8String>() {}), Arrays.asList(new TypeReference<Utf8String>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<TextChangedEventResponse> responses = new ArrayList<>(valueList.size());
         for (EventValues eventValues : valueList) {
             TextChangedEventResponse typedResponse = new TextChangedEventResponse();
@@ -203,7 +199,7 @@ public final class PublicResolver extends Contract {
 
     public Observable<TextChangedEventResponse> textChangedEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("TextChanged", Arrays.asList(new TypeReference<Bytes32>() {}, new TypeReference<Utf8String>() {}), Arrays.asList(new TypeReference<Utf8String>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(log -> {
             EventValues eventValues = extractEventParameters(event, log);
@@ -220,7 +216,7 @@ public final class PublicResolver extends Contract {
         return executeRemoteCallSingleValueReturn(function, Boolean.class);
     }
 
-    public RemoteCall<TransactionReceipt> setText(byte[] node, String key, String value) {
+    public RemoteCall<RepTransactionReceipt> setText(byte[] node, String key, String value) {
         Function function = new Function("setText", Arrays.asList(new Bytes32(node), new Utf8String(key), new Utf8String(value)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -233,7 +229,7 @@ public final class PublicResolver extends Contract {
         });
     }
 
-    public RemoteCall<TransactionReceipt> setPubkey(byte[] node, byte[] x, byte[] y) {
+    public RemoteCall<RepTransactionReceipt> setPubkey(byte[] node, byte[] x, byte[] y) {
         Function function = new Function("setPubkey", Arrays.asList(new Bytes32(node), new Bytes32(x), new Bytes32(y)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -253,7 +249,7 @@ public final class PublicResolver extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<TransactionReceipt> setABI(byte[] node, BigInteger contentType, byte[] data) {
+    public RemoteCall<RepTransactionReceipt> setABI(byte[] node, BigInteger contentType, byte[] data) {
         Function function = new Function("setABI", Arrays.asList(new Bytes32(node), new Uint256(contentType), new DynamicBytes(data)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -263,12 +259,12 @@ public final class PublicResolver extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<TransactionReceipt> setName(byte[] node, String name) {
+    public RemoteCall<RepTransactionReceipt> setName(byte[] node, String name) {
         Function function = new Function("setName", Arrays.asList(new Bytes32(node), new Utf8String(name)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> setContent(byte[] node, byte[] hash) {
+    public RemoteCall<RepTransactionReceipt> setContent(byte[] node, byte[] hash) {
         Function function = new Function("setContent", Arrays.asList(new Bytes32(node), new Bytes32(hash)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -281,7 +277,7 @@ public final class PublicResolver extends Contract {
         });
     }
 
-    public RemoteCall<TransactionReceipt> setAddr(byte[] node, String addr) {
+    public RemoteCall<RepTransactionReceipt> setAddr(byte[] node, String addr) {
         Function function = new Function("setAddr", Arrays.asList(new Bytes32(node), new Address(addr)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }

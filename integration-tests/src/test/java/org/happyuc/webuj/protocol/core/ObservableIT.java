@@ -5,12 +5,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.junit.Before;
 import org.junit.Test;
 import rx.Observable;
 import rx.Subscription;
 
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
 import org.happyuc.webuj.protocol.http.HttpService;
 
@@ -48,7 +48,7 @@ public class ObservableIT {
 
     @Test
     public void testLogObservable() throws Exception {
-        run(webuj.hucLogObservable(new HucFilter()));
+        run(webuj.hucLogObservable(new HucReqFilter()));
     }
 
     @Test

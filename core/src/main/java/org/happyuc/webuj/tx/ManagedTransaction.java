@@ -1,21 +1,20 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import org.happyuc.webuj.ens.EnsResolver;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
+
+import java.io.IOException;
+import java.math.BigInteger;
 
 
 /**
  * Generic transaction manager.
  */
 public abstract class ManagedTransaction {
-
-    public static final BigInteger GAS_PRICE = BigInteger.valueOf(22_000_000_000L);
+    public static final BigInteger GAS_PRICE = BigInteger.valueOf(18_000_000_000L);
 
     protected Webuj webuj;
 
@@ -77,7 +76,7 @@ public abstract class ManagedTransaction {
         return hucGasPrice.getGasPrice();
     }
 
-    protected TransactionReceipt send(String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit) throws IOException, TransactionException {
+    protected RepTransactionReceipt send(String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit) throws IOException, TransactionException {
 
         return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
     }

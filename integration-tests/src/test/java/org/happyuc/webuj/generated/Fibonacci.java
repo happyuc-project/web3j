@@ -10,15 +10,14 @@ import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.TypeReference;
 import org.happyuc.webuj.abi.datatypes.Event;
 import org.happyuc.webuj.abi.datatypes.Function;
-import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
 import rx.Observable;
@@ -46,8 +45,8 @@ public class Fibonacci extends Contract {
         super(BINARY, contractAddress, webuj, transactionManager, gasPrice, gasLimit);
     }
 
-    public List<NotifyEventResponse> getNotifyEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NOTIFY_EVENT, transactionReceipt);
+    public List<NotifyEventResponse> getNotifyEvents(RepTransactionReceipt repTransactionReceipt) {
+        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(NOTIFY_EVENT, repTransactionReceipt);
         ArrayList<NotifyEventResponse> responses = new ArrayList<NotifyEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
             NotifyEventResponse typedResponse = new NotifyEventResponse();
@@ -59,7 +58,7 @@ public class Fibonacci extends Contract {
         return responses;
     }
 
-    public Observable<NotifyEventResponse> notifyEventObservable(HucFilter filter) {
+    public Observable<NotifyEventResponse> notifyEventObservable(HucReqFilter filter) {
         return webuj.hucLogObservable(filter).map(new Func1<Log, NotifyEventResponse>() {
             @Override
             public NotifyEventResponse call(Log log) {
@@ -74,12 +73,12 @@ public class Fibonacci extends Contract {
     }
 
     public Observable<NotifyEventResponse> notifyEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(NOTIFY_EVENT));
         return notifyEventObservable(filter);
     }
 
-    public RemoteCall<TransactionReceipt> fibonacciNotify(BigInteger number) {
+    public RemoteCall<RepTransactionReceipt> fibonacciNotify(BigInteger number) {
         final Function function = new Function("fibonacciNotify", Arrays.asList(new org.happyuc.webuj.abi.datatypes.generated.Uint256(number)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }

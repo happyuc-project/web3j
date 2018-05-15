@@ -295,7 +295,7 @@ To transact with a smart contract:
 
 .. code-block:: java
 
-   TransactionReceipt transactionReceipt = contract.someMethod(
+   TransactionReceipt repTransactionReceipt = contract.someMethod(
                 <param1>,
                 ...).send();
 
@@ -349,7 +349,7 @@ blocks being created:
                ...
    });
 
-There are a number of other transaction and block replay Observables described in the
+There are a number of other reqTransaction and block replay Observables described in the
 `docs <http://docs.Webuj.io/filters.html>`_.
 
 Topic filters are also supported:
@@ -388,12 +388,12 @@ To send Huc to another party using your HappyUC wallet file:
 		
    Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
-   TransactionReceipt transactionReceipt = Transfer.sendFunds(
+   TransactionReceipt repTransactionReceipt = Transfer.sendFunds(
            web3, credentials, "0x<address>|<ensName>",
            BigDecimal.valueOf(1.0), Convert.Unit.HUC)
            .send();
 
-Or if you wish to create your own custom transaction:
+Or if you wish to create your own custom reqTransaction:
 
 .. code-block:: java
 
@@ -401,18 +401,18 @@ Or if you wish to create your own custom transaction:
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
 
    // get the next available nonce
-   HucGetTransactionCount hucGetTransactionCount = Webuj.hucGetTransactionCount(
+   HucGetTransactionCount hucGetRepTransactionCount = Webuj.hucGetRepTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
-   BigInteger nonce = hucGetTransactionCount.getTransactionCount();
+   BigInteger nonce = hucGetRepTransactionCount.getTransactionCount();
 
-   // create our transaction
+   // create our reqTransaction
    RawTransaction rawTransaction  = RawTransaction.createHucTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
 
-   // sign & send our transaction
+   // sign & send our reqTransaction
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
    String hexValue = Hex.toHexString(signedMessage);
-   HucSendTransaction hucSendTransaction = Webuj.hucSendRawTransaction(hexValue).send();
+   HucSendTransaction hucSendRepTransaction = Webuj.hucSendRawRepTransaction(hexValue).send();
    // ...
 
 Although it's far simpler using Webuj's `Transfer <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/Transfer.java>`_
@@ -426,7 +426,7 @@ keystore):
    Admin Webuj = Admin.build(new HttpService());  // defaults to http://localhost:8545/
    PersonalUnlockAccount personalUnlockAccount = Webuj.personalUnlockAccount("0x000...", "a password").sendAsync().get();
    if (personalUnlockAccount.accountUnlocked()) {
-       // send a transaction
+       // send a reqTransaction
    }
 
 If you want to make use of Parity's

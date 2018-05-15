@@ -1,17 +1,16 @@
 package org.happyuc.webuj.protocol.scenarios;
 
-import java.math.BigInteger;
-
-import org.junit.Test;
-
 import org.happyuc.webuj.crypto.RawTransaction;
 import org.happyuc.webuj.crypto.TransactionEncoder;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionCount;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.utils.Convert;
 import org.happyuc.webuj.utils.Numeric;
+import org.junit.Test;
+
+import java.math.BigInteger;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
@@ -20,7 +19,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Create, sign and send a raw transaction.
  */
-public class CreateRawTransactionIT extends Scenario {
+public class CreateRawReqRepTransactionIT extends Scenario {
 
     @Test
     public void testTransferHuc() throws Exception {
@@ -30,14 +29,14 @@ public class CreateRawTransactionIT extends Scenario {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        HucSendTransaction hucSendTransaction = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
-        String transactionHash = hucSendTransaction.getTransactionHash();
+        HucSendRepTransaction hucSendRepTransaction = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
+        String transactionHash = hucSendRepTransaction.getTransactionHash();
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
+        RepTransactionReceipt repTransactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
+        assertThat(repTransactionReceipt.getTransactionHash(), is(transactionHash));
     }
 
     @Test
@@ -48,16 +47,16 @@ public class CreateRawTransactionIT extends Scenario {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
-        HucSendTransaction hucSendTransaction = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
-        String transactionHash = hucSendTransaction.getTransactionHash();
+        HucSendRepTransaction hucSendRepTransaction = webuj.hucSendRawTransaction(hexValue).sendAsync().get();
+        String transactionHash = hucSendRepTransaction.getTransactionHash();
 
         assertFalse(transactionHash.isEmpty());
 
-        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
+        RepTransactionReceipt repTransactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertThat(transactionReceipt.getTransactionHash(), is(transactionHash));
+        assertThat(repTransactionReceipt.getTransactionHash(), is(transactionHash));
 
-        assertFalse("Contract execution ran out of gas", rawTransaction.getGasLimit().equals(transactionReceipt.getGasUsed()));
+        assertFalse("Contract execution ran out of gas", rawTransaction.getGasLimit().equals(repTransactionReceipt.getGasUsed()));
     }
 
     private static RawTransaction createHucTransaction(BigInteger nonce, String toAddress) {
@@ -71,8 +70,8 @@ public class CreateRawTransactionIT extends Scenario {
     }
 
     BigInteger getNonce(String address) throws Exception {
-        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(address, DefaultBlockParameterName.LATEST).sendAsync().get();
+        HucGetRepTransactionCount hucGetRepTransactionCount = webuj.hucGetTransactionCount(address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
-        return hucGetTransactionCount.getTransactionCount();
+        return hucGetRepTransactionCount.getTransactionCount();
     }
 }

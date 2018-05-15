@@ -8,8 +8,8 @@ import org.happyuc.webuj.protocol.admin.methods.response.NewAccountIdentifier;
 import org.happyuc.webuj.protocol.admin.methods.response.PersonalListAccounts;
 import org.happyuc.webuj.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.happyuc.webuj.protocol.core.Request;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.WebujService;
 
 /**
@@ -33,6 +33,6 @@ public interface Admin extends Webuj {
 
     public Request<?, PersonalUnlockAccount> personalUnlockAccount(String address, String passphrase);
 
-    public Request<?, HucSendTransaction> personalSendTransaction(Transaction transaction, String password);
+    public Request<?, HucSendRepTransaction> personalSendTransaction(ReqTransaction reqTransaction, String password);
 
 }   

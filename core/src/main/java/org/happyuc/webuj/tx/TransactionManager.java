@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.tx.response.PollingTransactionReceiptProcessor;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
@@ -13,7 +13,7 @@ import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
 import static org.happyuc.webuj.protocol.core.JsonRpc2_0Webuj.DEFAULT_BLOCK_TIME;
 
 /**
- * Transaction manager abstraction for executing transactions with HappyUC client via
+ * ReqTransaction manager abstraction for executing transactions with HappyUC client via
  * various mechanisms.
  */
 public abstract class TransactionManager {
@@ -37,19 +37,19 @@ public abstract class TransactionManager {
         this(new PollingTransactionReceiptProcessor(webuj, sleepDuration, attempts), fromAddress);
     }
 
-    protected TransactionReceipt executeTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException, TransactionException {
+    protected RepTransactionReceipt executeTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException, TransactionException {
 
-        HucSendTransaction hucSendTransaction = sendTransaction(gasPrice, gasLimit, to, data, value);
-        return processResponse(hucSendTransaction);
+        HucSendRepTransaction hucSendRepTransaction = sendTransaction(gasPrice, gasLimit, to, data, value);
+        return processResponse(hucSendRepTransaction);
     }
 
-    public abstract HucSendTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException;
+    public abstract HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException;
 
     public String getFromAddress() {
         return fromAddress;
     }
 
-    private TransactionReceipt processResponse(HucSendTransaction transactionResponse) throws IOException, TransactionException {
+    private RepTransactionReceipt processResponse(HucSendRepTransaction transactionResponse) throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
             throw new RuntimeException("Error processing transaction request: " + transactionResponse.getError().getMessage());
         }

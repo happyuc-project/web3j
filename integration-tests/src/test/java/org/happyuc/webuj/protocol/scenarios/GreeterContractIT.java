@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.junit.Test;
 
 import org.happyuc.webuj.abi.FunctionEncoder;
@@ -13,8 +14,8 @@ import org.happyuc.webuj.abi.datatypes.Function;
 import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.Utf8String;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
@@ -40,13 +41,13 @@ public class GreeterContractIT extends Scenario {
         String createTransactionHash = sendCreateContractTransaction();
         assertFalse(createTransactionHash.isEmpty());
 
-        TransactionReceipt createTransactionReceipt = waitForTransactionReceipt(createTransactionHash);
+        RepTransactionReceipt createRepTransactionReceipt = waitForTransactionReceipt(createTransactionHash);
 
-        assertThat(createTransactionReceipt.getTransactionHash(), is(createTransactionHash));
+        assertThat(createRepTransactionReceipt.getTransactionHash(), is(createTransactionHash));
 
-        assertFalse("Contract execution ran out of gas", createTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
+        assertFalse("Contract execution ran out of gas", createRepTransactionReceipt.getGasUsed().equals(GAS_LIMIT));
 
-        String contractAddress = createTransactionReceipt.getContractAddress();
+        String contractAddress = createRepTransactionReceipt.getContractAddress();
 
         assertNotNull(contractAddress);
 
@@ -65,9 +66,9 @@ public class GreeterContractIT extends Scenario {
 
         String encodedConstructor = FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String(VALUE)));
 
-        Transaction transaction = Transaction.createContractTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getGreeterSolidityBinary() + encodedConstructor);
+        ReqTransaction reqTransaction = ReqTransaction.createContractTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getGreeterSolidityBinary() + encodedConstructor);
 
-        org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction transactionResponse = webuj.hucSendTransaction(transaction).sendAsync().get();
+        HucSendRepTransaction transactionResponse = webuj.hucSendTransaction(reqTransaction).sendAsync().get();
 
         return transactionResponse.getTransactionHash();
     }
@@ -76,7 +77,7 @@ public class GreeterContractIT extends Scenario {
 
         String encodedFunction = FunctionEncoder.encode(function);
 
-        org.happyuc.webuj.protocol.core.methods.response.HucCall response = webuj.hucCall(Transaction.createHucCallTransaction(ALICE.getAddress(), contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
+        org.happyuc.webuj.protocol.core.methods.response.HucCall response = webuj.hucCall(ReqTransaction.createHucCallTransaction(ALICE.getAddress(), contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
 
         return response.getValue();
     }

@@ -8,7 +8,7 @@ import org.happyuc.webuj.utils.Numeric;
 /**
  * huc_getTransactionCount.
  */
-public class HucGetTransactionCount extends Response<String> {
+public class HucGetRepTransactionCount extends Response<String> {
     public BigInteger getTransactionCount() {
         return Numeric.decodeQuantity(getResult());
     }
