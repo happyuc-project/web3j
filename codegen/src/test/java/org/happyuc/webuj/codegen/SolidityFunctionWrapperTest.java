@@ -1,11 +1,5 @@
 package org.happyuc.webuj.codegen;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
@@ -27,8 +21,13 @@ import org.happyuc.webuj.abi.datatypes.generated.StaticArray3;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.abi.datatypes.generated.Uint64;
 import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
-
 import org.junit.Test;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -76,13 +75,21 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
         assertThat(buildTypeName("uint256[33]"), is(ParameterizedTypeName.get(StaticArray.class, Uint256.class)));
 
-        assertThat(buildTypeName("uint256[10][3]"), is(ParameterizedTypeName.get(ClassName.get(StaticArray3.class), ParameterizedTypeName.get(StaticArray10.class, Uint256.class))));
+        assertThat(buildTypeName("uint256[10][3]"),
+                   is(ParameterizedTypeName
+                              .get(ClassName.get(StaticArray3.class), ParameterizedTypeName.get(StaticArray10.class, Uint256.class))));
 
-        assertThat(buildTypeName("uint256[2][]"), is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class), ParameterizedTypeName.get(StaticArray2.class, Uint256.class))));
+        assertThat(buildTypeName("uint256[2][]"),
+                   is(ParameterizedTypeName
+                              .get(ClassName.get(DynamicArray.class), ParameterizedTypeName.get(StaticArray2.class, Uint256.class))));
 
-        assertThat(buildTypeName("uint256[33][]"), is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class), ParameterizedTypeName.get(StaticArray.class, Uint256.class))));
+        assertThat(buildTypeName("uint256[33][]"),
+                   is(ParameterizedTypeName
+                              .get(ClassName.get(DynamicArray.class), ParameterizedTypeName.get(StaticArray.class, Uint256.class))));
 
-        assertThat(buildTypeName("uint256[][]"), is(ParameterizedTypeName.get(ClassName.get(DynamicArray.class), ParameterizedTypeName.get(DynamicArray.class, Uint256.class))));
+        assertThat(buildTypeName("uint256[][]"),
+                   is(ParameterizedTypeName
+                              .get(ClassName.get(DynamicArray.class), ParameterizedTypeName.get(DynamicArray.class, Uint256.class))));
     }
 
     @Test
@@ -98,7 +105,8 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testGetNativeTypeParameterized() {
-        assertThat(getNativeType(ParameterizedTypeName.get(ClassName.get(DynamicArray.class), TypeName.get(Address.class))), equalTo(ParameterizedTypeName.get(ClassName.get(List.class), TypeName.get(String.class))));
+        assertThat(getNativeType(ParameterizedTypeName.get(ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
+                   equalTo(ParameterizedTypeName.get(ClassName.get(List.class), TypeName.get(String.class))));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -113,12 +121,18 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testGetEventNativeTypeParameterized() {
-        assertThat(getEventNativeType(ParameterizedTypeName.get(ClassName.get(DynamicArray.class), TypeName.get(Address.class))), equalTo(TypeName.get(byte[].class)));
+        assertThat(getEventNativeType(ParameterizedTypeName.get(ClassName.get(DynamicArray.class), TypeName.get(Address.class))),
+                   equalTo(TypeName.get(byte[].class)));
     }
 
     @Test
     public void testBuildFunctionTransaction() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(false, Arrays.asList(new AbiDefinition.NamedType("param", "uint8")), "functionName", Collections.emptyList(), "type", false);
+        AbiDefinition functionDefinition = new AbiDefinition(false,
+                                                             Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                                                             "functionName",
+                                                             Collections.emptyList(),
+                                                             "type",
+                                                             false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
@@ -131,18 +145,29 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildingFunctionTransactionThatReturnsValueReportsWarning() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(false, Arrays.asList(new AbiDefinition.NamedType("param", "uint8")), "functionName", Arrays.asList(new AbiDefinition.NamedType("result", "uint8")), "type", false);
+        AbiDefinition functionDefinition = new AbiDefinition(false,
+                                                             Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                                                             "functionName",
+                                                             Arrays.asList(new AbiDefinition.NamedType("result", "uint8")),
+                                                             "type",
+                                                             false);
 
         solidityFunctionWrapper.buildFunction(functionDefinition);
 
         //CHECKSTYLE:OFF
-        verify(generationReporter).report("Definition of the function functionName returns a value but is not defined as a view function. " + "Please ensure it contains the view modifier if you want to read the return value");
+        verify(generationReporter)
+                .report("Definition of the function functionName returns a value but is not defined as a view function. " + "Please ensure it contains the view modifier if you want to read the return value");
         //CHECKSTYLE:ON
     }
 
     @Test
     public void testBuildPayableFunctionTransaction() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(false, Arrays.asList(new AbiDefinition.NamedType("param", "uint8")), "functionName", Collections.emptyList(), "type", true);
+        AbiDefinition functionDefinition = new AbiDefinition(false,
+                                                             Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                                                             "functionName",
+                                                             Collections.emptyList(),
+                                                             "type",
+                                                             true);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
@@ -155,7 +180,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantSingleValueReturn() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(true, Arrays.asList(new AbiDefinition.NamedType("param", "uint8")), "functionName", Arrays.asList(new AbiDefinition.NamedType("result", "int8")), "type", false);
+        AbiDefinition functionDefinition = new AbiDefinition(true,
+                                                             Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                                                             "functionName",
+                                                             Arrays.asList(new AbiDefinition.NamedType("result", "int8")),
+                                                             "type",
+                                                             false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
@@ -168,7 +198,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test
     public void testBuildFunctionConstantSingleValueRawListReturn() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(true, Arrays.asList(new AbiDefinition.NamedType("param", "uint8")), "functionName", Arrays.asList(new AbiDefinition.NamedType("result", "address[]")), "type", false);
+        AbiDefinition functionDefinition = new AbiDefinition(true,
+                                                             Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                                                             "functionName",
+                                                             Arrays.asList(new AbiDefinition.NamedType("result", "address[]")),
+                                                             "type",
+                                                             false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
@@ -181,7 +216,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
 
     @Test(expected = RuntimeException.class)
     public void testBuildFunctionConstantInvalid() throws Exception {
-        AbiDefinition functionDefinition = new AbiDefinition(true, Arrays.asList(new AbiDefinition.NamedType("param", "uint8")), "functionName", Collections.emptyList(), "type", false);
+        AbiDefinition functionDefinition = new AbiDefinition(true,
+                                                             Arrays.asList(new AbiDefinition.NamedType("param", "uint8")),
+                                                             "functionName",
+                                                             Collections.emptyList(),
+                                                             "type",
+                                                             false);
 
         solidityFunctionWrapper.buildFunction(functionDefinition);
     }
@@ -189,7 +229,14 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
     @Test
     public void testBuildFunctionConstantMultipleValueReturn() throws Exception {
 
-        AbiDefinition functionDefinition = new AbiDefinition(true, Arrays.asList(new AbiDefinition.NamedType("param1", "uint8"), new AbiDefinition.NamedType("param2", "uint32")), "functionName", Arrays.asList(new AbiDefinition.NamedType("result1", "int8"), new AbiDefinition.NamedType("result2", "int32")), "type", false);
+        AbiDefinition functionDefinition = new AbiDefinition(true,
+                                                             Arrays.asList(new AbiDefinition.NamedType("param1", "uint8"),
+                                                                           new AbiDefinition.NamedType("param2", "uint32")),
+                                                             "functionName",
+                                                             Arrays.asList(new AbiDefinition.NamedType("result1", "int8"),
+                                                                           new AbiDefinition.NamedType("result2", "int32")),
+                                                             "type",
+                                                             false);
 
         MethodSpec methodSpec = solidityFunctionWrapper.buildFunction(functionDefinition);
 
@@ -211,7 +258,12 @@ public class SolidityFunctionWrapperTest extends TempFileProvider {
         fromAddress.setIndexed(true);
         toAddress.setIndexed(true);
 
-        AbiDefinition functionDefinition = new AbiDefinition(false, Arrays.asList(id, fromAddress, toAddress, value, message), "Transfer", new ArrayList<>(), "event", false);
+        AbiDefinition functionDefinition = new AbiDefinition(false,
+                                                             Arrays.asList(id, fromAddress, toAddress, value, message),
+                                                             "Transfer",
+                                                             new ArrayList<>(),
+                                                             "event",
+                                                             false);
         TypeSpec.Builder builder = TypeSpec.classBuilder("testClass");
 
         solidityFunctionWrapper.buildEventFunctions(functionDefinition, builder);

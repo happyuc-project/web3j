@@ -1,12 +1,12 @@
 package org.happyuc.webuj.console;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.happyuc.webuj.crypto.CipherException;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.utils.Files;
+
+import java.io.File;
+import java.io.IOException;
 
 import static org.happyuc.webuj.codegen.Console.exitError;
 import static org.happyuc.webuj.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;

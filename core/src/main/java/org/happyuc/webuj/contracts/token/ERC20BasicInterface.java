@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Describes the HappyUC "Basic" subset of the ERC-20 token standard.
  * <p>
- * Implementations should provide the concrete <code>TransferEventResponse</code>
+ * Implementations should provide the concrete <code>TransferEr</code>
  * from their token as the generic type "T".
  * </p>
  *
@@ -19,7 +19,7 @@ import java.util.List;
  * @see <a href="https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/token/ERC20Basic.sol">OpenZeppelin's zeppelin-solidity reference implementation</a>
  */
 @SuppressWarnings("unused")
-public interface ERC20BasicInterface<T> {
+public interface ERC20BasicInterface {
 
     RemoteCall<BigInteger> totalSupply();
 
@@ -27,8 +27,7 @@ public interface ERC20BasicInterface<T> {
 
     RemoteCall<RepTransactionReceipt> transfer(String to, BigInteger value);
 
-    List<T> getTransferEvents(RepTransactionReceipt repTransactionReceipt);
+    <T> List<T> getTransferEvents(RepTransactionReceipt repTransactionReceipt, EventResponse.Rec<T> rec);
 
-    Observable<T> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock);
-
+    <T> Observable<T> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock, EventResponse.Rec<T> rec);
 }
