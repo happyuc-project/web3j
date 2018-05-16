@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.Response;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
 
@@ -41,12 +41,12 @@ public abstract class Filter<T> {
 
     public void run(ScheduledExecutorService scheduledExecutorService, long blockTime) {
         try {
-            HucFilter hucFilter = sendRequest();
-            if (hucFilter.hasError()) {
-                throwException(hucFilter.getError());
+            HucRepFilter hucRepFilter = sendRequest();
+            if (hucRepFilter.hasError()) {
+                throwException(hucRepFilter.getError());
             }
 
-            filterId = hucFilter.getFilterId();
+            filterId = hucRepFilter.getFilterId();
             // this runs in the caller thread as if any exceptions are encountered, we shouldn't
             // proceed with creating the scheduled task below
             getInitialFilterLogs();
@@ -70,7 +70,7 @@ public abstract class Filter<T> {
             */
             schedule = scheduledExecutorService.scheduleAtFixedRate(() -> {
                 try {
-                    this.pollFilter(hucFilter);
+                    this.pollFilter(hucRepFilter);
                 } catch (Throwable e) {
                     // All exceptions must be caught, otherwise our job terminates without
                     // any notification
@@ -99,7 +99,7 @@ public abstract class Filter<T> {
         }
     }
 
-    private void pollFilter(HucFilter hucFilter) {
+    private void pollFilter(HucRepFilter hucRepFilter) {
         HucLog hucLog = null;
         try {
             hucLog = webuj.hucGetFilterChanges(filterId).send();
@@ -114,7 +114,7 @@ public abstract class Filter<T> {
         }
     }
 
-    abstract HucFilter sendRequest() throws IOException;
+    abstract HucRepFilter sendRequest() throws IOException;
 
     abstract void process(List<HucLog.LogResult> logResults);
 

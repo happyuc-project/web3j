@@ -1,8 +1,8 @@
 package org.happyuc.webuj.protocol.core.filters;
 
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.junit.Test;
 
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 
 public class LogFilterTest extends FilterTester {
@@ -16,6 +16,6 @@ public class LogFilterTest extends FilterTester {
                 //CHECKSTYLE:ON
                 HucLog.class);
 
-        runTest(hucLog, webuj.hucLogObservable(new HucFilter().addSingleTopic("test")));
+        runTest(hucLog, webuj.hucLogObservable(new HucReqFilter().addSingleTopic("test")));
     }
 }

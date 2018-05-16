@@ -1,28 +1,28 @@
 package org.happyuc.webuj.protocol.rx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.stream.Collectors;
-
 import org.happyuc.webuj.protocol.Webuj;
-import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
-
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterNumber;
 import org.happyuc.webuj.protocol.core.filters.BlockFilter;
 import org.happyuc.webuj.protocol.core.filters.LogFilter;
 import org.happyuc.webuj.protocol.core.filters.PendingTransactionFilter;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.Transaction;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransaction;
 import org.happyuc.webuj.utils.Observables;
+import rx.Observable;
+import rx.Scheduler;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.Subscriptions;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Collectors;
 
 /**
  * webuj reactive API implementation.
@@ -54,9 +54,9 @@ public class JsonRpc2_0Rx {
         });
     }
 
-    public Observable<Log> hucLogObservable(org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter, long pollingInterval) {
+    public Observable<Log> hucLogObservable(HucReqFilter hucReqFilter, long pollingInterval) {
         return Observable.create((Subscriber<? super Log> subscriber) -> {
-            LogFilter logFilter = new LogFilter(webuj, subscriber::onNext, hucFilter);
+            LogFilter logFilter = new LogFilter(webuj, subscriber::onNext, hucReqFilter);
 
             run(logFilter, subscriber, pollingInterval);
         });
@@ -68,11 +68,11 @@ public class JsonRpc2_0Rx {
         subscriber.add(Subscriptions.create(filter::cancel));
     }
 
-    public Observable<Transaction> transactionObservable(long pollingInterval) {
+    public Observable<RepTransaction> transactionObservable(long pollingInterval) {
         return blockObservable(true, pollingInterval).flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
-    public Observable<Transaction> pendingTransactionObservable(long pollingInterval) {
+    public Observable<RepTransaction> pendingTransactionObservable(long pollingInterval) {
         return hucPendingTransactionHashObservable(pollingInterval).flatMap(transactionHash -> webuj.hucGetTransactionByHash(transactionHash).observable()).filter(hucTransaction -> hucTransaction.getTransaction().isPresent()).map(hucTransaction -> hucTransaction.getTransaction().get());
     }
 
@@ -112,7 +112,7 @@ public class JsonRpc2_0Rx {
         }
     }
 
-    public Observable<Transaction> replayTransactionsObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Observable<RepTransaction> replayTransactionsObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return replayBlocksObservable(startBlock, endBlock, true).flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
@@ -144,7 +144,7 @@ public class JsonRpc2_0Rx {
         }
     }
 
-    public Observable<Transaction> catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
+    public Observable<RepTransaction> catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
         return catchUpToLatestBlockObservable(startBlock, true, Observable.empty()).flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
@@ -153,7 +153,7 @@ public class JsonRpc2_0Rx {
         return catchUpToLatestBlockObservable(startBlock, fullTransactionObjects, blockObservable(fullTransactionObjects, pollingInterval));
     }
 
-    public Observable<Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameter startBlock, long pollingInterval) {
+    public Observable<RepTransaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameter startBlock, long pollingInterval) {
         return catchUpToLatestAndSubscribeToNewBlocksObservable(startBlock, true, pollingInterval).flatMapIterable(JsonRpc2_0Rx::toTransactions);
     }
 
@@ -170,9 +170,9 @@ public class JsonRpc2_0Rx {
         }
     }
 
-    private static List<Transaction> toTransactions(HucBlock hucBlock) {
+    private static List<RepTransaction> toTransactions(HucBlock hucBlock) {
         // If you ever see an exception thrown here, it's probably due to an incomplete chain in
         // Ghuc/Parity. You should resync to solve.
-        return hucBlock.getBlock().getTransactions().stream().map(transactionResult -> (Transaction) transactionResult.get()).collect(Collectors.toList());
+        return hucBlock.getBlock().getTransactions().stream().map(transactionResult -> (RepTransaction) transactionResult.get()).collect(Collectors.toList());
     }
 }

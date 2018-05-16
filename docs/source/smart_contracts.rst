@@ -17,7 +17,7 @@ LISP Like Language (LLL)
 
 
 In order to deploy a smart contract onto the HappyUC blockchain, it must first be compiled into
-a bytecode format, then it can be sent as part of a transaction. Webuj can do all of this for you
+a bytecode format, then it can be sent as part of a reqTransaction. Webuj can do all of this for you
 with its :ref:`smart-contract-wrappers`. To understand what is happening behind the scenes, you
 can refer to the details in :ref:`creation-of-smart-contract`.
 
@@ -57,7 +57,7 @@ The *--bin* and *--abi* compiler arguments are both required to take full advant
 with smart contracts from Webuj.
 
 *--bin*
-  Outputs a Solidity binary file containing the hex-encoded binary to provide with the transaction
+  Outputs a Solidity binary file containing the hex-encoded binary to provide with the reqTransaction
   request.
 
 *--abi*
@@ -253,7 +253,7 @@ Webuj's
 which works with HappyUC wallet files to sign transactions offline before submitting them to the
 network.
 
-However, you may wish to modify the transaction manager, which you can pass to the smart
+However, you may wish to modify the reqTransaction manager, which you can pass to the smart
 contract deployment and creation methods instead of a credentials object, i.e.::
 
    YourSmartContract contract = YourSmartContract.deploy(
@@ -262,7 +262,7 @@ contract deployment and creation methods instead of a credentials object, i.e.::
 
 In addition to the RawTransactionManager, Webuj provides a
 `ClientTransactionManager <https://github.com/happyuc-project/webu.java/blob/master/src/main/java/org/Webuj/tx/ClientTransactionManager.java>`_
-which passes the responsibility of signing your transaction on to the HappyUC client you are
+which passes the responsibility of signing your reqTransaction on to the HappyUC client you are
 connecting to.
 
 There is also a
@@ -291,15 +291,15 @@ following request::
    Webuj.netVersion().send().getNetVersion();
 
 
-.. transaction-processors:
+.. reqTransaction-processors:
 
 Transaction Receipt Processors
 ------------------------------
 
-By default, when a new transaction is submitted by Webuj to an HappyUC client, Webuj will
+By default, when a new reqTransaction is submitted by Webuj to an HappyUC client, Webuj will
 continually poll the client until it receives a
 `TransactionReceipt <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/methods/response/TransactionReceipt.java>`_,
-indicating that the transaction has been added to the blockchain. If you are sending a number of
+indicating that the reqTransaction has been added to the blockchain. If you are sending a number of
 transactions asynchronously with Webuj, this can result in a number of threads polling the client
 concurrently.
 
@@ -309,33 +309,33 @@ To reduce this polling overhead, Webuj provides configurable
 There are a number of processors provided in Webuj:
 
 - `PollingTransactionReceiptProcessor <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/response/PollingTransactionReceiptProcessor.java>`_
-  is the default processor used in Webuj, which polls periodically for a transaction receipt for
-  each individual pending transaction.
+  is the default processor used in Webuj, which polls periodically for a reqTransaction receipt for
+  each individual pending reqTransaction.
 - `QueuingTransactionReceiptProcessor <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/response/QueuingTransactionReceiptProcessor.java>`_
   has an internal queue of all pending transactions. It contains a worker that runs periodically
-  to query if a transaction receipt is available yet. If a receipt is found, a callback to the
+  to query if a reqTransaction receipt is available yet. If a receipt is found, a callback to the
   client is invoked.
 - `NoOpProcessor <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/response/NoOpProcessor.java>`_
   provides an
   `EmptyTransactionReceipt <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/response/EmptyTransactionReceipt.java>`_
-  to clients which only contains the transaction hash. This is for clients who do not want Webuj
-  to perform any polling for a transaction receipt.
+  to clients which only contains the reqTransaction hash. This is for clients who do not want Webuj
+  to perform any polling for a reqTransaction receipt.
 
 **Note:** the
 `EmptyTransactionReceipt <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/response/EmptyTransactionReceipt.java>`_
 is also provided in the the initial response from the `QueuingTransactionReceiptProcessor <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/response/QueuingTransactionReceiptProcessor.java>`_.
-This allows the caller to have the transaction hash for the transaction that was submitted to the
+This allows the caller to have the reqTransaction hash for the reqTransaction that was submitted to the
 network.
 
 If you do not wish to use the default processor
 (`PollingTransactionReceiptProcessor <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/response/PollingTransactionReceiptProcessor.java>`_), you can
-specify the transaction receipt processor to use as follows::
+specify the reqTransaction receipt processor to use as follows::
 
    TransactionReceiptProcessor transactionReceiptProcessor =
            new QueuingTransactionReceiptProcessor(Webuj, new Callback() {
                     @Override
-                    public void accept(TransactionReceipt transactionReceipt) {
-                        // process transactionReceipt
+                    public void accept(TransactionReceipt repTransactionReceipt) {
+                        // process repTransactionReceipt
                     }
 
                     @Override
@@ -360,18 +360,18 @@ All transactional smart contract methods are named identically to their Solidity
 the same parameter values. Transactional calls do not return any values, regardless of the return
 type specified on the method. Hence, for all transactional methods the
 `Transaction Receipt <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#eth_gettransactionreceipt>`_
-associated with the transaction is returned.::
+associated with the reqTransaction is returned.::
 
-   TransactionReceipt transactionReceipt = contract.someMethod(
+   TransactionReceipt repTransactionReceipt = contract.someMethod(
                 <param1>,
                 ...).send();
 
 
-The transaction receipt is useful for two reasons:
+The reqTransaction receipt is useful for two reasons:
 
-#. It provides details of the mined block that the transaction resides in
+#. It provides details of the mined block that the reqTransaction resides in
 #. `Solidity events <http://Solidity.readthedocs.io/en/develop/contracts.html?highlight=events#events>`_
-   that are called will be logged as part of the transaction, which can then be extracted
+   that are called will be logged as part of the reqTransaction, which can then be extracted
 
 Any events defined within a smart contract will be represented in the smart contract wrapper with
 a method named *process<Event Name>Event*, which takes the Transaction Receipt and from this
@@ -380,7 +380,7 @@ the
 `EventValues <https://github.com/happyuc-project/webu.java/blob/master/abi/src/main/java/org/Webuj/abi/EventValues.java>`_
 object.::
 
-   EventValues eventValues = contract.processSomeEvent(transactionReceipt);
+   EventValues eventValues = contract.processSomeEvent(repTransactionReceipt);
 
 Alternatively you can use an Observable filter instead which will listen for events associated with
 the smart contract::

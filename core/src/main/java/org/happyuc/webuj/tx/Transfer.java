@@ -1,18 +1,17 @@
 package org.happyuc.webuj.tx;
 
+import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.RemoteCall;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
+import org.happyuc.webuj.protocol.exceptions.TransactionException;
+import org.happyuc.webuj.utils.Convert;
+import org.happyuc.webuj.utils.Numeric;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-
-import org.happyuc.webuj.crypto.Credentials;
-import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
-import org.happyuc.webuj.protocol.exceptions.TransactionException;
-import org.happyuc.webuj.utils.Convert;
-import org.happyuc.webuj.utils.Numeric;
 
 /**
  * Class for performing Huc transactions on the HappyUC blockchain.
@@ -34,20 +33,15 @@ public class Transfer extends ManagedTransaction {
      * @param value     amount to send
      * @param unit      of specified send
      * @return {@link Optional} containing our transaction receipt
-     * @throws ExecutionException   if the computation threw an
-     *                              exception
-     * @throws InterruptedException if the current thread was interrupted
-     *                              while waiting
+     * @throws IOException   if the computation threw an exception
      * @throws TransactionException if the transaction was not mined while waiting
      */
-    private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit) throws IOException, InterruptedException, TransactionException {
-
+    private RepTransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit) throws IOException, TransactionException {
         BigInteger gasPrice = requestCurrentGasPrice();
         return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
     }
 
-    private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) throws IOException, InterruptedException, TransactionException {
-
+    private RepTransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) throws IOException, TransactionException {
         BigDecimal weiValue = Convert.toWei(value, unit);
         if (!Numeric.isIntegerValue(weiValue)) {
             throw new UnsupportedOperationException("Non decimal Wei value provided: " + value + " " + unit.toString() + " = " + weiValue + " Wei");
@@ -57,10 +51,8 @@ public class Transfer extends ManagedTransaction {
         return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
     }
 
-    public static RemoteCall<TransactionReceipt> sendFunds(Webuj webuj, Credentials credentials, String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException, IOException, TransactionException {
-
+    public static RemoteCall<RepTransactionReceipt> sendFunds(Webuj webuj, Credentials credentials, String toAddress, BigDecimal value, Convert.Unit unit, String remark) {
         TransactionManager transactionManager = new RawTransactionManager(webuj, credentials);
-
         return new RemoteCall<>(() -> new Transfer(webuj, transactionManager).send(toAddress, value, unit));
     }
 
@@ -73,11 +65,11 @@ public class Transfer extends ManagedTransaction {
      * @param unit      of specified send
      * @return {@link RemoteCall} containing executing transaction
      */
-    public RemoteCall<TransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit) {
+    public RemoteCall<RepTransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit) {
         return new RemoteCall<>(() -> send(toAddress, value, unit));
     }
 
-    public RemoteCall<TransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) {
+    public RemoteCall<RepTransactionReceipt> sendFunds(String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice, BigInteger gasLimit) {
         return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, gasLimit));
     }
 }

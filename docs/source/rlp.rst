@@ -29,11 +29,11 @@ demonstrating encoding of a number of different values.
 Transaction encoding
 --------------------
 
-Within Webuj, RLP encoding is used to encode HappyUC transaction objects into a byte array which
-is signed before submission to the network. The transaction types and signing logic are located
+Within Webuj, RLP encoding is used to encode HappyUC reqTransaction objects into a byte array which
+is signed before submission to the network. The reqTransaction types and signing logic are located
 within the Crypto module, with the
 `TransactionEncoderTest <https://github.com/happyuc-project/webu.java/blob/master/crypto/src/test/java/org/Webuj/crypto/TransactionEncoderTest.java>`_
-providing examples of transaction signing and encoding.
+providing examples of reqTransaction signing and encoding.
 
 
 Dependencies

@@ -8,8 +8,8 @@ import org.happyuc.webuj.crypto.RawTransaction;
 import org.happyuc.webuj.crypto.TransactionEncoder;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionCount;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
 import org.happyuc.webuj.utils.Numeric;
 
@@ -63,13 +63,13 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     protected BigInteger getNonce() throws IOException {
-        HucGetTransactionCount hucGetTransactionCount = webuj.hucGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        HucGetRepTransactionCount hucGetRepTransactionCount = webuj.hucGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
 
-        return hucGetTransactionCount.getTransactionCount();
+        return hucGetRepTransactionCount.getTransactionCount();
     }
 
     @Override
-    public HucSendTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
+    public HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
 
         BigInteger nonce = getNonce();
 
@@ -78,7 +78,7 @@ public class RawTransactionManager extends TransactionManager {
         return signAndSend(rawTransaction);
     }
 
-    public HucSendTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
+    public HucSendRepTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
 
         byte[] signedMessage;
 

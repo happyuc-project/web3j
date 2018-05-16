@@ -9,8 +9,8 @@ Broadly speaking there are three types transactions supported on HappyUC:
 
 To undertake any of these transactions, it is necessary to have Huc (the fuel of the HappyUC
 blockchain) residing in the HappyUC account which the transactions are taking place from. This is
-to pay for the :ref:`Gas` costs, which is the transaction execution cost for the HappyUC client that
-performs the transaction on your behalf, comitting the result to the HappyUC blockchain.
+to pay for the :ref:`Gas` costs, which is the reqTransaction execution cost for the HappyUC client that
+performs the reqTransaction on your behalf, comitting the result to the HappyUC blockchain.
 Instructions for obtaining Huc are described below in :ref:`obtaining-huc`.
 
 Additionally, it is possible to query the state of a smart contract, this is described in
@@ -96,11 +96,11 @@ test networks.
 Gas
 ---
 
-When a transaction takes place in HappyUC, a transaction cost must be paid to the client that
-executes the transaction on your behalf, committing the output of this transaction to the HappyUC
+When a reqTransaction takes place in HappyUC, a reqTransaction cost must be paid to the client that
+executes the reqTransaction on your behalf, committing the output of this reqTransaction to the HappyUC
 blockchain.
 
-This cost is measure in gas, where gas is the number of instructions used to execute a transaction
+This cost is measure in gas, where gas is the number of instructions used to execute a reqTransaction
 in the HappyUC Virtual Machine. Please refer to the
 `Homestead documentation <http://ethdocs.org/en/latest/contracts-and-transactions/account-types-gas-and-transactions.html?highlight=gas#what-is-gas>`__
 for further information.
@@ -118,14 +118,14 @@ are used to dictate how much Huc you wish to spend in order for a tranaction to 
 
 *Gas limit*
 
-  This is the total amount of gas you are happy to spend on the transaction execution. There is an
-  upper limit of how large a single transaction can be in an HappyUC block which restricts this
+  This is the total amount of gas you are happy to spend on the reqTransaction execution. There is an
+  upper limit of how large a single reqTransaction can be in an HappyUC block which restricts this
   value typically to less then 6,700,000. The current gas limit is visible at https://ethstats.net/.
 
 
 These parameters taken together dictate the maximum amount of Huc you are willing to spend on
-transaction costs. i.e. you can spend no more then *gas price * gas limit*. The gas price can also
-affect how quickly a transaction takes place depending on what other transactions are available
+reqTransaction costs. i.e. you can spend no more then *gas price * gas limit*. The gas price can also
+affect how quickly a reqTransaction takes place depending on what other transactions are available
 with a more profitable gas price for miners.
 
 You may need to adjust these parameters to ensure that transactions take place in a timely manner.
@@ -165,11 +165,11 @@ instance of Webuj that supports Parity/Ghuc admin commands::
 
    Admin Webuj = Admin.build(new HttpService());
 
-Then you can unlock the account, and providing this was successful, send a transaction::
+Then you can unlock the account, and providing this was successful, send a reqTransaction::
 
    PersonalUnlockAccount personalUnlockAccount = Webuj.personalUnlockAccount("0x000...", "a password").send();
    if (personalUnlockAccount.accountUnlocked()) {
-       // send a transaction
+       // send a reqTransaction
    }
 
 
@@ -177,7 +177,7 @@ Transactions for sending in this manner should be created via
 `HucSendTransaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/methods/response/HucSendTransaction.java>`_,
 with the `Transaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/protocol/core/methods/request/Transaction.java>`_ type::
 
-  Transaction transaction = Transaction.createContractTransaction(
+  Transaction reqTransaction = Transaction.createContractTransaction(
                 <from address>,
                 <nonce>,
                 BigInteger.valueOf(<gas price>),  // we use default gas limit
@@ -185,12 +185,12 @@ with the `Transaction <https://github.com/happyuc-project/webu.java/blob/master/
         );
 
         org.happyuc.Webuj.protocol.core.methods.response.HucSendTransaction
-                transactionResponse = parity.hucSendTransaction(hucSendTransaction)
+                transactionResponse = parity.hucSendRepTransaction(hucSendRepTransaction)
                 .send();
 
         String transactionHash = transactionResponse.getTransactionHash();
 
-        // poll for transaction response via org.happyuc.webuj.protocol.Webuj.hucGetTransactionReceipt(<txHash>)
+        // poll for reqTransaction response via org.happyuc.webuj.protocol.Webuj.hucGetRepTransactionReceipt(<txHash>)
 
 Where the *<nonce>* value is obtained as per :ref:`below <nonce>`.
 
@@ -198,7 +198,7 @@ Please refer to the integration test
 `DeployContractIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/scenarios/DeployContractIT.java>`_
 and its superclass
 `Scenario <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/scenarios/Scenario.java>`_
-for further details of this transaction workflow.
+for further details of this reqTransaction workflow.
 
 Further details of working with the different admin commands supported by Webuj are available in
 the section :doc:`management_apis`.
@@ -206,18 +206,18 @@ the section :doc:`management_apis`.
 
 .. _offline-signing:
 
-Offline transaction signing
+Offline reqTransaction signing
 ---------------------------
 
 If you'd prefer not to manage your own HappyUC client, or do not want to provide wallet details
-such as your password to an HappyUC client, then offline transaction signing is the way to go.
+such as your password to an HappyUC client, then offline reqTransaction signing is the way to go.
 
-Offline transaction signing allows you to sign a transaction using your HappyUC HappyUC wallet
-within Webuj, allowing you to have complete control over your private credentials. A transaction
+Offline reqTransaction signing allows you to sign a reqTransaction using your HappyUC HappyUC wallet
+within Webuj, allowing you to have complete control over your private credentials. A reqTransaction
 created offline can then be sent to any HappyUC client on the network, which will propagate the
-transaction out to other nodes, provided it is a valid transaction.
+reqTransaction out to other nodes, provided it is a valid reqTransaction.
 
-You can also perform out of process transaction signing if required. This can be achieved by
+You can also perform out of process reqTransaction signing if required. This can be achieved by
 overriding the *sign* method in
 `ECKeyPair <https://github.com/happyuc-project/webu.java/blob/master/crypto/src/main/java/org/Webuj/crypto/ECKeyPair.java#L41>`_.
 
@@ -260,7 +260,7 @@ Transactions to be used in an offline signing capacity, should use the
 type for this purpose. The RawTransaction is similar to the previously mentioned Transaction type,
 however it does not require a *from* address, as this can be inferred from the signature.
 
-In order to create and sign a raw transaction, the sequence of events is as follows:
+In order to create and sign a raw reqTransaction, the sequence of events is as follows:
 
 #. Identify the next available :ref:`nonce <nonce>` for the sender account
 #. Create the RawTransaction object
@@ -269,52 +269,52 @@ In order to create and sign a raw transaction, the sequence of events is as foll
 #. Send the RawTransaction object to a node for processing
 
 The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
-can only be used once and until a transaction is mined, it is possible to send multiple versions of
-a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
+can only be used once and until a reqTransaction is mined, it is possible to send multiple versions of
+a reqTransaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
 
 Once you have obtained the next available :ref:`nonce <nonce>`, the value can then be used to
-create your transaction object::
+create your reqTransaction object::
 
    RawTransaction rawTransaction  = RawTransaction.createHucTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
 
-The transaction can then be signed and encoded::
+The reqTransaction can then be signed and encoded::
 
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, <credentials>);
    String hexValue = Numeric.toHexString(signedMessage);
 
 Where the credentials are those loaded as per :ref:`wallet-files`.
 
-The transaction is then sent using `huc_sendRawTransaction <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_sendrawtransaction>`_::
+The reqTransaction is then sent using `huc_sendRawTransaction <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_sendrawtransaction>`_::
 
-   HucSendTransaction hucSendTransaction = Webuj.hucSendRawTransaction(hexValue).sendAsync().get();
-   String transactionHash = hucSendTransaction.getTransactionHash();
-   // poll for transaction response via org.happyuc.webuj.protocol.Webuj.hucGetTransactionReceipt(<txHash>)
+   HucSendTransaction hucSendRepTransaction = Webuj.hucSendRawRepTransaction(hexValue).sendAsync().get();
+   String transactionHash = hucSendRepTransaction.getTransactionHash();
+   // poll for reqTransaction response via org.happyuc.webuj.protocol.Webuj.hucGetRepTransactionReceipt(<txHash>)
 
 
 Please refer to the integration test
 `CreateRawTransactionIT <https://github.com/happyuc-project/webu.java/blob/master/integration-tests/src/test/java/org/Webuj/protocol/scenarios/CreateRawTransactionIT.java>`_
-for a full example of creating and sending a raw transaction.
+for a full example of creating and sending a raw reqTransaction.
 
 
 .. _nonce:
 
-The transaction nonce
+The reqTransaction nonce
 ---------------------
 
 The nonce is an increasing numeric value which is used to uniquely identify transactions. A nonce
-can only be used once and until a transaction is mined, it is possible to send multiple versions of
-a transaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
+can only be used once and until a reqTransaction is mined, it is possible to send multiple versions of
+a reqTransaction with the same nonce, however, once mined, any subsequent submissions will be rejected.
 
 You can obtain the next available nonce via the
 `huc_getTransactionCount <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_gettransactioncount>`_ method::
 
-   HucGetTransactionCount hucGetTransactionCount = Webuj.hucGetTransactionCount(
+   HucGetTransactionCount hucGetRepTransactionCount = Webuj.hucGetRepTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
-        BigInteger nonce = hucGetTransactionCount.getTransactionCount();
+        BigInteger nonce = hucGetRepTransactionCount.getTransactionCount();
 
-The nonce can then be used to create your transaction object::
+The nonce can then be used to create your reqTransaction object::
 
    RawTransaction rawTransaction  = RawTransaction.createHucTransaction(
                 nonce, <gas price>, <gas limit>, <toAddress>, <value>);
@@ -325,16 +325,16 @@ The nonce can then be used to create your transaction object::
 Transaction types
 -----------------
 
-The different types of transaction in Webuj work with both Transaction and RawTransaction objects.
+The different types of reqTransaction in Webuj work with both Transaction and RawTransaction objects.
 The key difference is that Transaction objects must always have a from address, so that the
 HappyUC client which processes the
 `huc_sendTransaction <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_sendtransaction>`_
-request know which wallet to use in order to sign and send the transaction on the message senders
+request know which wallet to use in order to sign and send the reqTransaction on the message senders
 behalf. As mentioned :ref:`above <offline-signing>`, this is not necessary for raw transactions
 which are signed offline.
 
-The subsequent sections outline the key transaction attributes required for the different
-transaction types. The following attributes remain constant for all:
+The subsequent sections outline the key reqTransaction attributes required for the different
+reqTransaction types. The following attributes remain constant for all:
 
 - Gas price
 - Gas limit
@@ -349,7 +349,7 @@ Transaction and RawTransaction objects are used interchangeably in all of the su
 Transfer of Huc from one party to another
 -------------------------------------------
 
-The sending of Huc between two parties requires a minimal number of details of the transaction
+The sending of Huc between two parties requires a minimal number of details of the reqTransaction
 object:
 
 *to*
@@ -372,7 +372,7 @@ response for you::
 
    Webuj web3 = Webuj.build(new HttpService());  // defaults to http://localhost:8545/
    Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
-   TransactionReceipt transactionReceipt = Transfer.sendFunds(
+   TransactionReceipt repTransactionReceipt = Transfer.sendFunds(
            web3, credentials, "0x<address>|<ensName>",
            BigDecimal.valueOf(1.0), Convert.Unit.HUC).send();
 
@@ -401,7 +401,7 @@ To deploy a new smart contract, the following attributes will need to be provide
 
 ::
 
-   // using a raw transaction
+   // using a raw reqTransaction
    RawTransaction rawTransaction = RawTransaction.createContractTransaction(
            <nonce>,
            <gasPrice>,
@@ -411,11 +411,11 @@ To deploy a new smart contract, the following attributes will need to be provide
    // send...
 
    // get contract address
-   HucGetTransactionReceipt transactionReceipt =
-                Webuj.hucGetTransactionReceipt(transactionHash).send();
+   HucGetTransactionReceipt repTransactionReceipt =
+                Webuj.hucGetRepTransactionReceipt(transactionHash).send();
 
-   if (transactionReceipt.getTransactionReceipt.isPresent()) {
-       String contractAddress = transactionReceipt.get().getContractAddress();
+   if (repTransactionReceipt.getTransactionReceipt.isPresent()) {
+       String contractAddress = repTransactionReceipt.get().getContractAddress();
    } else {
        // try again
    }
@@ -427,8 +427,8 @@ encoded and appended to the *compiled smart contract code*::
    String encodedConstructor =
                 FunctionEncoder.encodeConstructor(Arrays.asList(new Type(value), ...));
 
-   // using a regular transaction
-   Transaction transaction = Transaction.createContractTransaction(
+   // using a regular reqTransaction
+   Transaction reqTransaction = Transaction.createContractTransaction(
            <fromAddress>,
            <nonce>,
            <gasPrice>,
@@ -468,11 +468,11 @@ to the :doc:`abi` section.
                 Arrays.asList(new TypeReference<Type>() {}, ...));
 
    String encodedFunction = FunctionEncoder.encode(function)
-   Transaction transaction = Transaction.createFunctionCallTransaction(
+   Transaction reqTransaction = Transaction.createFunctionCallTransaction(
                 <from>, <gasPrice>, <gasLimit>, contractAddress, <funds>, encodedFunction);
 
    org.happyuc.Webuj.protocol.core.methods.response.HucSendTransaction transactionResponse =
-                Webuj.hucSendTransaction(transaction).sendAsync().get();
+                Webuj.hucSendRepTransaction(reqTransaction).sendAsync().get();
 
    String transactionHash = transactionResponse.getTransactionHash();
 
@@ -491,7 +491,7 @@ Querying the state of a smart contract
 This functionality is facilitated by the `huc_call <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_call>`_
 JSON-RPC call.
 
-huc_call allows you to call a method on a smart contract to query a value. There is no transaction
+huc_call allows you to call a method on a smart contract to query a value. There is no reqTransaction
 cost associated with this function, this is because it does not change the state of any smart
 contract method's called, it simply returns the value from them::
 

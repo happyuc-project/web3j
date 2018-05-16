@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.generated.Fibonacci;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.http.HttpService;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -34,9 +34,9 @@ public class FunctionWrappersIT extends Scenario {
     public void testFibonacciNotify() throws Exception {
         Fibonacci fibonacci = Fibonacci.load("0x3c05b2564139fb55820b18b72e94b2178eaace7d", Webuj.build(new HttpService()), ALICE, GAS_PRICE, GAS_LIMIT);
 
-        TransactionReceipt transactionReceipt = fibonacci.fibonacciNotify(BigInteger.valueOf(15)).send();
+        RepTransactionReceipt repTransactionReceipt = fibonacci.fibonacciNotify(BigInteger.valueOf(15)).send();
 
-        Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(transactionReceipt).get(0);
+        Fibonacci.NotifyEventResponse result = fibonacci.getNotifyEvents(repTransactionReceipt).get(0);
 
         assertThat(result.input, equalTo(new Uint256(BigInteger.valueOf(15))));
 

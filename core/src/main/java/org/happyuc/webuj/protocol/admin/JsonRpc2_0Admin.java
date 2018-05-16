@@ -12,8 +12,8 @@ import org.happyuc.webuj.protocol.admin.methods.response.PersonalListAccounts;
 import org.happyuc.webuj.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.happyuc.webuj.protocol.core.JsonRpc2_0Webuj;
 import org.happyuc.webuj.protocol.core.Request;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.WebujService;
 
 /**
@@ -64,8 +64,8 @@ public class JsonRpc2_0Admin extends JsonRpc2_0Webuj implements Admin {
     }
 
     @Override
-    public Request<?, HucSendTransaction> personalSendTransaction(Transaction transaction, String passphrase) {
-        return new Request<>("personal_sendTransaction", Arrays.asList(transaction, passphrase), webujService, HucSendTransaction.class);
+    public Request<?, HucSendRepTransaction> personalSendTransaction(ReqTransaction reqTransaction, String passphrase) {
+        return new Request<>("personal_sendTransaction", Arrays.asList(reqTransaction, passphrase), webujService, HucSendRepTransaction.class);
     }
 
 }

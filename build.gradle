@@ -4,7 +4,7 @@ buildscript {
     ext.javapoetVersion = '1.7.0'
     ext.jnr_unixsocketVersion = '0.15'
     ext.okhttpVersion = '3.8.1'
-    ext.rxjavaVersion = '1.2.4'
+    ext.rxjavaVers
     ext.slf4jVersion = '1.7.25'
 
     // test dependencies
@@ -48,7 +48,7 @@ allprojects {
 
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'checkstyle'
+//    apply plugin: 'checkstyle'
 
     repositories {
         mavenCentral()
@@ -80,10 +80,10 @@ allprojects {
         reports.html.setDestination(file("${reporting.baseDir}/${name}"))
     }
 
-    checkstyle {
-        toolVersion = "7.7"
-        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
-    }
+//    checkstyle {
+//        toolVersion = "7.7"
+//        configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+//    }
 }
 
 subprojects {

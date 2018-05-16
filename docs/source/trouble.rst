@@ -7,37 +7,37 @@ Do you have a sample Webuj project
 Yes, refer to the Webuj sample project outlined in the :doc:`quickstart`.
 
 
-I'm submitting a transaction, but it's not being mined
+I'm submitting a reqTransaction, but it's not being mined
 ------------------------------------------------------
-After creating and sending a transaction, you receive a transaction hash, however calling
+After creating and sending a reqTransaction, you receive a reqTransaction hash, however calling
 `huc_getTransactionReceipt <https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_gettransactionreceipt>`_
-always returns a blank value, indicating the transaction has not been mined::
+always returns a blank value, indicating the reqTransaction has not been mined::
 
    String transactionHash = sendTransaction(...);
 
-   // you loop through the following expecting to eventually get a receipt once the transaction
+   // you loop through the following expecting to eventually get a receipt once the reqTransaction
    // is mined
-   HucGetTransactionReceipt.TransactionReceipt transactionReceipt =
-           Webuj.hucGetTransactionReceipt(transactionHash).sendAsync().get();
+   HucGetTransactionReceipt.TransactionReceipt repTransactionReceipt =
+           Webuj.hucGetRepTransactionReceipt(transactionHash).sendAsync().get();
 
-   if (!transactionReceipt.isPresent()) {
+   if (!repTransactionReceipt.isPresent()) {
        // try again, ad infinitum
    }
 
-However, you never receive a transaction receipt. Unfortunately there may not be a an error
-in your HappyUC client indicating any issues with the transaction::
+However, you never receive a reqTransaction receipt. Unfortunately there may not be a an error
+in your HappyUC client indicating any issues with the reqTransaction::
 
    I1025 18:13:32.817691 huc/api.go:1185] Tx(0xeaac9aab7f9aeab189acd8714c5a60c7424f86820884b815c4448cfcd4d9fc79) to: 0x9c98e381edc5fe1ac514935f3cc3edaa764cf004
 
 The easiest way to see if the submission is waiting to mined is to refer to Hucscan
-and search for the address the transaction was sent using https://testnet.hucscan.io/address/0x...
+and search for the address the reqTransaction was sent using https://testnet.hucscan.io/address/0x...
 If the submission has been successful it should be visible in Hucscan within seconds of you
-performing the transaction submission. The wait is for the mining to take place.
+performing the reqTransaction submission. The wait is for the mining to take place.
 
 .. image:: /images/pending_transaction.png
 
-If there is no sign of it then the transaction has vanished into the huc (sorry). The likely
-cause of this is likely to be to do with the transaction's nonce either not being set, or
+If there is no sign of it then the reqTransaction has vanished into the huc (sorry). The likely
+cause of this is likely to be to do with the reqTransaction's nonce either not being set, or
 being too low. Please refer to the section :ref:`nonce` for more information.
 
 
@@ -64,19 +64,19 @@ I want to obtain some Huc on Testnet, but don't want to have to mine it myself
 Please refer to the :ref:`happyuc-testnets` for how to obtain some Huc.
 
 
-How do I obtain the return value from a smart contract method invoked by a transaction?
+How do I obtain the return value from a smart contract method invoked by a reqTransaction?
 ---------------------------------------------------------------------------------------
 
 You can't. It is not possible to return values from methods on smart contracts that are called as
-part of a transaction. If you wish to read a value during a transaction, you must use
+part of a reqTransaction. If you wish to read a value during a reqTransaction, you must use
 `Events <http://solidity.readthedocs.io/en/develop/contracts.html#events>`_. To query values
-from smart contracts you must use a call, which is separate to a transaction. These methods should
+from smart contracts you must use a call, which is separate to a reqTransaction. These methods should
 be marked as
 `constant <http://solidity.readthedocs.io/en/develop/contracts.html?highlight=constant#constant-functions>`_
 functions. :ref:`smart-contract-wrappers` created by Webuj handle these differences for you.
 
 The following StackExchange
-`post <http://happyuc.stackexchange.com/questions/765/what-is-the-difference-between-a-transaction-and-a-call>`__
+`post <http://happyuc.stackexchange.com/questions/765/what-is-the-difference-between-a-reqTransaction-and-a-call>`__
 is useful for background.
 
 
@@ -84,7 +84,7 @@ Is it possible to send arbitrary text with transactions?
 --------------------------------------------------------
 
 Yes it is. Text should be ASCII encoded and provided as a hexadecimal String in the data field
-of the transaction. This is demonstrated below::
+of the reqTransaction. This is demonstrated below::
 
    RawTransaction.createTransaction(
            <nonce>, GAS_PRICE, GAS_LIMIT, "0x<address>", <amount>, "0x<hex encoded text>");
@@ -92,12 +92,12 @@ of the transaction. This is demonstrated below::
    byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
    String hexValue = Numeric.toHexString(signedMessage);
 
-   HucSendTransaction hucSendTransaction =
-           Webuj.hucSendRawTransaction(hexValue).send();
-   String transactionHash = hucSendTransaction.getTransactionHash();
+   HucSendTransaction hucSendRepTransaction =
+           Webuj.hucSendRawRepTransaction(hexValue).send();
+   String transactionHash = hucSendRepTransaction.getTransactionHash();
    ...
 
-*Note*: Please ensure you increase the gas limit on the transaction to allow for the storage of
+*Note*: Please ensure you increase the gas limit on the reqTransaction to allow for the storage of
 text.
 
 The following StackExchange

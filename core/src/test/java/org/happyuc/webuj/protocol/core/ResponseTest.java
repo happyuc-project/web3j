@@ -1,16 +1,5 @@
 package org.happyuc.webuj.protocol.core;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.junit.Test;
-
 import org.happyuc.webuj.protocol.ResponseTester;
 import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
 import org.happyuc.webuj.protocol.core.methods.response.DbGetHex;
@@ -25,16 +14,16 @@ import org.happyuc.webuj.protocol.core.methods.response.HucCompileLLL;
 import org.happyuc.webuj.protocol.core.methods.response.HucCompileSerpent;
 import org.happyuc.webuj.protocol.core.methods.response.HucCompileSolidity;
 import org.happyuc.webuj.protocol.core.methods.response.HucEstimateGas;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetBalance;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockTransactionCountByHash;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockTransactionCountByNumber;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockRepTransactionCountByHash;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockRepTransactionCountByNumber;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCompilers;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetStorageAt;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionCount;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockHash;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockNumber;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetWork;
@@ -42,31 +31,41 @@ import org.happyuc.webuj.protocol.core.methods.response.HucHashrate;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.HucMining;
 import org.happyuc.webuj.protocol.core.methods.response.HucProtocolVersion;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendRawTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRawRepTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucSign;
 import org.happyuc.webuj.protocol.core.methods.response.HucSubmitHashrate;
 import org.happyuc.webuj.protocol.core.methods.response.HucSubmitWork;
 import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
-import org.happyuc.webuj.protocol.core.methods.response.HucTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
 import org.happyuc.webuj.protocol.core.methods.response.NetListening;
 import org.happyuc.webuj.protocol.core.methods.response.NetPeerCount;
 import org.happyuc.webuj.protocol.core.methods.response.NetVersion;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.ShhAddToGroup;
 import org.happyuc.webuj.protocol.core.methods.response.ShhHasIdentity;
 import org.happyuc.webuj.protocol.core.methods.response.ShhMessages;
 import org.happyuc.webuj.protocol.core.methods.response.ShhNewFilter;
 import org.happyuc.webuj.protocol.core.methods.response.ShhNewGroup;
 import org.happyuc.webuj.protocol.core.methods.response.ShhNewIdentity;
-import org.happyuc.webuj.protocol.core.methods.response.ShhPost;
+import org.happyuc.webuj.protocol.core.methods.response.ShhRepPost;
 import org.happyuc.webuj.protocol.core.methods.response.ShhUninstallFilter;
 import org.happyuc.webuj.protocol.core.methods.response.ShhVersion;
-import org.happyuc.webuj.protocol.core.methods.response.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.WebuClientVersion;
 import org.happyuc.webuj.protocol.core.methods.response.WebuSha3;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -228,24 +227,24 @@ public class ResponseTest extends ResponseTester {
     public void testHucGetTransactionCount() {
         buildResponse("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0x1\"\n" + "}");
 
-        HucGetTransactionCount hucGetTransactionCount = deserialiseResponse((HucGetTransactionCount.class));
-        assertThat(hucGetTransactionCount.getTransactionCount(), equalTo(BigInteger.valueOf(1L)));
+        HucGetRepTransactionCount hucGetRepTransactionCount = deserialiseResponse((HucGetRepTransactionCount.class));
+        assertThat(hucGetRepTransactionCount.getTransactionCount(), equalTo(BigInteger.valueOf(1L)));
     }
 
     @Test
     public void testHucGetBlockTransactionCountByHash() {
         buildResponse("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0xb\"\n" + "}");
 
-        HucGetBlockTransactionCountByHash hucGetBlockTransactionCountByHash = deserialiseResponse(HucGetBlockTransactionCountByHash.class);
-        assertThat(hucGetBlockTransactionCountByHash.getTransactionCount(), equalTo(BigInteger.valueOf(11)));
+        HucGetBlockRepTransactionCountByHash hucGetBlockRepTransactionCountByHash = deserialiseResponse(HucGetBlockRepTransactionCountByHash.class);
+        assertThat(hucGetBlockRepTransactionCountByHash.getTransactionCount(), equalTo(BigInteger.valueOf(11)));
     }
 
     @Test
     public void testHucGetBlockTransactionCountByNumber() {
         buildResponse("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0xa\"\n" + "}");
 
-        HucGetBlockTransactionCountByNumber hucGetBlockTransactionCountByNumber = deserialiseResponse(HucGetBlockTransactionCountByNumber.class);
-        assertThat(hucGetBlockTransactionCountByNumber.getTransactionCount(), equalTo(BigInteger.valueOf(10)));
+        HucGetBlockRepTransactionCountByNumber hucGetBlockRepTransactionCountByNumber = deserialiseResponse(HucGetBlockRepTransactionCountByNumber.class);
+        assertThat(hucGetBlockRepTransactionCountByNumber.getTransactionCount(), equalTo(BigInteger.valueOf(10)));
     }
 
     @Test
@@ -284,16 +283,16 @@ public class ResponseTest extends ResponseTester {
     public void testHucSendTransaction() {
         buildResponse("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": " + "\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n" + "}");
 
-        HucSendTransaction hucSendTransaction = deserialiseResponse(HucSendTransaction.class);
-        assertThat(hucSendTransaction.getTransactionHash(), is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
+        HucSendRepTransaction hucSendRepTransaction = deserialiseResponse(HucSendRepTransaction.class);
+        assertThat(hucSendRepTransaction.getTransactionHash(), is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 
     @Test
     public void testHucSendRawTransaction() {
         buildResponse("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": " + "\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"\n" + "}");
 
-        HucSendRawTransaction hucSendRawTransaction = deserialiseResponse(HucSendRawTransaction.class);
-        assertThat(hucSendRawTransaction.getTransactionHash(), is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
+        HucSendRawRepTransaction hucSendRawRepTransaction = deserialiseResponse(HucSendRawRepTransaction.class);
+        assertThat(hucSendRawRepTransaction.getTransactionHash(), is("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"));
     }
 
     @Test
@@ -332,7 +331,7 @@ public class ResponseTest extends ResponseTester {
         HucBlock hucBlock = deserialiseResponse(HucBlock.class);
         HucBlock.Block block = new HucBlock.Block("0x1b4", "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331", "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5", "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2", "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347", "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331", "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421", "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff", "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421", "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6", "0x4e65fda2159562a496f9f3522f89122a3088497a", "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b", "0x027f07", "0x027f07", "0x0000000000000000000000000000000000000000000000000000000000000000", "0x027f07", "0x9f759", "0x9f759", "0x54e34e8e",
                 //CHECKSTYLE:OFF
-                Arrays.asList(new HucBlock.TransactionObject("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0x", "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b", "0x15df", "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", "0x7f110", "0x7f110", "0x09184e72a000", "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360", null, "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b", "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc", "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", (byte) 0)),
+                Arrays.asList(new HucBlock.RepTransactionObject("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0x", "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b", "0x15df", "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", "0x7f110", "0x7f110", "0x09184e72a000", "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360", null, "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b", "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc", "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", (byte) 0)),
                 //CHECKSTYLE:ON
                 Arrays.asList("0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347", "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"), Arrays.asList("0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b", "0x39a3eb432fbef1fc"));
         assertThat(hucBlock.getBlock(), equalTo(block));
@@ -348,7 +347,7 @@ public class ResponseTest extends ResponseTester {
         HucBlock hucBlock = deserialiseResponse(HucBlock.class);
         HucBlock.Block block = new HucBlock.Block("0x1b4", "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331", "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5", "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2", "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347", "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331", "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421", "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff", "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421", "0x1a95ad5ccdb0677af951810c6ddf4935afe4e5a6", "0x4e65fda2159562a496f9f3522f89122a3088497a", "0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b", "0x027f07", "0x027f07", "0x0000000000000000000000000000000000000000000000000000000000000000", "0x027f07", "0x9f759", "0x9f759", "0x54e34e8e",
                 //CHECKSTYLE:OFF
-                Arrays.asList(new HucBlock.TransactionObject("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0x", "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b", "0x15df", "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", "0x7f110", "0x7f110", "0x09184e72a000", "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360", null, "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b", "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc", "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", 0x9d)),
+                Arrays.asList(new HucBlock.RepTransactionObject("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0x", "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b", "0x15df", "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", "0x7f110", "0x7f110", "0x09184e72a000", "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360", null, "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b", "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc", "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", 0x9d)),
                 //CHECKSTYLE:ON
                 Arrays.asList("0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347", "0xd5855eb08b3387c0af375e9cdb6acfc05eb8f519e419b874b6ff2ffda7ed1dff"), Arrays.asList("0x57919c4e72e79ad7705a26e7ecd5a08ff546ac4fa37882e9cc57be87a3dab26b", "0x39a3eb432fbef1fc"));
         assertThat(hucBlock.getBlock(), equalTo(block));
@@ -366,19 +365,19 @@ public class ResponseTest extends ResponseTester {
     public void testHucTransaction() {
         //CHECKSTYLE:OFF
         buildResponse("{\n" + "    \"id\":1,\n" + "    \"jsonrpc\":\"2.0\",\n" + "    \"result\": {\n" + "        \"hash\":\"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n" + "        \"nonce\":\"0x\",\n" + "        \"blockHash\": \"0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b\",\n" + "        \"blockNumber\": \"0x15df\",\n" + "        \"transactionIndex\":  \"0x1\",\n" + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n" + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n" + "        \"value\":\"0x7f110\",\n" + "        \"gas\": \"0x7f110\",\n" + "        \"gasPrice\":\"0x09184e72a000\",\n" + "        \"input\":\"0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360\",\n" + "        \"creates\":null,\n" + "        \"publicKey\":\"0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b\",\n" + "        \"raw\":\"0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n" + "        \"r\":\"0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc\",\n" + "        \"s\":\"0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62\",\n" + "        \"v\":0\n" + "  }\n" + "}");
-        Transaction transaction = new Transaction("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0x", "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b", "0x15df", "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", "0x7f110", "0x7f110", "0x09184e72a000", "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360", null, "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b", "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc", "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", (byte) 0);
+        RepTransaction repTransaction = new RepTransaction("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0x", "0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b", "0x15df", "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", "0x7f110", "0x7f110", "0x09184e72a000", "0x603880600c6000396000f300603880600c6000396000f3603880600c6000396000f360", null, "0x6614d7d7bfe989295821985de0439e868b26ff05f98ae0da0ce5bccc24ea368a083b785323c9fcb405dd4c10a2c95d93312a1b2d68beb24ab4ea7c3c2f7c455b", "0xf8cd83103a048504a817c800830e57e0945927c5cc723c4486f93bf90bad3be8831139499e80b864140f8dd300000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000c03905df347aa6490d5a98fbb8d8e49520000000000000000000000000000000000000000000000000000000057d56ee61ba0f115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dca04a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", "0xf115cc4d7516dd430046504e1c888198e0323e8ded016d755f89c226ba3481dc", "0x4a2ae8ee49f1100b5c0202b37ed8bacf4caeddebde6b7f77e12e7a55893e9f62", (byte) 0);
         //CHECKSTYLE:ON
 
-        HucTransaction hucTransaction = deserialiseResponse(HucTransaction.class);
-        assertThat(hucTransaction.getTransaction().get(), equalTo(transaction));
+        HucRepTransaction hucRepTransaction = deserialiseResponse(HucRepTransaction.class);
+        assertThat(hucRepTransaction.getTransaction().get(), equalTo(repTransaction));
     }
 
     @Test
     public void testHucTransactionNull() {
         buildResponse("{\n" + "  \"result\": null\n" + "}");
 
-        HucTransaction hucTransaction = deserialiseResponse(HucTransaction.class);
-        assertThat(hucTransaction.getTransaction(), is(Optional.empty()));
+        HucRepTransaction hucRepTransaction = deserialiseResponse(HucRepTransaction.class);
+        assertThat(hucRepTransaction.getTransaction(), is(Optional.empty()));
     }
 
     @Test
@@ -386,13 +385,13 @@ public class ResponseTest extends ResponseTester {
         //CHECKSTYLE:OFF
         buildResponse("{\n" + "    \"id\":1,\n" + "    \"jsonrpc\":\"2.0\",\n" + "    \"result\": {\n" + "        \"transactionHash\": \"0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238\",\n" + "        \"transactionIndex\":  \"0x1\",\n" + "        \"blockHash\": \"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n" + "        \"blockNumber\": \"0xb\",\n" + "        \"cumulativeGasUsed\": \"0x33bc\",\n" + "        \"gasUsed\": \"0x4dc\",\n" + "        \"contractAddress\": \"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\n" + "        \"root\": \"9307ba10e41ecf3d40507fc908655fe72fc129d46f6d99baf7605d0e29184911\",\n" + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n" + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n" + "        \"logs\": [{\n" + "            \"removed\": false,\n" + "            \"logIndex\": \"0x1\",\n" + "            \"transactionIndex\": \"0x0\",\n" + "            \"transactionHash\": \"0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf\",\n" + "            \"blockHash\": \"0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" + "            \"blockNumber\":\"0x1b4\",\n" + "            \"address\": \"0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" + "            \"data\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\n" + "            \"type\":\"mined\",\n" + "            \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]" + "        }],\n" + "        \"logsBloom\":\"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"\n" + "  }\n" + "}");
 
-        TransactionReceipt transactionReceipt = new TransactionReceipt("0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238", "0x1", "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0xb", "0x33bc", "0x4dc", "0xb60e8dd61c5d32be8058bb8eb970870f07233155", "9307ba10e41ecf3d40507fc908655fe72fc129d46f6d99baf7605d0e29184911", null, "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", Arrays.asList(new Log(false, "0x1", "0x0", "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf", "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x1b4", "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x0000000000000000000000000000000000000000000000000000000000000000", "mined", Arrays.asList("0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))), "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt("0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238", "0x1", "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0xb", "0x33bc", "0x4dc", "0xb60e8dd61c5d32be8058bb8eb970870f07233155", "9307ba10e41ecf3d40507fc908655fe72fc129d46f6d99baf7605d0e29184911", null, "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", Arrays.asList(new Log(false, "0x1", "0x0", "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf", "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x1b4", "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x0000000000000000000000000000000000000000000000000000000000000000", "mined", Arrays.asList("0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))), "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 
         );
         //CHECKSTYLE:ON
 
-        HucGetTransactionReceipt hucGetTransactionReceipt = deserialiseResponse(HucGetTransactionReceipt.class);
-        assertThat(hucGetTransactionReceipt.getTransactionReceipt().get(), equalTo(transactionReceipt));
+        HucGetRepTransactionReceipt hucGetRepTransactionReceipt = deserialiseResponse(HucGetRepTransactionReceipt.class);
+        assertThat(hucGetRepTransactionReceipt.getTransactionReceipt().get(), equalTo(repTransactionReceipt));
     }
 
     @Test
@@ -400,13 +399,13 @@ public class ResponseTest extends ResponseTester {
         //CHECKSTYLE:OFF
         buildResponse("{\n" + "    \"id\":1,\n" + "    \"jsonrpc\":\"2.0\",\n" + "    \"result\": {\n" + "        \"transactionHash\": \"0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238\",\n" + "        \"transactionIndex\":  \"0x1\",\n" + "        \"blockHash\": \"0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b\",\n" + "        \"blockNumber\": \"0xb\",\n" + "        \"cumulativeGasUsed\": \"0x33bc\",\n" + "        \"gasUsed\": \"0x4dc\",\n" + "        \"contractAddress\": \"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\n" + "        \"status\": \"0x1\",\n" + "        \"from\":\"0x407d73d8a49eeb85d32cf465507dd71d507100c1\",\n" + "        \"to\":\"0x85h43d8a49eeb85d32cf465507dd71d507100c1\",\n" + "        \"logs\": [{\n" + "            \"removed\": false,\n" + "            \"logIndex\": \"0x1\",\n" + "            \"transactionIndex\": \"0x0\",\n" + "            \"transactionHash\": \"0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf\",\n" + "            \"blockHash\": \"0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" + "            \"blockNumber\":\"0x1b4\",\n" + "            \"address\": \"0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d\",\n" + "            \"data\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\n" + "            \"type\":\"mined\",\n" + "            \"topics\": [\"0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5\"]" + "        }],\n" + "        \"logsBloom\":\"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"\n" + "  }\n" + "}");
 
-        TransactionReceipt transactionReceipt = new TransactionReceipt("0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238", "0x1", "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0xb", "0x33bc", "0x4dc", "0xb60e8dd61c5d32be8058bb8eb970870f07233155", null, "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", Arrays.asList(new Log(false, "0x1", "0x0", "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf", "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x1b4", "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x0000000000000000000000000000000000000000000000000000000000000000", "mined", Arrays.asList("0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))), "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt("0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238", "0x1", "0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b", "0xb", "0x33bc", "0x4dc", "0xb60e8dd61c5d32be8058bb8eb970870f07233155", null, "0x1", "0x407d73d8a49eeb85d32cf465507dd71d507100c1", "0x85h43d8a49eeb85d32cf465507dd71d507100c1", Arrays.asList(new Log(false, "0x1", "0x0", "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf", "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x1b4", "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d", "0x0000000000000000000000000000000000000000000000000000000000000000", "mined", Arrays.asList("0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"))), "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 
         );
         //CHECKSTYLE:ON
 
-        HucGetTransactionReceipt hucGetTransactionReceipt = deserialiseResponse(HucGetTransactionReceipt.class);
-        assertThat(hucGetTransactionReceipt.getTransactionReceipt().get(), equalTo(transactionReceipt));
+        HucGetRepTransactionReceipt hucGetRepTransactionReceipt = deserialiseResponse(HucGetRepTransactionReceipt.class);
+        assertThat(hucGetRepTransactionReceipt.getTransactionReceipt().get(), equalTo(repTransactionReceipt));
     }
 
     @Test
@@ -454,8 +453,8 @@ public class ResponseTest extends ResponseTester {
     public void testHucFilter() {
         buildResponse("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0x1\"\n" + "}");
 
-        HucFilter hucFilter = deserialiseResponse(HucFilter.class);
-        assertThat(hucFilter.getFilterId(), is(BigInteger.valueOf(1)));
+        HucRepFilter hucRepFilter = deserialiseResponse(HucRepFilter.class);
+        assertThat(hucRepFilter.getFilterId(), is(BigInteger.valueOf(1)));
     }
 
     @Test
@@ -550,8 +549,8 @@ public class ResponseTest extends ResponseTester {
     public void testSshPost() {
         buildResponse("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\":\"2.0\",\n" + "  \"result\": true\n" + "}");
 
-        ShhPost shhPost = deserialiseResponse(ShhPost.class);
-        assertThat(shhPost.messageSent(), is(true));
+        ShhRepPost shhRepPost = deserialiseResponse(ShhRepPost.class);
+        assertThat(shhRepPost.messageSent(), is(true));
     }
 
     @Test

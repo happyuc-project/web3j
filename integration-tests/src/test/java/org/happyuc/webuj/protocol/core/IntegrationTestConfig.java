@@ -2,7 +2,7 @@ package org.happyuc.webuj.protocol.core;
 
 import java.math.BigInteger;
 
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 
 /**
  * Common values used by integration tests.
@@ -25,7 +25,7 @@ public interface IntegrationTestConfig {
 
     String validContractCode();
 
-    Transaction buildTransaction();
+    ReqTransaction buildTransaction();
 
     String validTransactionHash();
 

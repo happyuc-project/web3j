@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 
 /**
- * Transaction manager implementation for read-only operations on smart contracts.
+ * ReqTransaction manager implementation for read-only operations on smart contracts.
  */
 public class ReadonlyTransactionManager extends TransactionManager {
 
@@ -16,7 +16,7 @@ public class ReadonlyTransactionManager extends TransactionManager {
     }
 
     @Override
-    public HucSendTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
+    public HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
         throw new UnsupportedOperationException("Only read operations are supported by this transaction manager");
     }
 }

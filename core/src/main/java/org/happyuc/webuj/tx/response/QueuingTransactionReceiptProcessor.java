@@ -8,16 +8,16 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.utils.Async;
 
 /**
- * Transaction receipt processor that uses a single thread to query for transaction receipts.
+ * ReqTransaction receipt processor that uses a single thread to query for transaction receipts.
  *
  * <p><em>Note:</em>When initially invoked, this processor returns a transaction receipt containing
  * only the transaction hash of the submitted transaction. This is encapsulated in an
- * {@link EmptyTransactionReceipt}.
+ * {@link EmptyRepTransactionReceipt}.
  */
 public class QueuingTransactionReceiptProcessor extends TransactionReceiptProcessor {
 
@@ -38,17 +38,17 @@ public class QueuingTransactionReceiptProcessor extends TransactionReceiptProces
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(String transactionHash) throws IOException, TransactionException {
+    public RepTransactionReceipt waitForTransactionReceipt(String transactionHash) throws IOException, TransactionException {
         pendingTransactions.add(new RequestWrapper(transactionHash));
 
-        return new EmptyTransactionReceipt(transactionHash);
+        return new EmptyRepTransactionReceipt(transactionHash);
     }
 
     private void sendTransactionReceiptRequests() {
         for (RequestWrapper requestWrapper : pendingTransactions) {
             try {
                 String transactionHash = requestWrapper.getTransactionHash();
-                Optional<TransactionReceipt> transactionReceipt = sendTransactionReceiptRequest(transactionHash);
+                Optional<RepTransactionReceipt> transactionReceipt = sendTransactionReceiptRequest(transactionHash);
                 if (transactionReceipt.isPresent()) {
                     callback.accept(transactionReceipt.get());
                     pendingTransactions.remove(requestWrapper);

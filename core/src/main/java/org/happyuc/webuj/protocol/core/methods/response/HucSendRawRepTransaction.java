@@ -3,11 +3,10 @@ package org.happyuc.webuj.protocol.core.methods.response;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * shh_post.
+ * huc_sendRawTransaction.
  */
-public class ShhPost extends Response<Boolean> {
-
-    public boolean messageSent() {
+public class HucSendRawRepTransaction extends Response<String> {
+    public String getTransactionHash() {
         return getResult();
     }
 }

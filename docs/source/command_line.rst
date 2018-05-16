@@ -68,7 +68,7 @@ To send Huc to another address:
    $ Webuj wallet send <walletfile> 0x<address>|<ensName>
 
 When sending Huc to another address you will be asked a series of questions before the
-transaction takes place. See the below for a full example
+reqTransaction takes place. See the below for a full example
 
 The following example demonstrates using Webuj to send Huc to another wallet.
 

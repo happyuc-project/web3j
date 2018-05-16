@@ -18,9 +18,9 @@ import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
 import rx.Observable;
@@ -56,8 +56,8 @@ public class MetaCoin extends Contract {
         super(BINARY, contractAddress, webuj, transactionManager, gasPrice, gasLimit);
     }
 
-    public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
+    public List<TransferEventResponse> getTransferEvents(RepTransactionReceipt repTransactionReceipt) {
+        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, repTransactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
             TransferEventResponse typedResponse = new TransferEventResponse();
@@ -70,7 +70,7 @@ public class MetaCoin extends Contract {
         return responses;
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(HucFilter filter) {
+    public Observable<TransferEventResponse> transferEventObservable(HucReqFilter filter) {
         return webuj.hucLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
             @Override
             public TransferEventResponse call(Log log) {
@@ -86,7 +86,7 @@ public class MetaCoin extends Contract {
     }
 
     public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
         return transferEventObservable(filter);
     }
@@ -96,7 +96,7 @@ public class MetaCoin extends Contract {
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public RemoteCall<TransactionReceipt> sendCoin(String receiver, BigInteger amount) {
+    public RemoteCall<RepTransactionReceipt> sendCoin(String receiver, BigInteger amount) {
         final Function function = new Function("sendCoin", Arrays.<Type>asList(new org.happyuc.webuj.abi.datatypes.Address(receiver), new org.happyuc.webuj.abi.datatypes.generated.Uint256(amount)), Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }

@@ -6,10 +6,9 @@ import org.happyuc.webuj.tx.ChainId;
  * ENS registry contract addresses.
  */
 public class Contracts {
-
-    public static final String MAINNET = "0x314159265dd8dbb310642f98f50c066173c1259b";
-    public static final String ROPSTEN = "0x112234455c3a32fd11230c42e7bccd4a84e02010";
-    public static final String RINKEBY = "0xe7410170f87102df0055eb195163a03b7f2bff4a";
+    public static final String MAINNET = "0xeaeb3f3277618955806fc76ae6b28b23c85ee974c3f0b9398ce3c7d6a4c6de8b";
+    public static final String ROPSTEN = "0x0";
+    public static final String RINKEBY = "0x0";
 
     public static String resolveRegistryContract(String chainId) {
         switch (Byte.valueOf(chainId)) {

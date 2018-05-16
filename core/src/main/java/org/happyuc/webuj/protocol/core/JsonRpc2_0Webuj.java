@@ -1,21 +1,72 @@
 package org.happyuc.webuj.protocol.core;
 
+import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.WebujService;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.request.ShhFilter;
+import org.happyuc.webuj.protocol.core.methods.request.ShhReqPost;
+import org.happyuc.webuj.protocol.core.methods.response.DbGetHex;
+import org.happyuc.webuj.protocol.core.methods.response.DbGetString;
+import org.happyuc.webuj.protocol.core.methods.response.DbPutHex;
+import org.happyuc.webuj.protocol.core.methods.response.DbPutString;
+import org.happyuc.webuj.protocol.core.methods.response.HucAccounts;
+import org.happyuc.webuj.protocol.core.methods.response.HucBlock;
+import org.happyuc.webuj.protocol.core.methods.response.HucBlockNumber;
+import org.happyuc.webuj.protocol.core.methods.response.HucCoinbase;
+import org.happyuc.webuj.protocol.core.methods.response.HucCompileLLL;
+import org.happyuc.webuj.protocol.core.methods.response.HucCompileSerpent;
+import org.happyuc.webuj.protocol.core.methods.response.HucCompileSolidity;
+import org.happyuc.webuj.protocol.core.methods.response.HucEstimateGas;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetBalance;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockRepTransactionCountByHash;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockRepTransactionCountByNumber;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetCompilers;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetStorageAt;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockHash;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockNumber;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetWork;
+import org.happyuc.webuj.protocol.core.methods.response.HucHashrate;
+import org.happyuc.webuj.protocol.core.methods.response.HucLog;
+import org.happyuc.webuj.protocol.core.methods.response.HucMining;
+import org.happyuc.webuj.protocol.core.methods.response.HucProtocolVersion;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSign;
+import org.happyuc.webuj.protocol.core.methods.response.HucSubmitHashrate;
+import org.happyuc.webuj.protocol.core.methods.response.HucSubmitWork;
+import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
+import org.happyuc.webuj.protocol.core.methods.response.Log;
+import org.happyuc.webuj.protocol.core.methods.response.NetListening;
+import org.happyuc.webuj.protocol.core.methods.response.NetPeerCount;
+import org.happyuc.webuj.protocol.core.methods.response.NetVersion;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.ShhAddToGroup;
+import org.happyuc.webuj.protocol.core.methods.response.ShhHasIdentity;
+import org.happyuc.webuj.protocol.core.methods.response.ShhMessages;
+import org.happyuc.webuj.protocol.core.methods.response.ShhNewFilter;
+import org.happyuc.webuj.protocol.core.methods.response.ShhNewGroup;
+import org.happyuc.webuj.protocol.core.methods.response.ShhNewIdentity;
+import org.happyuc.webuj.protocol.core.methods.response.ShhRepPost;
+import org.happyuc.webuj.protocol.core.methods.response.ShhUninstallFilter;
+import org.happyuc.webuj.protocol.core.methods.response.ShhVersion;
+import org.happyuc.webuj.protocol.core.methods.response.WebuClientVersion;
+import org.happyuc.webuj.protocol.core.methods.response.WebuSha3;
+import org.happyuc.webuj.protocol.rx.JsonRpc2_0Rx;
+import org.happyuc.webuj.utils.Async;
+import org.happyuc.webuj.utils.Numeric;
+import rx.Observable;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
-
-import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.methods.response.*;
-import rx.Observable;
-
-import org.happyuc.webuj.protocol.WebujService;
-import org.happyuc.webuj.protocol.core.methods.request.ShhFilter;
-import org.happyuc.webuj.protocol.core.methods.request.ShhPost;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
-import org.happyuc.webuj.protocol.rx.JsonRpc2_0Rx;
-import org.happyuc.webuj.utils.Async;
-import org.happyuc.webuj.utils.Numeric;
 
 /**
  * JSON-RPC 2.0 factory implementation.
@@ -112,22 +163,34 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucGetStorageAt> hucGetStorageAt(String address, BigInteger position, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getStorageAt", Arrays.asList(address, Numeric.encodeQuantity(position), defaultBlockParameter.getValue()), webujService, HucGetStorageAt.class);
+        return new Request<>("huc_getStorageAt",
+                             Arrays.asList(address, Numeric.encodeQuantity(position), defaultBlockParameter.getValue()),
+                             webujService,
+                             HucGetStorageAt.class);
     }
 
     @Override
-    public Request<?, HucGetTransactionCount> hucGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getTransactionCount", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetTransactionCount.class);
+    public Request<?, HucGetRepTransactionCount> hucGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>("huc_getTransactionCount",
+                             Arrays.asList(address, defaultBlockParameter.getValue()),
+                             webujService,
+                             HucGetRepTransactionCount.class);
     }
 
     @Override
-    public Request<?, HucGetBlockTransactionCountByHash> hucGetBlockTransactionCountByHash(String blockHash) {
-        return new Request<>("huc_getBlockTransactionCountByHash", Arrays.asList(blockHash), webujService, HucGetBlockTransactionCountByHash.class);
+    public Request<?, HucGetBlockRepTransactionCountByHash> hucGetBlockTransactionCountByHash(String blockHash) {
+        return new Request<>("huc_getBlockTransactionCountByHash",
+                             Arrays.asList(blockHash),
+                             webujService,
+                             HucGetBlockRepTransactionCountByHash.class);
     }
 
     @Override
-    public Request<?, HucGetBlockTransactionCountByNumber> hucGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getBlockTransactionCountByNumber", Arrays.asList(defaultBlockParameter.getValue()), webujService, HucGetBlockTransactionCountByNumber.class);
+    public Request<?, HucGetBlockRepTransactionCountByNumber> hucGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>("huc_getBlockTransactionCountByNumber",
+                             Arrays.asList(defaultBlockParameter.getValue()),
+                             webujService,
+                             HucGetBlockRepTransactionCountByNumber.class);
     }
 
     @Override
@@ -137,7 +200,10 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucGetUncleCountByBlockNumber> hucGetUncleCountByBlockNumber(DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getUncleCountByBlockNumber", Arrays.asList(defaultBlockParameter.getValue()), webujService, HucGetUncleCountByBlockNumber.class);
+        return new Request<>("huc_getUncleCountByBlockNumber",
+                             Arrays.asList(defaultBlockParameter.getValue()),
+                             webujService,
+                             HucGetUncleCountByBlockNumber.class);
     }
 
     @Override
@@ -151,23 +217,32 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Request<?, org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction> hucSendTransaction(Transaction transaction) {
-        return new Request<>("huc_sendTransaction", Arrays.asList(transaction), webujService, org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction.class);
+    public Request<?, HucSendRepTransaction> hucSendTransaction(ReqTransaction reqTransaction) {
+        return new Request<>("huc_sendTransaction",
+                             Arrays.asList(reqTransaction),
+                             webujService,
+                             HucSendRepTransaction.class);
     }
 
     @Override
-    public Request<?, org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction> hucSendRawTransaction(String signedTransactionData) {
-        return new Request<>("huc_sendRawTransaction", Arrays.asList(signedTransactionData), webujService, org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction.class);
+    public Request<?, HucSendRepTransaction> hucSendRawTransaction(String signedTransactionData) {
+        return new Request<>("huc_sendRawTransaction",
+                             Arrays.asList(signedTransactionData),
+                             webujService,
+                             HucSendRepTransaction.class);
     }
 
     @Override
-    public Request<?, org.happyuc.webuj.protocol.core.methods.response.HucCall> hucCall(Transaction transaction, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_call", Arrays.asList(transaction, defaultBlockParameter), webujService, org.happyuc.webuj.protocol.core.methods.response.HucCall.class);
+    public Request<?, org.happyuc.webuj.protocol.core.methods.response.HucCall> hucCall(ReqTransaction reqTransaction, DefaultBlockParameter defaultBlockParameter) {
+        return new Request<>("huc_call",
+                             Arrays.asList(reqTransaction, defaultBlockParameter),
+                             webujService,
+                             org.happyuc.webuj.protocol.core.methods.response.HucCall.class);
     }
 
     @Override
-    public Request<?, HucEstimateGas> hucEstimateGas(Transaction transaction) {
-        return new Request<>("huc_estimateGas", Arrays.asList(transaction), webujService, HucEstimateGas.class);
+    public Request<?, HucEstimateGas> hucEstimateGas(ReqTransaction reqTransaction) {
+        return new Request<>("huc_estimateGas", Arrays.asList(reqTransaction), webujService, HucEstimateGas.class);
     }
 
     @Override
@@ -177,37 +252,52 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucBlock> hucGetBlockByNumber(DefaultBlockParameter defaultBlockParameter, boolean returnFullTransactionObjects) {
-        return new Request<>("huc_getBlockByNumber", Arrays.asList(defaultBlockParameter.getValue(), returnFullTransactionObjects), webujService, HucBlock.class);
+        return new Request<>("huc_getBlockByNumber",
+                             Arrays.asList(defaultBlockParameter.getValue(), returnFullTransactionObjects),
+                             webujService,
+                             HucBlock.class);
     }
 
     @Override
-    public Request<?, HucTransaction> hucGetTransactionByHash(String transactionHash) {
-        return new Request<>("huc_getTransactionByHash", Arrays.asList(transactionHash), webujService, HucTransaction.class);
+    public Request<?, HucRepTransaction> hucGetTransactionByHash(String transactionHash) {
+        return new Request<>("huc_getTransactionByHash", Arrays.asList(transactionHash), webujService, HucRepTransaction.class);
     }
 
     @Override
-    public Request<?, HucTransaction> hucGetTransactionByBlockHashAndIndex(String blockHash, BigInteger transactionIndex) {
-        return new Request<>("huc_getTransactionByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucTransaction.class);
+    public Request<?, HucRepTransaction> hucGetTransactionByBlockHashAndIndex(String blockHash, BigInteger transactionIndex) {
+        return new Request<>("huc_getTransactionByBlockHashAndIndex",
+                             Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)),
+                             webujService,
+                             HucRepTransaction.class);
     }
 
     @Override
-    public Request<?, HucTransaction> hucGetTransactionByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex) {
-        return new Request<>("huc_getTransactionByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(transactionIndex)), webujService, HucTransaction.class);
+    public Request<?, HucRepTransaction> hucGetTransactionByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex) {
+        return new Request<>("huc_getTransactionByBlockNumberAndIndex",
+                             Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(transactionIndex)),
+                             webujService,
+                             HucRepTransaction.class);
     }
 
     @Override
-    public Request<?, HucGetTransactionReceipt> hucGetTransactionReceipt(String transactionHash) {
-        return new Request<>("huc_getTransactionReceipt", Arrays.asList(transactionHash), webujService, HucGetTransactionReceipt.class);
+    public Request<?, HucGetRepTransactionReceipt> hucGetTransactionReceipt(String transactionHash) {
+        return new Request<>("huc_getTransactionReceipt", Arrays.asList(transactionHash), webujService, HucGetRepTransactionReceipt.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetUncleByBlockHashAndIndex(String blockHash, BigInteger transactionIndex) {
-        return new Request<>("huc_getUncleByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucBlock.class);
+        return new Request<>("huc_getUncleByBlockHashAndIndex",
+                             Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)),
+                             webujService,
+                             HucBlock.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetUncleByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger uncleIndex) {
-        return new Request<>("huc_getUncleByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(uncleIndex)), webujService, HucBlock.class);
+        return new Request<>("huc_getUncleByBlockNumberAndIndex",
+                             Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(uncleIndex)),
+                             webujService,
+                             HucBlock.class);
     }
 
     @Override
@@ -231,28 +321,34 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Request<?, HucFilter> hucNewFilter(org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter) {
-        return new Request<>("huc_newFilter", Arrays.asList(hucFilter), webujService, HucFilter.class);
+    public Request<?, HucRepFilter> hucNewFilter(HucReqFilter hucReqFilter) {
+        return new Request<>("huc_newFilter", Arrays.asList(hucReqFilter), webujService, HucRepFilter.class);
     }
 
     @Override
-    public Request<?, HucFilter> hucNewBlockFilter() {
-        return new Request<>("huc_newBlockFilter", Collections.<String>emptyList(), webujService, HucFilter.class);
+    public Request<?, HucRepFilter> hucNewBlockFilter() {
+        return new Request<>("huc_newBlockFilter", Collections.<String>emptyList(), webujService, HucRepFilter.class);
     }
 
     @Override
-    public Request<?, HucFilter> hucNewPendingTransactionFilter() {
-        return new Request<>("huc_newPendingTransactionFilter", Collections.<String>emptyList(), webujService, HucFilter.class);
+    public Request<?, HucRepFilter> hucNewPendingTransactionFilter() {
+        return new Request<>("huc_newPendingTransactionFilter", Collections.<String>emptyList(), webujService, HucRepFilter.class);
     }
 
     @Override
     public Request<?, HucUninstallFilter> hucUninstallFilter(BigInteger filterId) {
-        return new Request<>("huc_uninstallFilter", Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucUninstallFilter.class);
+        return new Request<>("huc_uninstallFilter",
+                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
+                             webujService,
+                             HucUninstallFilter.class);
     }
 
     @Override
     public Request<?, HucLog> hucGetFilterChanges(BigInteger filterId) {
-        return new Request<>("huc_getFilterChanges", Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
+        return new Request<>("huc_getFilterChanges",
+                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
+                             webujService,
+                             HucLog.class);
     }
 
     @Override
@@ -261,8 +357,8 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Request<?, HucLog> hucGetLogs(org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter) {
-        return new Request<>("huc_getLogs", Arrays.asList(hucFilter), webujService, HucLog.class);
+    public Request<?, HucLog> hucGetLogs(HucReqFilter hucReqFilter) {
+        return new Request<>("huc_getLogs", Arrays.asList(hucReqFilter), webujService, HucLog.class);
     }
 
     @Override
@@ -301,8 +397,11 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Request<?, org.happyuc.webuj.protocol.core.methods.response.ShhPost> shhPost(ShhPost shhPost) {
-        return new Request<>("shh_post", Arrays.asList(shhPost), webujService, org.happyuc.webuj.protocol.core.methods.response.ShhPost.class);
+    public Request<?, ShhRepPost> shhPost(ShhReqPost shhReqPost) {
+        return new Request<>("shh_post",
+                             Arrays.asList(shhReqPost),
+                             webujService,
+                             ShhRepPost.class);
     }
 
     @Override
@@ -337,17 +436,26 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, ShhUninstallFilter> shhUninstallFilter(BigInteger filterId) {
-        return new Request<>("shh_uninstallFilter", Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, ShhUninstallFilter.class);
+        return new Request<>("shh_uninstallFilter",
+                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
+                             webujService,
+                             ShhUninstallFilter.class);
     }
 
     @Override
     public Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId) {
-        return new Request<>("shh_getFilterChanges", Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, ShhMessages.class);
+        return new Request<>("shh_getFilterChanges",
+                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
+                             webujService,
+                             ShhMessages.class);
     }
 
     @Override
     public Request<?, ShhMessages> shhGetMessages(BigInteger filterId) {
-        return new Request<>("shh_getMessages", Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, ShhMessages.class);
+        return new Request<>("shh_getMessages",
+                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
+                             webujService,
+                             ShhMessages.class);
     }
 
     @Override
@@ -361,17 +469,17 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Observable<Log> hucLogObservable(org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter) {
-        return webujRx.hucLogObservable(hucFilter, blockTime);
+    public Observable<Log> hucLogObservable(HucReqFilter hucReqFilter) {
+        return webujRx.hucLogObservable(hucReqFilter, blockTime);
     }
 
     @Override
-    public Observable<org.happyuc.webuj.protocol.core.methods.response.Transaction> transactionObservable() {
+    public Observable<RepTransaction> transactionObservable() {
         return webujRx.transactionObservable(blockTime);
     }
 
     @Override
-    public Observable<org.happyuc.webuj.protocol.core.methods.response.Transaction> pendingTransactionObservable() {
+    public Observable<RepTransaction> pendingTransactionObservable() {
         return webujRx.pendingTransactionObservable(blockTime);
     }
 
@@ -391,7 +499,7 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Observable<org.happyuc.webuj.protocol.core.methods.response.Transaction> replayTransactionsObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Observable<RepTransaction> replayTransactionsObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return webujRx.replayTransactionsObservable(startBlock, endBlock);
     }
 
@@ -406,7 +514,7 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Observable<org.happyuc.webuj.protocol.core.methods.response.Transaction> catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
+    public Observable<RepTransaction> catchUpToLatestTransactionObservable(DefaultBlockParameter startBlock) {
         return webujRx.catchUpToLatestTransactionObservable(startBlock);
     }
 
@@ -416,7 +524,7 @@ public class JsonRpc2_0Webuj implements Webuj {
     }
 
     @Override
-    public Observable<org.happyuc.webuj.protocol.core.methods.response.Transaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameter startBlock) {
+    public Observable<RepTransaction> catchUpToLatestAndSubscribeToNewTransactionsObservable(DefaultBlockParameter startBlock) {
         return webujRx.catchUpToLatestAndSubscribeToNewTransactionsObservable(startBlock, blockTime);
     }
 
