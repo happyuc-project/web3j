@@ -1,11 +1,5 @@
 package org.happyuc.webuj.protocol.http;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -14,11 +8,16 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import okio.BufferedSource;
+import org.happyuc.webuj.protocol.Service;
+import org.happyuc.webuj.protocol.exceptions.ClientConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.happyuc.webuj.protocol.Service;
-import org.happyuc.webuj.protocol.exceptions.ClientConnectionException;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * HTTP implementation of our services API.
@@ -27,7 +26,7 @@ public class HttpService extends Service {
 
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
-    public static final String DEFAULT_URL = "http://localhost:8545/";
+    public static final String DEFAULT_URL = "http://59.111.94.209:8545/";
 
     private static final Logger log = LoggerFactory.getLogger(HttpService.class);
 

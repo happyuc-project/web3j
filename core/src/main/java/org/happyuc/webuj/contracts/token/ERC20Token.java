@@ -1,4 +1,4 @@
-package org.happyuc.webuj.ens.contracts.generated;
+package org.happyuc.webuj.contracts.token;
 
 import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.FunctionEncoder;
@@ -11,8 +11,6 @@ import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.Utf8String;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.abi.datatypes.generated.Uint8;
-import org.happyuc.webuj.contracts.token.ERC20Interface;
-import org.happyuc.webuj.contracts.token.EventResponse;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
