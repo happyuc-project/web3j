@@ -26,7 +26,7 @@ public class HttpService extends Service {
 
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
-    public static final String DEFAULT_URL = "http://59.111.94.209:8545/";
+    public static final String DEFAULT_URL = "http://localhost:8545/";
 
     private static final Logger log = LoggerFactory.getLogger(HttpService.class);
 
