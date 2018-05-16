@@ -48,7 +48,7 @@ public class WalletUtilsTest {
 
     @Test
     public void testGenerateBip39Wallets() throws Exception {
-        Bip39Wallet wallet = WalletUtils.generateBip39Wallet(PASSWORD, tempDir);
+        Bip39Wallet wallet = WalletUtils.generateBip39Wallet(PASSWORD, tempDir, null);
         byte[] seed = MnemonicUtils.generateSeed(wallet.getMnemonic(), PASSWORD);
         Credentials credentials = Credentials.create(ECKeyPair.create(Hash.sha256(seed)));
 

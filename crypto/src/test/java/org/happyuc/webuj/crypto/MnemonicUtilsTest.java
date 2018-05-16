@@ -78,8 +78,8 @@ public class MnemonicUtilsTest {
     }
 
     @Test
-    public void generateMnemonicShouldGenerateExpectedMnemonicWords() {
-        String actualMnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
+    public void generateMnemonicShouldGenerateExpectedMnemonicWords(List<String> wordList) {
+        String actualMnemonic = MnemonicUtils.generateMnemonic(initialEntropy,wordList);
 
         assertEquals(mnemonic, actualMnemonic);
     }

@@ -44,8 +44,9 @@ public class MnemonicUtils {
      * @param initialEntropy The initial entropy to generate mnemonic from
      * @return The generated mnemonic
      * @throws IllegalArgumentException If the given entropy is invalid
+     * @param wordList 助记词列表
      */
-    public static String generateMnemonic(byte[] initialEntropy) {
+    public static String generateMnemonic(byte[] initialEntropy,List<String> wordList) {
         validateInitialEntropy(initialEntropy);
 
         int ent = initialEntropy.length * 8;
@@ -58,7 +59,7 @@ public class MnemonicUtils {
         StringBuilder mnemonicBuilder = new StringBuilder();
         for (int i = 0; i < iterations; i++) {
             int index = toInt(nextElevenBits(bits, i));
-            mnemonicBuilder.append(WORD_LIST.get(index));
+            mnemonicBuilder.append(wordList.get(index));
 
             boolean notLastIteration = i < iterations - 1;
             if (notLastIteration) {

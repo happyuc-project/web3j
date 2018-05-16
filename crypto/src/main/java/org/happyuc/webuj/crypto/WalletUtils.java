@@ -8,6 +8,7 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -79,11 +80,11 @@ public class WalletUtils {
      * @throws CipherException if the underlying cipher is not available
      * @throws IOException     if the destination cannot be written to
      */
-    public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory) throws CipherException, IOException {
+    public static Bip39Wallet generateBip39Wallet(String password, File destinationDirectory, List<String> wordList) throws CipherException, IOException {
         byte[] initialEntropy = new byte[16];
         secureRandom.nextBytes(initialEntropy);
 
-        String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy);
+        String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy,wordList);
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         ECKeyPair privateKey = ECKeyPair.create(Hash.sha256(seed));
 
