@@ -1,16 +1,19 @@
-package org.happyuc.webuj.ens.contracts.generated;
+package org.happyuc.webuj.contracts.token;
 
-import org.happyuc.webuj.contracts.token.ERC20Token;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.http.HttpService;
+import org.happyuc.webuj.tx.Contract;
+import org.happyuc.webuj.tx.ManagedTransaction;
 import org.happyuc.webuj.utils.Convert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigInteger;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ERC20TokenTest {
     private Webuj webuj;
@@ -33,6 +36,23 @@ public class ERC20TokenTest {
         contract.transfer(_to, BigInteger.ONE, Convert.Unit.HUC, "").send();
         BigInteger after = contract.balanceOf(credentials.getAddress()).send();
         assertEquals("Transfer 1 ERC20", Convert.fromWei(before.subtract(after), Convert.Unit.HUC).toString(), BigInteger.ONE.toString());
+    }
+
+    @Test
+    public void deploy() throws Exception {
+        String name = "ERC20(Test)";
+        String symbol = "ERC20";
+        BigInteger price = ManagedTransaction.GAS_PRICE;
+        BigInteger limit = Contract.GAS_LIMIT;
+        BigInteger amount = BigInteger.valueOf(1000000);
+        ERC20Token contract = ERC20Token.deploy(webuj, credentials, price, limit, amount, name, BigInteger.ONE, symbol).send();
+        assertTrue("Create new contract token", contract.isValid());
+    }
+
+    @Test
+    public void load() throws IOException {
+        ERC20Token contract = ERC20Token.load(contractAddr, webuj, credentials);
+        assertTrue("Load existing contract token", contract.isValid());
     }
 
 }
