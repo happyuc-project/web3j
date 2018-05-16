@@ -1,16 +1,15 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import org.happyuc.webuj.crypto.SampleKeys;
 import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.utils.Convert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.math.BigDecimal;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -30,19 +29,19 @@ public class TransferTest extends ManagedReqRepTransactionTester {
 
     @Test
     public void testSendFunds() throws Exception {
-        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.HUC).send(), is(
-                repTransactionReceipt));
+        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.HUC, "").send(),
+                   is(repTransactionReceipt));
     }
 
     @Test
     public void testSendFundsAsync() throws Exception {
-        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.HUC).send(), is(
-                repTransactionReceipt));
+        assertThat(Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, BigDecimal.TEN, Convert.Unit.HUC, "").send(),
+                   is(repTransactionReceipt));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testTransferInvalidValue() throws Exception {
-        Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, new BigDecimal(0.1), Convert.Unit.WEI).send();
+        Transfer.sendFunds(webuj, SampleKeys.CREDENTIALS, ADDRESS, new BigDecimal(0.1), Convert.Unit.WEI, "").send();
     }
 
     @SuppressWarnings("unchecked")

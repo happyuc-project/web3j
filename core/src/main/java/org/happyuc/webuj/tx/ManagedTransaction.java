@@ -77,7 +77,6 @@ public abstract class ManagedTransaction {
     }
 
     protected RepTransactionReceipt send(String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit) throws IOException, TransactionException {
-
         return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
     }
 }

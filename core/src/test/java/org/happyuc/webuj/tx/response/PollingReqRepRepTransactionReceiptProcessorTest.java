@@ -5,7 +5,6 @@ import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.junit.Before;
 import org.junit.Test;

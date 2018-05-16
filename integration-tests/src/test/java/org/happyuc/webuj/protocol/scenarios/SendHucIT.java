@@ -1,15 +1,14 @@
 package org.happyuc.webuj.protocol.scenarios;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
-import org.junit.Test;
-
-import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.tx.Transfer;
 import org.happyuc.webuj.utils.Convert;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.core.Is.is;
@@ -27,7 +26,8 @@ public class SendHucIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         BigInteger value = Convert.toWei("0.5", Convert.Unit.HUC).toBigInteger();
 
-        ReqTransaction reqTransaction = ReqTransaction.createHucTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
+        ReqTransaction reqTransaction = ReqTransaction
+                .createHucTransaction(ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
 
         HucSendRepTransaction hucSendRepTransaction = webuj.hucSendTransaction(reqTransaction).sendAsync().get();
 
@@ -62,7 +62,8 @@ public class SendHucIT extends Scenario {
      */
     @Test
     public void testTransfer() throws Exception {
-        RepTransactionReceipt repTransactionReceipt = Transfer.sendFunds(webuj, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.HUC).send();
+        RepTransactionReceipt repTransactionReceipt = Transfer
+                .sendFunds(webuj, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.HUC, "").send();
         assertFalse(repTransactionReceipt.getBlockHash().isEmpty());
     }
 }

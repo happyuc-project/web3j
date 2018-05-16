@@ -7,6 +7,7 @@ import org.happyuc.webuj.abi.datatypes.Address;
 import org.happyuc.webuj.abi.datatypes.DynamicBytes;
 import org.happyuc.webuj.abi.datatypes.Event;
 import org.happyuc.webuj.abi.datatypes.Function;
+import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.Utf8String;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.abi.datatypes.generated.Uint8;
@@ -20,6 +21,7 @@ import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
+import org.happyuc.webuj.utils.Convert;
 import rx.Observable;
 
 import java.math.BigInteger;
@@ -39,12 +41,12 @@ public class ERC20Token extends Contract implements ERC20Interface {
                                                          Arrays.asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
                                                          Collections.singletonList(new TypeReference<Uint256>() {}));
 
-    private ERC20Token(String contractAddress, Webuj webuj, Credentials credentials) {
+    public ERC20Token(String contractAddress, Webuj webuj, Credentials credentials) {
         super(BINARY, contractAddress, webuj, credentials, GAS_PRICE, GAS_LIMIT);
     }
 
 
-    private ERC20Token(String contractAddress, Webuj webuj, TransactionManager transactionManager) {
+    public ERC20Token(String contractAddress, Webuj webuj, TransactionManager transactionManager) {
         super(BINARY, contractAddress, webuj, transactionManager, GAS_PRICE, GAS_LIMIT);
     }
 
@@ -56,7 +58,9 @@ public class ERC20Token extends Contract implements ERC20Interface {
      */
     @Override
     public RemoteCall<BigInteger> totalSupply() {
-        final Function function = new Function("totalSupply", Arrays.asList(), Arrays.asList(new TypeReference<Uint256>() {}));
+        final List<Type> inputParam = Collections.emptyList();
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint256>() {});
+        final Function function = new Function("totalSupply", inputParam, outputParam);
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
@@ -68,9 +72,9 @@ public class ERC20Token extends Contract implements ERC20Interface {
      */
     @Override
     public RemoteCall<BigInteger> balanceOf(String _owner) {
-        final Function function = new Function("balanceOf",
-                                               Arrays.asList(new Address(_owner)),
-                                               Arrays.asList(new TypeReference<Uint256>() {}));
+        final List<Type> inputParam = Collections.singletonList(new Address(_owner));
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint256>() {});
+        final Function function = new Function("balanceOf", inputParam, outputParam);
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
@@ -82,8 +86,9 @@ public class ERC20Token extends Contract implements ERC20Interface {
      * @return RepTransactionReceipt
      */
     @Override
-    public RemoteCall<RepTransactionReceipt> transfer(String _to, BigInteger _value) {
-        final Function function = new Function("transfer", Arrays.asList(new Address(_to), new Uint256(_value)), Collections.emptyList());
+    public RemoteCall<RepTransactionReceipt> transfer(String _to, BigInteger _value, Convert.Unit unit, String _remark) {
+        BigInteger weiValue = Convert.toWei(_value, unit);
+        final Function function = new Function("transfer", Arrays.asList(new Address(_to), new Uint256(weiValue)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
 
@@ -91,7 +96,7 @@ public class ERC20Token extends Contract implements ERC20Interface {
      * todo ???
      *
      * @param repTransactionReceipt the transaction result, like method `transfer`
-     * @return List<EventResponse.TransferEr>
+     * @return List EventResponse.TransferEr
      */
     public List<EventResponse.TransferEr> simpleGetTxEvents(RepTransactionReceipt repTransactionReceipt) {
         return getTransferEvents(repTransactionReceipt, eventValues -> {
@@ -120,7 +125,7 @@ public class ERC20Token extends Contract implements ERC20Interface {
      *
      * @param startBlock todo ???
      * @param endBlock   todo ???
-     * @return Observable<EventResponse.TransferEr>
+     * @return Observable EventResponse.TransferEr
      */
 
     public Observable<EventResponse.TransferEr> simpleTsEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
@@ -150,25 +155,26 @@ public class ERC20Token extends Contract implements ERC20Interface {
 
     @Override
     public RemoteCall<BigInteger> allowance(String _owner, String _spender) {
-        final Function function = new Function("allowance",
-                                               Arrays.asList(new Address(_owner), new Address(_spender)),
-                                               Collections.singletonList(new TypeReference<Uint256>() {}));
+        final List<Type> inputParam = Arrays.asList(new Address(_owner), new Address(_spender));
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint256>() {});
+        final Function function = new Function("allowance", inputParam, outputParam);
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     @Override
     public RemoteCall<RepTransactionReceipt> approve(String _spender, BigInteger _value) {
-        final Function function = new Function("approve",
-                                               Arrays.asList(new Address(_spender), new Uint256(_value)),
-                                               Collections.emptyList());
+        final List<Type> inputParam = Arrays.asList(new Address(_spender), new Uint256(_value));
+        final List<TypeReference<?>> outputParam = Collections.emptyList();
+        final Function function = new Function("approve", inputParam, outputParam);
         return executeRemoteCallTransaction(function);
     }
 
     @Override
-    public RemoteCall<RepTransactionReceipt> transferFrom(String _from, String _to, BigInteger _value) {
-        final Function function = new Function("transferFrom",
-                                               Arrays.asList(new Address(_from), new Address(_to), new Uint256(_value)),
-                                               Collections.emptyList());
+    public RemoteCall<RepTransactionReceipt> transferFrom(String _from, String _to, BigInteger _value, Convert.Unit unit, String remark) {
+        BigInteger weiValue = Convert.toWei(_value, unit);
+        final List<Type> inputParam = Arrays.asList(new Address(_from), new Address(_to), new Uint256(weiValue));
+        final List<TypeReference<?>> outputParam = Collections.emptyList();
+        final Function function = new Function("transferFrom", inputParam, outputParam);
         return executeRemoteCallTransaction(function);
     }
 
@@ -176,7 +182,7 @@ public class ERC20Token extends Contract implements ERC20Interface {
      * todo ???
      *
      * @param repTransactionReceipt the transaction result, like method `transfer`
-     * @return List<EventResponse.ApprovalEr>
+     * @return List EventResponse.ApprovalEr
      */
     public List<EventResponse.ApprovalEr> simpleGetapprEvents(RepTransactionReceipt repTransactionReceipt) {
         return getTransferEvents(repTransactionReceipt, eventValues -> {
@@ -205,7 +211,7 @@ public class ERC20Token extends Contract implements ERC20Interface {
      *
      * @param startBlock todo ???
      * @param endBlock   todo ???
-     * @return Observable<EventResponse.ApprovalEr>
+     * @return Observable EventResponse.ApprovalEr
      */
 
     public Observable<EventResponse.ApprovalEr> simpleAppEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
@@ -234,45 +240,51 @@ public class ERC20Token extends Contract implements ERC20Interface {
     }
 
     public RemoteCall<String> name() {
-        final Function function = new Function("name", Arrays.asList(), Arrays.asList(new TypeReference<Utf8String>() {}));
+        final List<Type> inputParam = Collections.emptyList();
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Utf8String>() {});
+        final Function function = new Function("name", inputParam, outputParam);
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteCall<BigInteger> decimals() {
-        final Function function = new Function("decimals", Arrays.asList(), Arrays.asList(new TypeReference<Uint8>() {}));
+        final List<Type> inputParam = Collections.emptyList();
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint8>() {});
+        final Function function = new Function("decimals", inputParam, outputParam);
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteCall<String> version() {
-        final Function function = new Function("version", Arrays.asList(), Arrays.asList(new TypeReference<Utf8String>() {}));
+        final List<Type> inputParam = Collections.emptyList();
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Utf8String>() {});
+        final Function function = new Function("version", inputParam, outputParam);
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteCall<String> symbol() {
-        final Function function = new Function("symbol", Arrays.asList(), Arrays.asList(new TypeReference<Utf8String>() {}));
+        final List<Type> inputParam = Collections.emptyList();
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Utf8String>() {});
+        final Function function = new Function("symbol", inputParam, outputParam);
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteCall<RepTransactionReceipt> approveAndCall(String _spender, BigInteger _value, byte[] _extraData) {
-        final Function function = new Function("approveAndCall",
-                                               Arrays.asList(new Address(_spender), new Uint256(_value), new DynamicBytes(_extraData)),
-                                               Collections.emptyList());
+        final List<Type> inputParam = Arrays.asList(new Address(_spender), new Uint256(_value), new DynamicBytes(_extraData));
+        final List<TypeReference<?>> outputParam = Collections.emptyList();
+        final Function function = new Function("approveAndCall", inputParam, outputParam);
         return executeRemoteCallTransaction(function);
     }
 
     public static RemoteCall<ERC20Token> deploy(Webuj webuj, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(new Uint256(_initialAmount),
-                                                                                    new Utf8String(_tokenName),
-                                                                                    new Uint8(_decimalUnits),
-                                                                                    new Utf8String(_tokenSymbol)));
+        List<Type> param = Arrays
+                .asList(new Uint256(_initialAmount), new Utf8String(_tokenName), new Uint8(_decimalUnits), new Utf8String(_tokenSymbol));
+        String encodedConstructor = FunctionEncoder.encodeConstructor(param);
         return deployRemoteCall(ERC20Token.class, webuj, credentials, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
     public static RemoteCall<ERC20Token> deploy(Webuj webuj, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger _initialAmount, String _tokenName, BigInteger _decimalUnits, String _tokenSymbol) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(new Uint256(_initialAmount),
-                                                                                    new Utf8String(_tokenName),
-                                                                                    new Uint8(_decimalUnits),
-                                                                                    new Utf8String(_tokenSymbol)));
+        List<Type> param = Arrays
+                .asList(new Uint256(_initialAmount), new Utf8String(_tokenName), new Uint8(_decimalUnits), new Utf8String(_tokenSymbol));
+        final String encodedConstructor = FunctionEncoder.encodeConstructor(param);
         return deployRemoteCall(ERC20Token.class, webuj, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 

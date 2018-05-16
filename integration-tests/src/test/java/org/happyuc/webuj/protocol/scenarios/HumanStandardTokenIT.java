@@ -20,7 +20,6 @@ import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
 import org.happyuc.webuj.utils.Numeric;
 import org.junit.Test;
 

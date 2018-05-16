@@ -1,22 +1,20 @@
 package org.happyuc.webuj.console;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.ens.EnsResolver;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.WebuClientVersion;
-import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.protocol.http.HttpService;
 import org.happyuc.webuj.protocol.infura.InfuraHttpService;
 import org.happyuc.webuj.tx.Transfer;
 import org.happyuc.webuj.utils.Convert;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import static org.happyuc.webuj.codegen.Console.exitError;
 
@@ -94,7 +92,7 @@ public class WalletSendFunds extends WalletManager {
 
         console.printf("Commencing transfer (this may take a few minutes) ");
         try {
-            Future<RepTransactionReceipt> future = Transfer.sendFunds(webuj, credentials, destinationAddress, amountInWei, Convert.Unit.WEI).sendAsync();
+            Future<RepTransactionReceipt> future = Transfer.sendFunds(webuj, credentials, destinationAddress, amountInWei, Convert.Unit.WEI, "").sendAsync();
 
             while (!future.isDone()) {
                 console.printf(".");
@@ -102,7 +100,7 @@ public class WalletSendFunds extends WalletManager {
             }
             console.printf("$%n%n");
             return future.get();
-        } catch (InterruptedException | ExecutionException | TransactionException | IOException e) {
+        } catch (InterruptedException | ExecutionException e) {
             exitError("Problem encountered transferring funds: \n" + e.getMessage());
         }
         throw new RuntimeException("Application exit failure");

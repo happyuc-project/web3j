@@ -223,7 +223,6 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionException if the transaction was not mined while waiting
      */
     RepTransactionReceipt executeTransaction(String data, BigInteger weiValue) throws TransactionException, IOException {
-
         RepTransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
 
         if (receipt.getStatus() != null && !SUCCESSFUL_TRANSACTION_STATUS.equals(receipt.getStatus())) {

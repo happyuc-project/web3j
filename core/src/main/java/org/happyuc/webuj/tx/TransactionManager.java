@@ -1,14 +1,14 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.happyuc.webuj.tx.response.PollingTransactionReceiptProcessor;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
+
+import java.io.IOException;
+import java.math.BigInteger;
 
 import static org.happyuc.webuj.protocol.core.JsonRpc2_0Webuj.DEFAULT_BLOCK_TIME;
 
@@ -38,7 +38,6 @@ public abstract class TransactionManager {
     }
 
     protected RepTransactionReceipt executeTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException, TransactionException {
-
         HucSendRepTransaction hucSendRepTransaction = sendTransaction(gasPrice, gasLimit, to, data, value);
         return processResponse(hucSendRepTransaction);
     }

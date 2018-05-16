@@ -22,7 +22,6 @@ import org.happyuc.webuj.protocol.core.methods.response.HucCall;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
