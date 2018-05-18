@@ -1,27 +1,39 @@
 package org.happyuc.webuj.utils;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Ethereum unit conversion functions.
  */
 public final class Convert {
-    private Convert() { }
+    private Convert()
+    {
+    }
 
-    public static BigDecimal fromWei(String number, Unit unit) {
+    public static BigDecimal fromWei(String number, Unit unit)
+    {
         return fromWei(new BigDecimal(number), unit);
     }
 
-    public static BigDecimal fromWei(BigDecimal number, Unit unit) {
+    public static BigDecimal fromWei(BigDecimal number, Unit unit)
+    {
         return number.divide(unit.getWeiFactor());
     }
 
-    public static BigDecimal toWei(String number, Unit unit) {
+    public static BigDecimal toWei(String number, Unit unit)
+    {
         return toWei(new BigDecimal(number), unit);
     }
 
-    public static BigDecimal toWei(BigDecimal number, Unit unit) {
+    public static BigDecimal toWei(BigDecimal number, Unit unit)
+    {
         return number.multiply(unit.getWeiFactor());
+    }
+
+    public static BigInteger toWei(BigInteger number, Unit unit)
+    {
+        return toWei(new BigDecimal(number), unit).toBigInteger();
     }
 
     public enum Unit {
@@ -47,24 +59,31 @@ public final class Convert {
         private String name;
         private BigDecimal weiFactor;
 
-        Unit(String name, int factor) {
+        Unit(String name, int factor)
+        {
             this.name = name;
             this.weiFactor = BigDecimal.TEN.pow(factor);
         }
 
-        public BigDecimal getWeiFactor() {
+        public BigDecimal getWeiFactor()
+        {
             return weiFactor;
         }
 
         @Override
-        public String toString() {
+        public String toString()
+        {
             return name;
         }
 
-        public static Unit fromString(String name) {
-            if (name != null) {
-                for (Unit unit : Unit.values()) {
-                    if (name.equalsIgnoreCase(unit.name)) {
+        public static Unit fromString(String name)
+        {
+            if (name != null)
+            {
+                for (Unit unit : Unit.values())
+                {
+                    if (name.equalsIgnoreCase(unit.name))
+                    {
                         return unit;
                     }
                 }
