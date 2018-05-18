@@ -1,7 +1,6 @@
 package org.happyuc.webuj.utils;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 
 /**
@@ -19,10 +18,6 @@ public final class Convert {
         return number.divide(unit.getWeiFactor(), RoundingMode.HALF_UP);
     }
 
-    public static BigInteger fromWei(BigInteger number, Unit unit) {
-        return fromWei(new BigDecimal(number), unit).toBigInteger();
-    }
-
     public static BigDecimal toWei(String number, Unit unit) {
         return toWei(new BigDecimal(number), unit);
     }
@@ -30,11 +25,6 @@ public final class Convert {
     public static BigDecimal toWei(BigDecimal number, Unit unit) {
         return number.multiply(unit.getWeiFactor());
     }
-
-    public static BigInteger toWei(BigInteger number, Unit unit) {
-        return toWei(new BigDecimal(number), unit).toBigInteger();
-    }
-
 
     public enum Unit {
         WEI("wei", 0),

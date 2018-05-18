@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static org.junit.Assert.assertEquals;
@@ -22,11 +23,11 @@ public class ERC20TokenTest {
 
     private Credentials credentials;
 
-    public static final String NODE_URL = "";
-    public static final String _TO = "";
-    public static final String CONTRACT_ADDR = "";
+    public static final String NODE_URL = "http://112.74.96.198:8545";
+    public static final String _TO = "0x82a85ec8b94779ae96e8fdfa752aa7ac3932252d";
+    public static final String CONTRACT_ADDR = "0xd851b36f3f792dcd16864feabee0c78d8e41bb54";
     public static final String PRIVATE_KEY = "";
-    public static final String SOURCE = "";
+    public static final String SOURCE = "/home/ldc/blockchain/huc/keystore/" + "UTC--2018-04-11T08-26-55.177995665Z--6d3ba18195cd8dd969d81a252f27c844900cd5ba";
 
     @Before
     public void setUp() throws IOException, CipherException {
@@ -39,9 +40,10 @@ public class ERC20TokenTest {
     public void transfer() throws Exception {
         ERC20Token contract = ERC20Token.load(CONTRACT_ADDR, webuj, credentials);
         BigInteger before = contract.balanceOf(credentials.getAddress()).send();
-        contract.transfer(_TO, BigInteger.ONE, Convert.Unit.HUC, "").send();
+        contract.transfer(_TO, "1", Convert.Unit.HUC, "").send();
         BigInteger after = contract.balanceOf(credentials.getAddress()).send();
-        assertEquals("Transfer 1 ERC20", Convert.fromWei(before.subtract(after), Convert.Unit.HUC).toString(), BigInteger.ONE.toString());
+        BigDecimal balTail = Convert.fromWei(before.subtract(after).toString(), Convert.Unit.HUC);
+        assertEquals("Transfer 1 ERC20", balTail, BigDecimal.ONE);
     }
 
     @Test

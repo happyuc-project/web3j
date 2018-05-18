@@ -26,7 +26,7 @@ public interface ERC20Interface extends ERC20BasicInterface {
 
     RemoteCall<RepTransactionReceipt> approve(String spender, BigInteger value);
 
-    RemoteCall<RepTransactionReceipt> transferFrom(String from, String to, BigInteger value, Convert.Unit unit, String remark);
+    RemoteCall<RepTransactionReceipt> transferFrom(String from, String to, String value, Convert.Unit unit, String remark);
 
     <T> List<T> getApprovalEvents(RepTransactionReceipt repTransactionReceipt, EventResponse.Rec<T> rec);
 

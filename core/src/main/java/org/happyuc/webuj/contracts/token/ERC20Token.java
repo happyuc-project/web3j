@@ -81,8 +81,8 @@ public class ERC20Token extends Contract implements ERC20Interface {
      * @return RepTransactionReceipt
      */
     @Override
-    public RemoteCall<RepTransactionReceipt> transfer(String _to, BigInteger _value, Convert.Unit unit, String _remark) {
-        BigInteger weiValue = Convert.toWei(_value, unit);
+    public RemoteCall<RepTransactionReceipt> transfer(String _to, String _value, Convert.Unit unit, String _remark) {
+        BigInteger weiValue = Convert.toWei(_value, unit).toBigInteger();
         final Function function = new Function("transfer", Arrays.asList(new Address(_to), new Uint256(weiValue)), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -165,8 +165,8 @@ public class ERC20Token extends Contract implements ERC20Interface {
     }
 
     @Override
-    public RemoteCall<RepTransactionReceipt> transferFrom(String _from, String _to, BigInteger _value, Convert.Unit unit, String remark) {
-        BigInteger weiValue = Convert.toWei(_value, unit);
+    public RemoteCall<RepTransactionReceipt> transferFrom(String _from, String _to, String _value, Convert.Unit unit, String remark) {
+        BigInteger weiValue = Convert.toWei(_value, unit).toBigInteger();
         final List<Type> inputParam = Arrays.asList(new Address(_from), new Address(_to), new Uint256(weiValue));
         final List<TypeReference<?>> outputParam = Collections.emptyList();
         final Function function = new Function("transferFrom", inputParam, outputParam);
