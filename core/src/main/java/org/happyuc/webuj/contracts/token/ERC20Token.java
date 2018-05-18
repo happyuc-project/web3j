@@ -269,16 +269,16 @@ public class ERC20Token extends Contract implements ERC20Interface {
         return executeRemoteCallTransaction(function);
     }
 
-    public static RemoteCall<ERC20Token> deploy(Webuj webuj, Credentials credentials, BigInteger _price, BigInteger _limit, BigInteger _amount, String _name, BigInteger _units, String _symbol) {
-        List<Type> param = Arrays.asList(new Uint256(_amount), new Utf8String(_name), new Uint8(_units), new Utf8String(_symbol));
+    public static RemoteCall<ERC20Token> deploy(Webuj webuj, Credentials credentials, BigInteger price, BigInteger limit, BigInteger amount, String name, String symbol) {
+        List<Type> param = Arrays.asList(new Uint256(amount), new Utf8String(name), new Utf8String(symbol));
         String encodedConstructor = FunctionEncoder.encodeConstructor(param);
-        return deployRemoteCall(ERC20Token.class, webuj, credentials, _price, _limit, BINARY, encodedConstructor);
+        return deployRemoteCall(ERC20Token.class, webuj, credentials, price, limit, BINARY, encodedConstructor);
     }
 
-    public static RemoteCall<ERC20Token> deploy(Webuj webuj, TransactionManager manager, BigInteger _price, BigInteger _limit, BigInteger _amount, String _name, BigInteger _units, String _symbol) {
-        List<Type> param = Arrays.asList(new Uint256(_amount), new Utf8String(_name), new Uint8(_units), new Utf8String(_symbol));
-        final String encodedConstructor = FunctionEncoder.encodeConstructor(param);
-        return deployRemoteCall(ERC20Token.class, webuj, manager, _price, _limit, BINARY, encodedConstructor);
+    public static RemoteCall<ERC20Token> deploy(Webuj webuj, TransactionManager manager, BigInteger price, BigInteger limit, BigInteger amount, String name, String symbol) {
+        List<Type> param = Arrays.asList(new Uint256(amount), new Utf8String(name), new Utf8String(symbol));
+        String encodedConstructor = FunctionEncoder.encodeConstructor(param);
+        return deployRemoteCall(ERC20Token.class, webuj, manager, price, limit, BINARY, encodedConstructor);
     }
 
     public static ERC20Token load(String contractAddress, Webuj webuj, Credentials credentials) {

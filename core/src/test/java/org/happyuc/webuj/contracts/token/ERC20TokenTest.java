@@ -2,6 +2,7 @@ package org.happyuc.webuj.contracts.token;
 
 import org.happyuc.webuj.crypto.CipherException;
 import org.happyuc.webuj.crypto.Credentials;
+import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.http.HttpService;
 import org.happyuc.webuj.tx.Contract;
@@ -21,17 +22,17 @@ public class ERC20TokenTest {
 
     private Credentials credentials;
 
-    public static final String NODE_URL = "http://112.74.96.198:8545";
+    public static final String NODE_URL = "";
+    public static final String _TO = "";
     public static final String CONTRACT_ADDR = "";
     public static final String PRIVATE_KEY = "";
-    public static final String _TO = "";
     public static final String SOURCE = "";
 
     @Before
     public void setUp() throws IOException, CipherException {
         webuj = Webuj.build(new HttpService());
-        // credentials = WalletUtils.loadCredentials("123456", SOURCE);
-        credentials = Credentials.create(PRIVATE_KEY);
+        // credentials = Credentials.create(PRIVATE_KEY);
+        credentials = WalletUtils.loadCredentials("123456", SOURCE);
     }
 
     @Test
@@ -50,7 +51,7 @@ public class ERC20TokenTest {
         BigInteger price = ManagedTransaction.GAS_PRICE;
         BigInteger limit = Contract.GAS_LIMIT;
         BigInteger amount = BigInteger.valueOf(1000000);
-        ERC20Token contract = ERC20Token.deploy(webuj, credentials, price, limit, amount, name, BigInteger.ONE, symbol).send();
+        ERC20Token contract = ERC20Token.deploy(webuj, credentials, price, limit, amount, name, symbol).send();
         assertTrue("Create new contract token", contract.isValid());
     }
 
