@@ -21,8 +21,11 @@ public final class Convert {
         return number.divide(unit.getWeiFactor());
     }
 
-    public static BigDecimal toWei(String number, Unit unit)
-    {
+    public static BigInteger fromWei(BigInteger number, Unit unit) {
+        return fromWei(new BigDecimal(number), unit).toBigInteger();
+    }
+
+    public static BigDecimal toWei(String number, Unit unit) {
         return toWei(new BigDecimal(number), unit);
     }
 
