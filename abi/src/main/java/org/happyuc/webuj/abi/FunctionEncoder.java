@@ -1,15 +1,15 @@
 package org.happyuc.webuj.abi;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.happyuc.webuj.abi.datatypes.Function;
 import org.happyuc.webuj.abi.datatypes.StaticArray;
 import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.Uint;
 import org.happyuc.webuj.crypto.Hash;
 import org.happyuc.webuj.utils.Numeric;
+
+import java.math.BigInteger;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>HappyUC Contract Application Binary Interface (ABI) encoding for functions.

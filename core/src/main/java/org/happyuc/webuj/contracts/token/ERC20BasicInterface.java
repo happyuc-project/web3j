@@ -26,7 +26,7 @@ public interface ERC20BasicInterface {
 
     RemoteCall<BigInteger> balanceOf(String who);
 
-    RemoteCall<RepTransactionReceipt> transfer(String to, BigInteger value, Convert.Unit unit, String remark);
+    RemoteCall<RepTransactionReceipt> transfer(String to, String value, Convert.Unit unit, String remark);
 
     <T> List<T> getTransferEvents(RepTransactionReceipt repTransactionReceipt, EventResponse.Rec<T> rec);
 

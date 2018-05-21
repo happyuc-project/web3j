@@ -265,8 +265,7 @@ public abstract class Contract extends ManagedTransaction {
         return contract;
     }
 
-    protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws IOException, TransactionException {
-
+    protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws TransactionException {
         try {
             Constructor<T> constructor = type.getDeclaredConstructor(String.class, Webuj.class, Credentials.class, BigInteger.class, BigInteger.class);
             constructor.setAccessible(true);
@@ -282,8 +281,7 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
-    protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws IOException, TransactionException {
-
+    protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws TransactionException {
         try {
             Constructor<T> constructor = type.getDeclaredConstructor(String.class, Webuj.class, TransactionManager.class, BigInteger.class, BigInteger.class);
             constructor.setAccessible(true);
