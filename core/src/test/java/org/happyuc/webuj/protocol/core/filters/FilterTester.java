@@ -19,7 +19,7 @@ import org.happyuc.webuj.protocol.ObjectMapperFactory;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.WebujService;
 import org.happyuc.webuj.protocol.core.Request;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
 
@@ -47,7 +47,7 @@ public abstract class FilterTester {
     }
 
     <T> void runTest(HucLog hucLog, Observable<T> observable) throws Exception {
-        HucFilter hucFilter = objectMapper.readValue("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0x1\"\n" + "}", HucFilter.class);
+        HucRepFilter hucRepFilter = objectMapper.readValue("{\n" + "  \"id\":1,\n" + "  \"jsonrpc\": \"2.0\",\n" + "  \"result\": \"0x1\"\n" + "}", HucRepFilter.class);
 
         HucUninstallFilter hucUninstallFilter = objectMapper.readValue("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":true}", HucUninstallFilter.class);
 
@@ -58,7 +58,7 @@ public abstract class FilterTester {
 
         CountDownLatch completedLatch = new CountDownLatch(1);
 
-        when(webujService.send(any(Request.class), eq(HucFilter.class))).thenReturn(hucFilter);
+        when(webujService.send(any(Request.class), eq(HucRepFilter.class))).thenReturn(hucRepFilter);
         when(webujService.send(any(Request.class), eq(HucLog.class))).thenReturn(hucLog);
         when(webujService.send(any(Request.class), eq(HucUninstallFilter.class))).thenReturn(hucUninstallFilter);
 

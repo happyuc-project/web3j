@@ -2,7 +2,10 @@ package org.happyuc.webuj.protocol.core;
 
 import java.math.BigInteger;
 
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.protocol.core.methods.request.ShhFilter;
+import org.happyuc.webuj.protocol.core.methods.request.ShhReqPost;
 import org.happyuc.webuj.protocol.core.methods.response.DbGetHex;
 import org.happyuc.webuj.protocol.core.methods.response.DbGetString;
 import org.happyuc.webuj.protocol.core.methods.response.DbPutHex;
@@ -15,16 +18,16 @@ import org.happyuc.webuj.protocol.core.methods.response.HucCompileLLL;
 import org.happyuc.webuj.protocol.core.methods.response.HucCompileSerpent;
 import org.happyuc.webuj.protocol.core.methods.response.HucCompileSolidity;
 import org.happyuc.webuj.protocol.core.methods.response.HucEstimateGas;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetBalance;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockTransactionCountByHash;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockTransactionCountByNumber;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockRepTransactionCountByHash;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetBlockRepTransactionCountByNumber;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCode;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetCompilers;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetStorageAt;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionCount;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockHash;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetUncleCountByBlockNumber;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetWork;
@@ -32,11 +35,12 @@ import org.happyuc.webuj.protocol.core.methods.response.HucHashrate;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.HucMining;
 import org.happyuc.webuj.protocol.core.methods.response.HucProtocolVersion;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucSign;
 import org.happyuc.webuj.protocol.core.methods.response.HucSubmitHashrate;
 import org.happyuc.webuj.protocol.core.methods.response.HucSubmitWork;
 import org.happyuc.webuj.protocol.core.methods.response.HucSyncing;
-import org.happyuc.webuj.protocol.core.methods.response.HucTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucUninstallFilter;
 import org.happyuc.webuj.protocol.core.methods.response.NetListening;
 import org.happyuc.webuj.protocol.core.methods.response.NetPeerCount;
@@ -47,6 +51,7 @@ import org.happyuc.webuj.protocol.core.methods.response.ShhMessages;
 import org.happyuc.webuj.protocol.core.methods.response.ShhNewFilter;
 import org.happyuc.webuj.protocol.core.methods.response.ShhNewGroup;
 import org.happyuc.webuj.protocol.core.methods.response.ShhNewIdentity;
+import org.happyuc.webuj.protocol.core.methods.response.ShhRepPost;
 import org.happyuc.webuj.protocol.core.methods.response.ShhUninstallFilter;
 import org.happyuc.webuj.protocol.core.methods.response.ShhVersion;
 import org.happyuc.webuj.protocol.core.methods.response.WebuClientVersion;
@@ -86,11 +91,11 @@ public interface HappyUC {
 
     Request<?, HucGetStorageAt> hucGetStorageAt(String address, BigInteger position, DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, HucGetTransactionCount> hucGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter);
+    Request<?, HucGetRepTransactionCount> hucGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, HucGetBlockTransactionCountByHash> hucGetBlockTransactionCountByHash(String blockHash);
+    Request<?, HucGetBlockRepTransactionCountByHash> hucGetBlockTransactionCountByHash(String blockHash);
 
-    Request<?, HucGetBlockTransactionCountByNumber> hucGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter);
+    Request<?, HucGetBlockRepTransactionCountByNumber> hucGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter);
 
     Request<?, HucGetUncleCountByBlockHash> hucGetUncleCountByBlockHash(String blockHash);
 
@@ -100,25 +105,25 @@ public interface HappyUC {
 
     Request<?, HucSign> hucSign(String address, String sha3HashOfDataToSign);
 
-    Request<?, org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction> hucSendTransaction(org.happyuc.webuj.protocol.core.methods.request.Transaction transaction);
+    Request<?, HucSendRepTransaction> hucSendTransaction(ReqTransaction reqTransaction);
 
-    Request<?, org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction> hucSendRawTransaction(String signedTransactionData);
+    Request<?, HucSendRepTransaction> hucSendRawTransaction(String signedTransactionData);
 
-    Request<?, org.happyuc.webuj.protocol.core.methods.response.HucCall> hucCall(org.happyuc.webuj.protocol.core.methods.request.Transaction transaction, DefaultBlockParameter defaultBlockParameter);
+    Request<?, org.happyuc.webuj.protocol.core.methods.response.HucCall> hucCall(ReqTransaction reqTransaction, DefaultBlockParameter defaultBlockParameter);
 
-    Request<?, HucEstimateGas> hucEstimateGas(org.happyuc.webuj.protocol.core.methods.request.Transaction transaction);
+    Request<?, HucEstimateGas> hucEstimateGas(ReqTransaction reqTransaction);
 
     Request<?, HucBlock> hucGetBlockByHash(String blockHash, boolean returnFullTransactionObjects);
 
     Request<?, HucBlock> hucGetBlockByNumber(DefaultBlockParameter defaultBlockParameter, boolean returnFullTransactionObjects);
 
-    Request<?, HucTransaction> hucGetTransactionByHash(String transactionHash);
+    Request<?, HucRepTransaction> hucGetTransactionByHash(String transactionHash);
 
-    Request<?, HucTransaction> hucGetTransactionByBlockHashAndIndex(String blockHash, BigInteger transactionIndex);
+    Request<?, HucRepTransaction> hucGetTransactionByBlockHashAndIndex(String blockHash, BigInteger transactionIndex);
 
-    Request<?, HucTransaction> hucGetTransactionByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex);
+    Request<?, HucRepTransaction> hucGetTransactionByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex);
 
-    Request<?, HucGetTransactionReceipt> hucGetTransactionReceipt(String transactionHash);
+    Request<?, HucGetRepTransactionReceipt> hucGetTransactionReceipt(String transactionHash);
 
     Request<?, HucBlock> hucGetUncleByBlockHashAndIndex(String blockHash, BigInteger transactionIndex);
 
@@ -132,11 +137,11 @@ public interface HappyUC {
 
     Request<?, HucCompileSerpent> hucCompileSerpent(String sourceCode);
 
-    Request<?, HucFilter> hucNewFilter(org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter);
+    Request<?, HucRepFilter> hucNewFilter(HucReqFilter hucReqFilter);
 
-    Request<?, HucFilter> hucNewBlockFilter();
+    Request<?, HucRepFilter> hucNewBlockFilter();
 
-    Request<?, HucFilter> hucNewPendingTransactionFilter();
+    Request<?, HucRepFilter> hucNewPendingTransactionFilter();
 
     Request<?, HucUninstallFilter> hucUninstallFilter(BigInteger filterId);
 
@@ -144,7 +149,7 @@ public interface HappyUC {
 
     Request<?, HucLog> hucGetFilterLogs(BigInteger filterId);
 
-    Request<?, HucLog> hucGetLogs(org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter);
+    Request<?, HucLog> hucGetLogs(HucReqFilter hucReqFilter);
 
     Request<?, HucGetWork> hucGetWork();
 
@@ -160,7 +165,7 @@ public interface HappyUC {
 
     Request<?, DbGetHex> dbGetHex(String databaseName, String keyName);
 
-    Request<?, org.happyuc.webuj.protocol.core.methods.response.ShhPost> shhPost(org.happyuc.webuj.protocol.core.methods.request.ShhPost shhPost);
+    Request<?, ShhRepPost> shhPost(ShhReqPost shhReqPost);
 
     Request<?, ShhVersion> shhVersion();
 

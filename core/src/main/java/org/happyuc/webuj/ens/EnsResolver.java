@@ -127,9 +127,8 @@ public class EnsResolver {
         byte[] nameHash = NameHash.nameHashAsBytes(ensName);
 
         String resolverAddress = ensRegistry.resolver(nameHash).send();
-        PublicResolver resolver = PublicResolver.load(resolverAddress, webuj, transactionManager, ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
 
-        return resolver;
+        return PublicResolver.load(resolverAddress, webuj, transactionManager, ManagedTransaction.GAS_PRICE, org.happyuc.webuj.tx.Contract.GAS_LIMIT);
     }
 
     boolean isSynced() throws Exception {

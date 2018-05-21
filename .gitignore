@@ -27,6 +27,7 @@ hs_err_pid*
 /out
 */build/
 */out/
+local.properties
 
 gradle.properties
 
@@ -42,7 +43,8 @@ gradle-app.setting
 # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
-.idea
+# Jetbrains IDE
+.idea/
 *.iml
 geth.sh
 ghuc.sh

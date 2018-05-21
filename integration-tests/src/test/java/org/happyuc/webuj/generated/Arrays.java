@@ -3,7 +3,6 @@ package org.happyuc.webuj.generated;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.happyuc.webuj.abi.TypeReference;
 import org.happyuc.webuj.abi.datatypes.Address;
@@ -13,7 +12,7 @@ import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
 
@@ -38,7 +37,7 @@ public class Arrays extends Contract {
     }
 
     @SuppressWarnings("unchecked")
-    public RemoteCall<TransactionReceipt> multiDynamic(List<List<BigInteger>> input) {
+    public RemoteCall<RepTransactionReceipt> multiDynamic(List<List<BigInteger>> input) {
         final Function function = new Function("multiDynamic", java.util.Arrays.asList(new org.happyuc.webuj.abi.datatypes.DynamicArray(org.happyuc.webuj.abi.Utils.typeMap(input, org.happyuc.webuj.abi.datatypes.generated.StaticArray2.class, org.happyuc.webuj.abi.datatypes.generated.Uint256.class))), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -53,17 +52,17 @@ public class Arrays extends Contract {
     }
 
     @SuppressWarnings("unchecked")
-    public RemoteCall<TransactionReceipt> multiFixed(List<List<BigInteger>> input) {
+    public RemoteCall<RepTransactionReceipt> multiFixed(List<List<BigInteger>> input) {
         final Function function = new Function("multiFixed", java.util.Arrays.asList(new org.happyuc.webuj.abi.datatypes.generated.StaticArray6(org.happyuc.webuj.abi.Utils.typeMap(input, org.happyuc.webuj.abi.datatypes.generated.StaticArray2.class, org.happyuc.webuj.abi.datatypes.generated.Uint256.class))), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> fixedReverse(List<BigInteger> input) {
+    public RemoteCall<RepTransactionReceipt> fixedReverse(List<BigInteger> input) {
         final Function function = new Function("fixedReverse", java.util.Arrays.asList(new org.happyuc.webuj.abi.datatypes.generated.StaticArray10<org.happyuc.webuj.abi.datatypes.generated.Uint256>(org.happyuc.webuj.abi.Utils.typeMap(input, org.happyuc.webuj.abi.datatypes.generated.Uint256.class))), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> dynamicReverse(List<BigInteger> input) {
+    public RemoteCall<RepTransactionReceipt> dynamicReverse(List<BigInteger> input) {
         final Function function = new Function("dynamicReverse", java.util.Arrays.asList(new org.happyuc.webuj.abi.datatypes.DynamicArray<org.happyuc.webuj.abi.datatypes.generated.Uint256>(org.happyuc.webuj.abi.Utils.typeMap(input, org.happyuc.webuj.abi.datatypes.generated.Uint256.class))), Collections.emptyList());
         return executeRemoteCallTransaction(function);
     }

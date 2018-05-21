@@ -32,7 +32,7 @@ Also, when performing Huc transfers, such as using the command line tools:
 Webuj implementation
 --------------------
 
-Behind the scenes, whenever you using Webuj's transaction managers (which are derived from the
+Behind the scenes, whenever you using Webuj's reqTransaction managers (which are derived from the
 `ManagedTransaction <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/tx/ManagedTransaction.java>`_
 class), the `EnsResolver <https://github.com/happyuc-project/webu.java/blob/master/core/src/main/java/org/Webuj/ens/EnsResolver.java>`_
 is invoked to perform an ENS lookup if applicable.

@@ -5,9 +5,9 @@ import java.math.BigInteger;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * Transaction object used by both {@link HucTransaction} and {@link HucBlock}.
+ * ReqTransaction object used by both {@link HucRepTransaction} and {@link HucBlock}.
  */
-public class Transaction {
+public class RepTransaction {
     private String hash;
     private String nonce;
     private String blockHash;
@@ -26,10 +26,10 @@ public class Transaction {
     private String s;
     private int v;  // see https://github.com/happyuc-project/webu.java/issues/44
 
-    public Transaction() {
+    public RepTransaction() {
     }
 
-    public Transaction(String hash, String nonce, String blockHash, String blockNumber, String transactionIndex, String from, String to, String value, String gas, String gasPrice, String input, String creates, String publicKey, String raw, String r, String s, int v) {
+    public RepTransaction(String hash, String nonce, String blockHash, String blockNumber, String transactionIndex, String from, String to, String value, String gas, String gasPrice, String input, String creates, String publicKey, String raw, String r, String s, int v) {
         this.hash = hash;
         this.nonce = nonce;
         this.blockHash = blockHash;
@@ -225,11 +225,11 @@ public class Transaction {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Transaction)) {
+        if (!(o instanceof RepTransaction)) {
             return false;
         }
 
-        Transaction that = (Transaction) o;
+        RepTransaction that = (RepTransaction) o;
 
         if (getV() != that.getV()) {
             return false;

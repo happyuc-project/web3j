@@ -43,10 +43,10 @@ import org.happyuc.webuj.protocol.ObjectMapperFactory;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.AbiDefinition;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
 import org.happyuc.webuj.utils.Collection;
@@ -504,7 +504,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         String functionName = functionDefinition.getName();
 
-        methodBuilder.returns(buildRemoteCall(TypeName.get(TransactionReceipt.class)));
+        methodBuilder.returns(buildRemoteCall(TypeName.get(RepTransactionReceipt.class)));
 
         methodBuilder.addStatement("final $T function = new $T(\n$S, \n$T.<$T>asList($L), \n$T" + ".<$T<?>>emptyList())", Function.class, Function.class, functionName, Arrays.class, Type.class, inputParams, Collections.class, TypeReference.class);
         if (functionDefinition.isPayable()) {
@@ -537,7 +537,7 @@ public class SolidityFunctionWrapper extends Generator {
         String generatedFunctionName = Strings.lowercaseFirstLetter(functionName) + "EventObservable";
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(rx.Observable.class), ClassName.get("", responseClassName));
 
-        MethodSpec.Builder observableMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName).addModifiers(Modifier.PUBLIC).addParameter(HucFilter.class, FILTER).returns(parameterizedTypeName);
+        MethodSpec.Builder observableMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName).addModifiers(Modifier.PUBLIC).addParameter(HucReqFilter.class, FILTER).returns(parameterizedTypeName);
 
         TypeSpec converter = TypeSpec.anonymousClassBuilder("").addSuperinterface(ParameterizedTypeName.get(ClassName.get(Func1.class), ClassName.get(Log.class), ClassName.get("", responseClassName))).addMethod(MethodSpec.methodBuilder("call").addAnnotation(Override.class).addModifiers(Modifier.PUBLIC).addParameter(Log.class, "log").returns(ClassName.get("", responseClassName)).addStatement("$T eventValues = extractEventParametersWithLog(" + buildEventDefinitionName(functionName) + ", log)", Contract.EventValuesWithLog.class).addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName)).addCode(buildTypedResponse("typedResponse", indexedParameters, nonIndexedParameters, true)).addStatement("return typedResponse").build()).build();
 
@@ -553,7 +553,7 @@ public class SolidityFunctionWrapper extends Generator {
 
         MethodSpec.Builder observableMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName).addModifiers(Modifier.PUBLIC).addParameter(DefaultBlockParameter.class, START_BLOCK).addParameter(DefaultBlockParameter.class, END_BLOCK).returns(parameterizedTypeName);
 
-        observableMethodBuilder.addStatement("$1T filter = new $1T($2L, $3L, " + "getContractAddress())", HucFilter.class, START_BLOCK, END_BLOCK).addStatement("filter.addSingleTopic($T.encode(" + buildEventDefinitionName(functionName) + "))", EventEncoder.class).addStatement("return " + generatedFunctionName + "(filter)");
+        observableMethodBuilder.addStatement("$1T filter = new $1T($2L, $3L, " + "getContractAddress())", HucReqFilter.class, START_BLOCK, END_BLOCK).addStatement("filter.addSingleTopic($T.encode(" + buildEventDefinitionName(functionName) + "))", EventEncoder.class).addStatement("return " + generatedFunctionName + "(filter)");
 
         return observableMethodBuilder.build();
     }
@@ -563,9 +563,9 @@ public class SolidityFunctionWrapper extends Generator {
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(List.class), ClassName.get("", responseClassName));
 
         String generatedFunctionName = "get" + Strings.capitaliseFirstLetter(functionName) + "Events";
-        MethodSpec.Builder transactionMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName).addModifiers(Modifier.PUBLIC).addParameter(TransactionReceipt.class, "transactionReceipt").returns(parameterizedTypeName);
+        MethodSpec.Builder transactionMethodBuilder = MethodSpec.methodBuilder(generatedFunctionName).addModifiers(Modifier.PUBLIC).addParameter(RepTransactionReceipt.class, "repTransactionReceipt").returns(parameterizedTypeName);
 
-        transactionMethodBuilder.addStatement("$T valueList = extractEventParametersWithLog(" + buildEventDefinitionName(functionName) + ", " + "transactionReceipt)", ParameterizedTypeName.get(List.class, Contract.EventValuesWithLog.class)).addStatement("$1T responses = new $1T(valueList.size())", ParameterizedTypeName.get(ClassName.get(ArrayList.class), ClassName.get("", responseClassName))).beginControlFlow("for ($T eventValues : valueList)", Contract.EventValuesWithLog.class).addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName)).addCode(buildTypedResponse("typedResponse", indexedParameters, nonIndexedParameters, false)).addStatement("responses.add(typedResponse)").endControlFlow();
+        transactionMethodBuilder.addStatement("$T valueList = extractEventParametersWithLog(" + buildEventDefinitionName(functionName) + ", " + "repTransactionReceipt)", ParameterizedTypeName.get(List.class, Contract.EventValuesWithLog.class)).addStatement("$1T responses = new $1T(valueList.size())", ParameterizedTypeName.get(ClassName.get(ArrayList.class), ClassName.get("", responseClassName))).beginControlFlow("for ($T eventValues : valueList)", Contract.EventValuesWithLog.class).addStatement("$1T typedResponse = new $1T()", ClassName.get("", responseClassName)).addCode(buildTypedResponse("typedResponse", indexedParameters, nonIndexedParameters, false)).addStatement("responses.add(typedResponse)").endControlFlow();
 
 
         transactionMethodBuilder.addStatement("return responses");

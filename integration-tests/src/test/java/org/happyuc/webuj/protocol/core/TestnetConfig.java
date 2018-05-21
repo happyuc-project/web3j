@@ -7,7 +7,7 @@ import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.TypeReference;
 import org.happyuc.webuj.abi.datatypes.Event;
 import org.happyuc.webuj.abi.datatypes.Uint;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 
 /**
  * Mordon Testnet Configuration.
@@ -60,9 +60,9 @@ public class TestnetConfig implements IntegrationTestConfig {
     }
 
     @Override
-    public Transaction buildTransaction() {
-        return Transaction.createContractTransaction(validAccount(), BigInteger.ZERO,  // nonce
-                Transaction.DEFAULT_GAS, validContractCode());
+    public ReqTransaction buildTransaction() {
+        return ReqTransaction.createContractTransaction(validAccount(), BigInteger.ZERO,  // nonce
+                                                        ReqTransaction.DEFAULT_GAS, validContractCode());
     }
 
     @Override

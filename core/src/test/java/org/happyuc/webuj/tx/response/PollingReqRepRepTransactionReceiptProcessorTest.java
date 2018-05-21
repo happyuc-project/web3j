@@ -1,16 +1,15 @@
 package org.happyuc.webuj.tx.response;
 
-import java.io.IOException;
-
 import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.Request;
+import org.happyuc.webuj.protocol.core.Response;
+import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
+import org.happyuc.webuj.protocol.exceptions.TransactionException;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.happyuc.webuj.protocol.core.Request;
-import org.happyuc.webuj.protocol.core.Response;
-import org.happyuc.webuj.protocol.core.methods.response.HucGetTransactionReceipt;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
-import org.happyuc.webuj.protocol.exceptions.TransactionException;
+import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PollingTransactionReceiptProcessorTest {
+public class PollingReqRepRepTransactionReceiptProcessorTest {
     private static final String TRANSACTION_HASH = "0x00";
     private Webuj webuj;
     private long sleepDuration;
@@ -36,12 +35,12 @@ public class PollingTransactionReceiptProcessorTest {
 
     @Test
     public void returnsTransactionReceiptWhenItIsAvailableInstantly() throws Exception {
-        TransactionReceipt transactionReceipt = new TransactionReceipt();
-        doReturn(requestReturning(response(transactionReceipt))).when(webuj).hucGetTransactionReceipt(TRANSACTION_HASH);
+        RepTransactionReceipt repTransactionReceipt = new RepTransactionReceipt();
+        doReturn(requestReturning(response(repTransactionReceipt))).when(webuj).hucGetTransactionReceipt(TRANSACTION_HASH);
 
-        TransactionReceipt receipt = processor.waitForTransactionReceipt(TRANSACTION_HASH);
+        RepTransactionReceipt receipt = processor.waitForTransactionReceipt(TRANSACTION_HASH);
 
-        assertThat(receipt, sameInstance(transactionReceipt));
+        assertThat(receipt, sameInstance(repTransactionReceipt));
     }
 
     @Test
@@ -66,9 +65,9 @@ public class PollingTransactionReceiptProcessorTest {
         return request;
     }
 
-    private static HucGetTransactionReceipt response(TransactionReceipt transactionReceipt) {
-        HucGetTransactionReceipt response = new HucGetTransactionReceipt();
-        response.setResult(transactionReceipt);
+    private static HucGetRepTransactionReceipt response(RepTransactionReceipt repTransactionReceipt) {
+        HucGetRepTransactionReceipt response = new HucGetRepTransactionReceipt();
+        response.setResult(repTransactionReceipt);
         return response;
     }
 }

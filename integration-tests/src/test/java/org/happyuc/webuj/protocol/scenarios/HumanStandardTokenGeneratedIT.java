@@ -4,12 +4,12 @@ import java.math.BigInteger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.junit.Test;
 import rx.Subscription;
 
 import org.happyuc.webuj.generated.HumanStandardToken;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -49,7 +49,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         // transfer tokens
         BigInteger transferQuantity = BigInteger.valueOf(100_000);
 
-        TransactionReceipt aliceTransferReceipt = contract.transfer(BOB.getAddress(), transferQuantity).send();
+        RepTransactionReceipt aliceTransferReceipt = contract.transfer(BOB.getAddress(), transferQuantity).send();
 
         TransferEventResponse aliceTransferEventValues = contract.getTransferEvents(aliceTransferReceipt).get(0);
 
@@ -69,7 +69,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         assertThat(contract.allowance(aliceAddress, bobAddress).send(), equalTo(BigInteger.ZERO));
 
         transferQuantity = BigInteger.valueOf(50);
-        TransactionReceipt approveReceipt = contract.approve(BOB.getAddress(), transferQuantity).send();
+        RepTransactionReceipt approveReceipt = contract.approve(BOB.getAddress(), transferQuantity).send();
 
         ApprovalEventResponse approvalEventValues = contract.getApprovalEvents(approveReceipt).get(0);
 
@@ -85,7 +85,7 @@ public class HumanStandardTokenGeneratedIT extends Scenario {
         // Bob requires his own contract instance
         HumanStandardToken bobsContract = HumanStandardToken.load(contract.getContractAddress(), webuj, BOB, GAS_PRICE, GAS_LIMIT);
 
-        TransactionReceipt bobTransferReceipt = bobsContract.transferFrom(aliceAddress, bobAddress, transferQuantity).send();
+        RepTransactionReceipt bobTransferReceipt = bobsContract.transferFrom(aliceAddress, bobAddress, transferQuantity).send();
 
         TransferEventResponse bobTransferEventValues = contract.getTransferEvents(bobTransferReceipt).get(0);
         assertThat(bobTransferEventValues._from, equalTo(aliceAddress));

@@ -7,7 +7,8 @@ import java.util.Optional;
 
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.Request;
-import org.happyuc.webuj.protocol.core.methods.response.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
+import org.happyuc.webuj.protocol.core.methods.response.HucRepFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
 
@@ -16,17 +17,17 @@ import org.happyuc.webuj.protocol.core.methods.response.Log;
  */
 public class LogFilter extends Filter<Log> {
 
-    private final org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter;
+    private final HucReqFilter hucReqFilter;
 
-    public LogFilter(Webuj webuj, Callback<Log> callback, org.happyuc.webuj.protocol.core.methods.request.HucFilter hucFilter) {
+    public LogFilter(Webuj webuj, Callback<Log> callback, HucReqFilter hucReqFilter) {
         super(webuj, callback);
-        this.hucFilter = hucFilter;
+        this.hucReqFilter = hucReqFilter;
     }
 
 
     @Override
-    HucFilter sendRequest() throws IOException {
-        return webuj.hucNewFilter(hucFilter).send();
+    HucRepFilter sendRequest() throws IOException {
+        return webuj.hucNewFilter(hucReqFilter).send();
     }
 
     @Override

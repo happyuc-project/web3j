@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.junit.Test;
 
 import org.happyuc.webuj.abi.EventEncoder;
@@ -17,12 +20,10 @@ import org.happyuc.webuj.abi.datatypes.Type;
 import org.happyuc.webuj.abi.datatypes.generated.Uint256;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucEstimateGas;
 import org.happyuc.webuj.protocol.core.methods.response.HucLog;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,11 +48,11 @@ public class EventFilterIT extends Scenario {
         BigInteger gas = estimateGas(encodedFunction);
         String transactionHash = sendTransaction(ALICE, CONTRACT_ADDRESS, gas, encodedFunction);
 
-        TransactionReceipt transactionReceipt = waitForTransactionReceipt(transactionHash);
+        RepTransactionReceipt repTransactionReceipt = waitForTransactionReceipt(transactionHash);
 
-        assertFalse("Transaction execution ran out of gas", gas.equals(transactionReceipt.getGasUsed()));
+        assertFalse("ReqTransaction execution ran out of gas", gas.equals(repTransactionReceipt.getGasUsed()));
 
-        List<Log> logs = transactionReceipt.getLogs();
+        List<Log> logs = repTransactionReceipt.getLogs();
         assertFalse(logs.isEmpty());
 
         Log log = logs.get(0);
@@ -76,7 +77,7 @@ public class EventFilterIT extends Scenario {
     }
 
     private BigInteger estimateGas(String encodedFunction) throws Exception {
-        HucEstimateGas hucEstimateGas = webuj.hucEstimateGas(Transaction.createHucCallTransaction(ALICE.getAddress(), null, encodedFunction)).sendAsync().get();
+        HucEstimateGas hucEstimateGas = webuj.hucEstimateGas(ReqTransaction.createHucCallTransaction(ALICE.getAddress(), null, encodedFunction)).sendAsync().get();
         // this was coming back as 50,000,000 which is > the block gas limit of 4,712,388
         // see huc.getBlock("latest")
         return hucEstimateGas.getAmountUsed().divide(BigInteger.valueOf(100));
@@ -84,9 +85,9 @@ public class EventFilterIT extends Scenario {
 
     private String sendTransaction(Credentials credentials, String contractAddress, BigInteger gas, String encodedFunction) throws Exception {
         BigInteger nonce = getNonce(credentials.getAddress());
-        Transaction transaction = Transaction.createFunctionCallTransaction(credentials.getAddress(), nonce, Transaction.DEFAULT_GAS, gas, contractAddress, encodedFunction);
+        ReqTransaction reqTransaction = ReqTransaction.createFunctionCallTransaction(credentials.getAddress(), nonce, ReqTransaction.DEFAULT_GAS, gas, contractAddress, encodedFunction);
 
-        org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction transactionResponse = webuj.hucSendTransaction(transaction).sendAsync().get();
+        HucSendRepTransaction transactionResponse = webuj.hucSendTransaction(reqTransaction).sendAsync().get();
 
         assertFalse(transactionResponse.hasError());
 
@@ -94,11 +95,11 @@ public class EventFilterIT extends Scenario {
     }
 
     private List<HucLog.LogResult> createFilterForEvent(String encodedEventSignature, String contractAddress) throws Exception {
-        HucFilter hucFilter = new HucFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST, contractAddress);
+        HucReqFilter hucReqFilter = new HucReqFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST, contractAddress);
 
-        hucFilter.addSingleTopic(encodedEventSignature);
+        hucReqFilter.addSingleTopic(encodedEventSignature);
 
-        HucLog hucLog = webuj.hucGetLogs(hucFilter).send();
+        HucLog hucLog = webuj.hucGetLogs(hucReqFilter).send();
         return hucLog.getLogs();
     }
 }

@@ -2,10 +2,10 @@ package org.happyuc.webuj.protocol.admin;
 
 import java.math.BigInteger;
 
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.junit.Test;
 
 import org.happyuc.webuj.protocol.RequestTester;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
 import org.happyuc.webuj.protocol.http.HttpService;
 
 public class RequestTest extends RequestTester {
@@ -33,7 +33,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testPersonalSendTransaction() throws Exception {
-        webuj.personalSendTransaction(new Transaction("FROM", BigInteger.ONE, BigInteger.TEN, BigInteger.ONE, "TO", BigInteger.ZERO, "DATA"), "password").send();
+        webuj.personalSendTransaction(new ReqTransaction("FROM", BigInteger.ONE, BigInteger.TEN, BigInteger.ONE, "TO", BigInteger.ZERO, "DATA"), "password").send();
 
         //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"personal_sendTransaction\",\"params\":[{\"from\":\"FROM\",\"to\":\"TO\",\"gas\":\"0x1\",\"gasPrice\":\"0xa\",\"value\":\"0x0\",\"data\":\"0xDATA\",\"nonce\":\"0x1\"},\"password\"],\"id\":1}");

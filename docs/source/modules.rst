@@ -9,7 +9,7 @@ In dependency order, they are as follows:
 * utils -  Minimal set of utility classes
 * rlp - Recursive Length Prefix (RLP) encoders
 * abi - Application Binary Interface (ABI) encoders
-* crypto - cryptographic library for for transaction signing and key/wallet management in HappyUC
+* crypto - cryptographic library for for reqTransaction signing and key/wallet management in HappyUC
 * tuples - Simple tuples library
 * core - Much like the previous Webuj core artifact without the code generators
 * codegen - code generators
@@ -24,7 +24,7 @@ The below modules only depend on the core module.
 For most use cases (interacting with the network and smart contracts) the *core* module should be
 all you need. The dependencies of the core module are very granular and only likely to be of use
 if your project is focussed on a very specific interaction with the HappyUC network (such as
-ABI/RLP encoding, transaction signing but not submission, etc).
+ABI/RLP encoding, reqTransaction signing but not submission, etc).
 
 All modules are published to both Maven Central and Bintray, with the published artifact names
 using the names listed above, i.e.:

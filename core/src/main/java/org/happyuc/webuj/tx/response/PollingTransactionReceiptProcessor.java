@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
 
 /**
@@ -22,14 +22,14 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
     }
 
     @Override
-    public TransactionReceipt waitForTransactionReceipt(String transactionHash) throws IOException, TransactionException {
+    public RepTransactionReceipt waitForTransactionReceipt(String transactionHash) throws IOException, TransactionException {
 
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
-    private TransactionReceipt getTransactionReceipt(String transactionHash, long sleepDuration, int attempts) throws IOException, TransactionException {
+    private RepTransactionReceipt getTransactionReceipt(String transactionHash, long sleepDuration, int attempts) throws IOException, TransactionException {
 
-        Optional<TransactionReceipt> receiptOptional = sendTransactionReceiptRequest(transactionHash);
+        Optional<RepTransactionReceipt> receiptOptional = sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
                 try {
@@ -43,6 +43,6 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
             }
         }
 
-        throw new TransactionException("Transaction receipt was not generated after " + ((sleepDuration * attempts) / 1000 + " seconds for transaction: " + transactionHash));
+        throw new TransactionException("ReqTransaction receipt was not generated after " + ((sleepDuration * attempts) / 1000 + " seconds for transaction: " + transactionHash));
     }
 }

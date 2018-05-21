@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import org.happyuc.webuj.protocol.Webuj;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
-import org.happyuc.webuj.protocol.core.methods.response.HucSendTransaction;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
+import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
 
 /**
@@ -33,10 +33,10 @@ public class ClientTransactionManager extends TransactionManager {
     }
 
     @Override
-    public HucSendTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
+    public HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
 
-        Transaction transaction = new Transaction(getFromAddress(), null, gasPrice, gasLimit, to, value, data);
+        ReqTransaction reqTransaction = new ReqTransaction(getFromAddress(), null, gasPrice, gasLimit, to, value, data);
 
-        return webuj.hucSendTransaction(transaction).send();
+        return webuj.hucSendTransaction(reqTransaction).send();
     }
 }

@@ -1,14 +1,5 @@
 package org.happyuc.webuj.ens.contracts.generated;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import rx.Observable;
-import rx.functions.Func1;
-
 import org.happyuc.webuj.abi.EventEncoder;
 import org.happyuc.webuj.abi.EventValues;
 import org.happyuc.webuj.abi.TypeReference;
@@ -22,11 +13,19 @@ import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.Log;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.TransactionManager;
+import rx.Observable;
+import rx.functions.Func1;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>Auto generated code.
@@ -48,9 +47,9 @@ public final class ENS extends Contract {
         super(BINARY, contractAddress, webuj, transactionManager, gasPrice, gasLimit);
     }
 
-    public List<NewOwnerEventResponse> getNewOwnerEvents(TransactionReceipt transactionReceipt) {
+    public List<NewOwnerEventResponse> getNewOwnerEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("NewOwner", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<NewOwnerEventResponse> responses = new ArrayList<NewOwnerEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NewOwnerEventResponse typedResponse = new NewOwnerEventResponse();
@@ -64,7 +63,7 @@ public final class ENS extends Contract {
 
     public Observable<NewOwnerEventResponse> newOwnerEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewOwner", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}, new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(new Func1<Log, NewOwnerEventResponse>() {
             @Override
@@ -79,9 +78,9 @@ public final class ENS extends Contract {
         });
     }
 
-    public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
+    public List<TransferEventResponse> getTransferEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("Transfer", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             TransferEventResponse typedResponse = new TransferEventResponse();
@@ -94,7 +93,7 @@ public final class ENS extends Contract {
 
     public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("Transfer", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
             @Override
@@ -108,9 +107,9 @@ public final class ENS extends Contract {
         });
     }
 
-    public List<NewResolverEventResponse> getNewResolverEvents(TransactionReceipt transactionReceipt) {
+    public List<NewResolverEventResponse> getNewResolverEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("NewResolver", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<NewResolverEventResponse> responses = new ArrayList<NewResolverEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NewResolverEventResponse typedResponse = new NewResolverEventResponse();
@@ -123,7 +122,7 @@ public final class ENS extends Contract {
 
     public Observable<NewResolverEventResponse> newResolverEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewResolver", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(new Func1<Log, NewResolverEventResponse>() {
             @Override
@@ -137,9 +136,9 @@ public final class ENS extends Contract {
         });
     }
 
-    public List<NewTTLEventResponse> getNewTTLEvents(TransactionReceipt transactionReceipt) {
+    public List<NewTTLEventResponse> getNewTTLEvents(RepTransactionReceipt repTransactionReceipt) {
         final Event event = new Event("NewTTL", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
-        List<EventValues> valueList = extractEventParameters(event, transactionReceipt);
+        List<EventValues> valueList = extractEventParameters(event, repTransactionReceipt);
         ArrayList<NewTTLEventResponse> responses = new ArrayList<NewTTLEventResponse>(valueList.size());
         for (EventValues eventValues : valueList) {
             NewTTLEventResponse typedResponse = new NewTTLEventResponse();
@@ -152,7 +151,7 @@ public final class ENS extends Contract {
 
     public Observable<NewTTLEventResponse> newTTLEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         final Event event = new Event("NewTTL", Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}), Arrays.<TypeReference<?>>asList(new TypeReference<Uint64>() {}));
-        HucFilter filter = new HucFilter(startBlock, endBlock, getContractAddress());
+        HucReqFilter filter = new HucReqFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(event));
         return webuj.hucLogObservable(filter).map(new Func1<Log, NewTTLEventResponse>() {
             @Override
@@ -176,12 +175,12 @@ public final class ENS extends Contract {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
-    public RemoteCall<TransactionReceipt> setSubnodeOwner(byte[] node, byte[] label, String owner) {
+    public RemoteCall<RepTransactionReceipt> setSubnodeOwner(byte[] node, byte[] label, String owner) {
         Function function = new Function("setSubnodeOwner", Arrays.<Type>asList(new org.happyuc.webuj.abi.datatypes.generated.Bytes32(node), new org.happyuc.webuj.abi.datatypes.generated.Bytes32(label), new org.happyuc.webuj.abi.datatypes.Address(owner)), Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> setTTL(byte[] node, BigInteger ttl) {
+    public RemoteCall<RepTransactionReceipt> setTTL(byte[] node, BigInteger ttl) {
         Function function = new Function("setTTL", Arrays.<Type>asList(new org.happyuc.webuj.abi.datatypes.generated.Bytes32(node), new org.happyuc.webuj.abi.datatypes.generated.Uint64(ttl)), Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -191,12 +190,12 @@ public final class ENS extends Contract {
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public RemoteCall<TransactionReceipt> setResolver(byte[] node, String resolver) {
+    public RemoteCall<RepTransactionReceipt> setResolver(byte[] node, String resolver) {
         Function function = new Function("setResolver", Arrays.<Type>asList(new org.happyuc.webuj.abi.datatypes.generated.Bytes32(node), new org.happyuc.webuj.abi.datatypes.Address(resolver)), Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteCall<TransactionReceipt> setOwner(byte[] node, String owner) {
+    public RemoteCall<RepTransactionReceipt> setOwner(byte[] node, String owner) {
         Function function = new Function("setOwner", Arrays.<Type>asList(new org.happyuc.webuj.abi.datatypes.generated.Bytes32(node), new org.happyuc.webuj.abi.datatypes.Address(owner)), Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }

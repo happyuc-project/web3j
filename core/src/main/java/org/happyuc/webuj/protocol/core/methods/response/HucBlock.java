@@ -454,16 +454,16 @@ public class HucBlock extends Response<HucBlock.Block> {
         }
     }
 
-    public static class TransactionObject extends Transaction implements TransactionResult<Transaction> {
-        public TransactionObject() {
+    public static class RepTransactionObject extends RepTransaction implements TransactionResult<RepTransaction> {
+        public RepTransactionObject() {
         }
 
-        public TransactionObject(String hash, String nonce, String blockHash, String blockNumber, String transactionIndex, String from, String to, String value, String gasPrice, String gas, String input, String creates, String publicKey, String raw, String r, String s, int v) {
+        public RepTransactionObject(String hash, String nonce, String blockHash, String blockNumber, String transactionIndex, String from, String to, String value, String gasPrice, String gas, String input, String creates, String publicKey, String raw, String r, String s, int v) {
             super(hash, nonce, blockHash, blockNumber, transactionIndex, from, to, value, gasPrice, gas, input, creates, publicKey, raw, r, s, v);
         }
 
         @Override
-        public Transaction get() {
+        public RepTransaction get() {
             return this;
         }
     }
@@ -479,7 +479,7 @@ public class HucBlock extends Response<HucBlock.Block> {
             JsonToken nextToken = jsonParser.nextToken();
 
             if (nextToken == JsonToken.START_OBJECT) {
-                Iterator<TransactionObject> transactionObjectIterator = objectReader.readValues(jsonParser, TransactionObject.class);
+                Iterator<RepTransactionObject> transactionObjectIterator = objectReader.readValues(jsonParser, RepTransactionObject.class);
                 while (transactionObjectIterator.hasNext()) {
                     transactionResults.add(transactionObjectIterator.next());
                 }

@@ -4,13 +4,13 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
+import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.junit.Test;
 
 import org.happyuc.webuj.protocol.RequestTester;
-import org.happyuc.webuj.protocol.core.methods.request.HucFilter;
 import org.happyuc.webuj.protocol.core.methods.request.ShhFilter;
-import org.happyuc.webuj.protocol.core.methods.request.ShhPost;
-import org.happyuc.webuj.protocol.core.methods.request.Transaction;
+import org.happyuc.webuj.protocol.core.methods.request.ShhReqPost;
 import org.happyuc.webuj.protocol.http.HttpService;
 import org.happyuc.webuj.utils.Numeric;
 
@@ -27,14 +27,14 @@ public class RequestTest extends RequestTester {
     public void testWeb3ClientVersion() throws Exception {
         webuj.webuClientVersion().send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"web3_clientVersion\",\"params\":[],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"webu_clientVersion\",\"params\":[],\"id\":1}");
     }
 
     @Test
     public void testWeb3Sha3() throws Exception {
         webuj.webuSha3("0x68656c6c6f20776f726c64").send();
 
-        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"web3_sha3\"," + "\"params\":[\"0x68656c6c6f20776f726c64\"],\"id\":1}");
+        verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"webu_sha3\"," + "\"params\":[\"0x68656c6c6f20776f726c64\"],\"id\":1}");
     }
 
     @Test
@@ -183,7 +183,7 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testHucSendTransaction() throws Exception {
-        webuj.hucSendTransaction(new Transaction("0xb60e8dd61c5d32be8058bb8eb970870f07233155", BigInteger.ONE, Numeric.toBigInt("0x9184e72a000"), Numeric.toBigInt("0x76c0"), "0xb60e8dd61c5d32be8058bb8eb970870f07233155", Numeric.toBigInt("0x9184e72a"), "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb" + "970870f072445675058bb8eb970870f072445675")).send();
+        webuj.hucSendTransaction(new ReqTransaction("0xb60e8dd61c5d32be8058bb8eb970870f07233155", BigInteger.ONE, Numeric.toBigInt("0x9184e72a000"), Numeric.toBigInt("0x76c0"), "0xb60e8dd61c5d32be8058bb8eb970870f07233155", Numeric.toBigInt("0x9184e72a"), "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb" + "970870f072445675058bb8eb970870f072445675")).send();
 
         //CHECKSTYLE:OFF
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"huc_sendTransaction\",\"params\":[{\"from\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"gas\":\"0x76c0\",\"gasPrice\":\"0x9184e72a000\",\"value\":\"0x9184e72a\",\"data\":\"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\",\"nonce\":\"0x1\"}],\"id\":1}");
@@ -202,21 +202,21 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testHucCall() throws Exception {
-        webuj.hucCall(Transaction.createHucCallTransaction("0xa70e8dd61c5d32be8058bb8eb970870f07233155", "0xb60e8dd61c5d32be8058bb8eb970870f07233155", "0x0"), DefaultBlockParameter.valueOf("latest")).send();
+        webuj.hucCall(ReqTransaction.createHucCallTransaction("0xa70e8dd61c5d32be8058bb8eb970870f07233155", "0xb60e8dd61c5d32be8058bb8eb970870f07233155", "0x0"), DefaultBlockParameter.valueOf("latest")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"huc_call\"," + "\"params\":[{\"from\":\"0xa70e8dd61c5d32be8058bb8eb970870f07233155\"," + "\"to\":\"0xb60e8dd61c5d32be8058bb8eb970870f07233155\",\"data\":\"0x0\"}," + "\"latest\"],\"id\":1}");
     }
 
     @Test
     public void testHucEstimateGas() throws Exception {
-        webuj.hucEstimateGas(Transaction.createHucCallTransaction("0xa70e8dd61c5d32be8058bb8eb970870f07233155", "0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", "0x0")).send();
+        webuj.hucEstimateGas(ReqTransaction.createHucCallTransaction("0xa70e8dd61c5d32be8058bb8eb970870f07233155", "0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", "0x0")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"huc_estimateGas\"," + "\"params\":[{\"from\":\"0xa70e8dd61c5d32be8058bb8eb970870f07233155\"," + "\"to\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\",\"data\":\"0x0\"}]," + "\"id\":1}");
     }
 
     @Test
     public void testHucEstimateGasContractCreation() throws Exception {
-        webuj.hucEstimateGas(Transaction.createContractTransaction("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", BigInteger.ONE, BigInteger.TEN, "")).send();
+        webuj.hucEstimateGas(ReqTransaction.createContractTransaction("0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f", BigInteger.ONE, BigInteger.TEN, "")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"huc_estimateGas\"," + "\"params\":[{\"from\":\"0x52b93c80364dc2dd4444c146d73b9836bbbb2b3f\"," + "\"gasPrice\":\"0xa\",\"data\":\"0x\",\"nonce\":\"0x1\"}],\"id\":1}");
     }
@@ -309,9 +309,9 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testHucNewFilter() throws Exception {
-        HucFilter hucFilter = new HucFilter().addSingleTopic("0x12341234");
+        HucReqFilter hucReqFilter = new HucReqFilter().addSingleTopic("0x12341234");
 
-        webuj.hucNewFilter(hucFilter).send();
+        webuj.hucNewFilter(hucReqFilter).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"huc_newFilter\"," + "\"params\":[{\"topics\":[\"0x12341234\"]}],\"id\":1}");
     }
@@ -353,14 +353,14 @@ public class RequestTest extends RequestTester {
 
     @Test
     public void testHucGetLogs() throws Exception {
-        webuj.hucGetLogs(new HucFilter().addSingleTopic("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b")).send();
+        webuj.hucGetLogs(new HucReqFilter().addSingleTopic("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"huc_getLogs\"," + "\"params\":[{\"topics\":[" + "\"0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b\"]}]," + "\"id\":1}");
     }
 
     @Test
     public void testHucGetLogsWithNumericBlockRange() throws Exception {
-        webuj.hucGetLogs(new HucFilter(DefaultBlockParameter.valueOf(Numeric.toBigInt("0xe8")), DefaultBlockParameter.valueOf("latest"), "")).send();
+        webuj.hucGetLogs(new HucReqFilter(DefaultBlockParameter.valueOf(Numeric.toBigInt("0xe8")), DefaultBlockParameter.valueOf("latest"), "")).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"huc_getLogs\"," + "\"params\":[{\"topics\":[],\"fromBlock\":\"0xe8\"," + "\"toBlock\":\"latest\",\"address\":[\"\"]}],\"id\":1}");
     }
@@ -424,7 +424,7 @@ public class RequestTest extends RequestTester {
     @Test
     public void testShhPost() throws Exception {
         //CHECKSTYLE:OFF
-        webuj.shhPost(new ShhPost("0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1", "0x3e245533f97284d442460f2998cd41858798ddf04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a0d4d661997d3940272b717b1", Arrays.asList("0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"), "0x7b2274797065223a226d6", Numeric.toBigInt("0x64"), Numeric.toBigInt("0x64"))).send();
+        webuj.shhPost(new ShhReqPost("0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1", "0x3e245533f97284d442460f2998cd41858798ddf04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a0d4d661997d3940272b717b1", Arrays.asList("0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"), "0x7b2274797065223a226d6", Numeric.toBigInt("0x64"), Numeric.toBigInt("0x64"))).send();
 
         verifyResult("{\"jsonrpc\":\"2.0\",\"method\":\"shh_post\",\"params\":[{\"from\":\"0x04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a03e245533f97284d442460f2998cd41858798ddfd4d661997d3940272b717b1\",\"to\":\"0x3e245533f97284d442460f2998cd41858798ddf04f96a5e25610293e42a73908e93ccc8c4d4dc0edcfa9fa872f50cb214e08ebf61a0d4d661997d3940272b717b1\",\"topics\":[\"0x776869737065722d636861742d636c69656e74\",\"0x4d5a695276454c39425154466b61693532\"],\"payload\":\"0x7b2274797065223a226d6\",\"priority\":\"0x64\",\"ttl\":\"0x64\"}],\"id\":1}");
         //CHECKSTYLE:ON

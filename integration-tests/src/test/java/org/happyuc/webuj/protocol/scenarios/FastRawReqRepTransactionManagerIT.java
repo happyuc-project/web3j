@@ -11,12 +11,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import org.happyuc.webuj.protocol.core.RemoteCall;
-import org.happyuc.webuj.protocol.core.methods.response.TransactionReceipt;
 import org.happyuc.webuj.tx.FastRawTransactionManager;
 import org.happyuc.webuj.tx.Transfer;
 import org.happyuc.webuj.tx.response.Callback;
@@ -28,7 +28,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.happyuc.webuj.tx.TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH;
 
-public class FastRawTransactionManagerIT extends Scenario {
+public class FastRawReqRepTransactionManagerIT extends Scenario {
 
     private static final int COUNT = 10;  // don't set too high if using a real HappyUC network
     private static final long POLLING_FREQUENCY = 15000;
@@ -39,7 +39,7 @@ public class FastRawTransactionManagerIT extends Scenario {
     @Test
     public void testTransactionPolling() throws Exception {
 
-        List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
+        List<Future<RepTransactionReceipt>> transactionReceipts = new LinkedList<>();
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(webuj, ALICE, new PollingTransactionReceiptProcessor(webuj, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
 
         Transfer transfer = new Transfer(webuj, transactionManager);
@@ -47,18 +47,18 @@ public class FastRawTransactionManagerIT extends Scenario {
 
         for (int i = 0; i < COUNT; i++) {
 
-            Future<TransactionReceipt> transactionReceiptFuture = createTransaction(transfer, gasPrice).sendAsync();
+            Future<RepTransactionReceipt> transactionReceiptFuture = createTransaction(transfer, gasPrice).sendAsync();
             transactionReceipts.add(transactionReceiptFuture);
         }
 
         for (int i = 0; i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !transactionReceipts.isEmpty(); i++) {
 
-            for (Iterator<Future<TransactionReceipt>> iterator = transactionReceipts.iterator(); iterator.hasNext(); ) {
-                Future<TransactionReceipt> transactionReceiptFuture = iterator.next();
+            for (Iterator<Future<RepTransactionReceipt>> iterator = transactionReceipts.iterator(); iterator.hasNext(); ) {
+                Future<RepTransactionReceipt> transactionReceiptFuture = iterator.next();
 
                 if (transactionReceiptFuture.isDone()) {
-                    TransactionReceipt transactionReceipt = transactionReceiptFuture.get();
-                    assertFalse(transactionReceipt.getBlockHash().isEmpty());
+                    RepTransactionReceipt repTransactionReceipt = transactionReceiptFuture.get();
+                    assertFalse(repTransactionReceipt.getBlockHash().isEmpty());
                     iterator.remove();
                 }
             }
@@ -73,12 +73,12 @@ public class FastRawTransactionManagerIT extends Scenario {
     public void testTransactionQueuing() throws Exception {
 
         Map<String, Object> pendingTransactions = new ConcurrentHashMap<>();
-        ConcurrentLinkedQueue<TransactionReceipt> transactionReceipts = new ConcurrentLinkedQueue<>();
+        ConcurrentLinkedQueue<RepTransactionReceipt> repTransactionReceipts = new ConcurrentLinkedQueue<>();
 
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(webuj, ALICE, new QueuingTransactionReceiptProcessor(webuj, new Callback() {
             @Override
-            public void accept(TransactionReceipt transactionReceipt) {
-                transactionReceipts.add(transactionReceipt);
+            public void accept(RepTransactionReceipt transactionReceipt) {
+                repTransactionReceipts.add(transactionReceipt);
             }
 
             @Override
@@ -92,25 +92,25 @@ public class FastRawTransactionManagerIT extends Scenario {
         BigInteger gasPrice = transfer.requestCurrentGasPrice();
 
         for (int i = 0; i < COUNT; i++) {
-            TransactionReceipt transactionReceipt = createTransaction(transfer, gasPrice).send();
-            pendingTransactions.put(transactionReceipt.getTransactionHash(), new Object());
+            RepTransactionReceipt repTransactionReceipt = createTransaction(transfer, gasPrice).send();
+            pendingTransactions.put(repTransactionReceipt.getTransactionHash(), new Object());
         }
 
         for (int i = 0; i < DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH && !pendingTransactions.isEmpty(); i++) {
-            for (TransactionReceipt transactionReceipt : transactionReceipts) {
-                assertFalse(transactionReceipt.getBlockHash().isEmpty());
-                pendingTransactions.remove(transactionReceipt.getTransactionHash());
-                transactionReceipts.remove(transactionReceipt);
+            for (RepTransactionReceipt repTransactionReceipt : repTransactionReceipts) {
+                assertFalse(repTransactionReceipt.getBlockHash().isEmpty());
+                pendingTransactions.remove(repTransactionReceipt.getTransactionHash());
+                repTransactionReceipts.remove(repTransactionReceipt);
             }
 
             Thread.sleep(POLLING_FREQUENCY);
         }
 
-        assertTrue(transactionReceipts.isEmpty());
+        assertTrue(repTransactionReceipts.isEmpty());
     }
 
 
-    private RemoteCall<TransactionReceipt> createTransaction(Transfer transfer, BigInteger gasPrice) {
+    private RemoteCall<RepTransactionReceipt> createTransaction(Transfer transfer, BigInteger gasPrice) {
         return transfer.sendFunds(BOB.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI, gasPrice, Transfer.GAS_LIMIT);
     }
 }
