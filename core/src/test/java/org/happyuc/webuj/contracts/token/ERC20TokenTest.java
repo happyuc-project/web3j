@@ -23,27 +23,17 @@ public class ERC20TokenTest {
 
     private Credentials credentials;
 
-    public static final String NODE_URL = "";
+    public static final String NODE_URL = "http://112.74.96.198:8545";
     public static final String _TO = "";
-    public static final String CONTRACT_ADDR = "";
     public static final String PRIVATE_KEY = "";
     public static final String SOURCE = "";
+    public static String CONTRACT_ADDR;
 
     @Before
     public void setUp() throws IOException, CipherException {
         webuj = Webuj.build(new HttpService());
         // credentials = Credentials.create(PRIVATE_KEY);
         credentials = WalletUtils.loadCredentials("123456", SOURCE);
-    }
-
-    @Test
-    public void transfer() throws Exception {
-        ERC20Token contract = ERC20Token.load(CONTRACT_ADDR, webuj, credentials);
-        BigInteger before = contract.balanceOf(credentials.getAddress()).send();
-        contract.transfer(_TO, "1", Convert.Unit.HUC, "").send();
-        BigInteger after = contract.balanceOf(credentials.getAddress()).send();
-        BigDecimal balTail = Convert.fromWei(before.subtract(after).toString(), Convert.Unit.HUC);
-        assertEquals("Transfer 1 ERC20", balTail, BigDecimal.ONE);
     }
 
     @Test
@@ -55,6 +45,7 @@ public class ERC20TokenTest {
         BigInteger amount = BigInteger.valueOf(1000000);
         ERC20Token contract = ERC20Token.deploy(webuj, credentials, price, limit, amount, name, symbol).send();
         assertTrue("Create new contract token", contract.isValid());
+        CONTRACT_ADDR = contract.getContractAddress();
     }
 
     @Test
@@ -63,4 +54,13 @@ public class ERC20TokenTest {
         assertTrue("Load existing contract token", contract.isValid());
     }
 
+    @Test
+    public void transfer() throws Exception {
+        ERC20Token contract = ERC20Token.load(CONTRACT_ADDR, webuj, credentials);
+        BigInteger before = contract.balanceOf(credentials.getAddress()).send();
+        contract.transfer(_TO, "1", Convert.Unit.HUC, "").send();
+        BigInteger after = contract.balanceOf(credentials.getAddress()).send();
+        BigDecimal balTail = Convert.fromWei(before.subtract(after).toString(), Convert.Unit.HUC);
+        assertEquals("Transfer 1 ERC20", balTail, BigDecimal.ONE);
+    }
 }
