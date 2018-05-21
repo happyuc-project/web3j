@@ -16,6 +16,10 @@ public abstract class EventResponse {
         }
     }
 
+    public static <T extends EventResponse> void print(T t) {
+        System.out.println(t.toString());
+    }
+
     public static class TransferEr extends EventResponse {
         public Log log;
 
@@ -26,6 +30,11 @@ public abstract class EventResponse {
         public BigInteger _value;
 
         public String _data;
+
+        @Override
+        public String toString() {
+            return "from: " + _from + "\nto: " + _to + "\nvalue: " + _value + "\naddress: " + log.getAddress();
+        }
     }
 
     public static class ApprovalEr extends EventResponse {
@@ -38,6 +47,11 @@ public abstract class EventResponse {
         public BigInteger _value;
 
         public String _data;
+
+        @Override
+        public String toString() {
+            return "owner: " + _owner + "spender: " + _spender + "value: " + _value + "\naddress: " + log.getAddress();
+        }
     }
 
     public interface Rec<T> {

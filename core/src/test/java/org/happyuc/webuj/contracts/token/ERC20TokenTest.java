@@ -4,6 +4,7 @@ import org.happyuc.webuj.crypto.CipherException;
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.WalletUtils;
 import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.http.HttpService;
 import org.happyuc.webuj.tx.Contract;
 import org.happyuc.webuj.tx.ManagedTransaction;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -49,7 +51,7 @@ public class ERC20TokenTest {
     }
 
     @Test
-    public void load() throws IOException {
+    public void load() throws Exception {
         ERC20Token contract = ERC20Token.load(CONTRACT_ADDR, webuj, credentials);
         assertTrue("Load existing contract token", contract.isValid());
     }
@@ -58,7 +60,9 @@ public class ERC20TokenTest {
     public void transfer() throws Exception {
         ERC20Token contract = ERC20Token.load(CONTRACT_ADDR, webuj, credentials);
         BigInteger before = contract.balanceOf(credentials.getAddress()).send();
-        contract.transfer(_TO, "1", Convert.Unit.HUC, "").send();
+        RepTransactionReceipt rece = contract.transfer(_TO, "1", Convert.Unit.HUC, "").send();
+        List<EventResponse.TransferEr> txsInfo = contract.simpleGetTxEvents(rece);
+        txsInfo.forEach(EventResponse.TransferEr::print);
         BigInteger after = contract.balanceOf(credentials.getAddress()).send();
         BigDecimal balTail = Convert.fromWei(before.subtract(after).toString(), Convert.Unit.HUC);
         assertEquals("Transfer 1 ERC20", balTail, BigDecimal.ONE);

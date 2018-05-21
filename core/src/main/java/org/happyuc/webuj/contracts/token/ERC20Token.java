@@ -47,19 +47,6 @@ public class ERC20Token extends Contract implements ERC20Interface {
 
 
     /**
-     * Obtain the total circulation which Token
-     *
-     * @return BigInteger
-     */
-    @Override
-    public RemoteCall<BigInteger> totalSupply() {
-        final List<Type> inputParam = Collections.emptyList();
-        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint256>() {});
-        final Function function = new Function("totalSupply", inputParam, outputParam);
-        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
-    }
-
-    /**
      * Obtain the balance of whos _owner in which Token
      *
      * @param _owner an Account or Wallet address
@@ -122,7 +109,6 @@ public class ERC20Token extends Contract implements ERC20Interface {
      * @param endBlock   todo ???
      * @return Observable EventResponse.TransferEr
      */
-
     public Observable<EventResponse.TransferEr> simpleTsEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return transferEventObservable(startBlock, endBlock, eventValues -> {
             EventResponse.TransferEr tEr = new EventResponse.TransferEr();
@@ -208,7 +194,6 @@ public class ERC20Token extends Contract implements ERC20Interface {
      * @param endBlock   todo ???
      * @return Observable EventResponse.ApprovalEr
      */
-
     public Observable<EventResponse.ApprovalEr> simpleAppEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
         return approvalEventObservable(startBlock, endBlock, eventValues -> {
             EventResponse.ApprovalEr aEr = new EventResponse.ApprovalEr();
@@ -241,6 +226,13 @@ public class ERC20Token extends Contract implements ERC20Interface {
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
+    public RemoteCall<String> symbol() {
+        final List<Type> inputParam = Collections.emptyList();
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Utf8String>() {});
+        final Function function = new Function("symbol", inputParam, outputParam);
+        return executeRemoteCallSingleValueReturn(function, String.class);
+    }
+
     public RemoteCall<BigInteger> decimals() {
         final List<Type> inputParam = Collections.emptyList();
         final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint8>() {});
@@ -248,18 +240,17 @@ public class ERC20Token extends Contract implements ERC20Interface {
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
-    public RemoteCall<String> version() {
+    /**
+     * Obtain the total circulation which Token
+     *
+     * @return BigInteger
+     */
+    @Override
+    public RemoteCall<BigInteger> totalSupply() {
         final List<Type> inputParam = Collections.emptyList();
-        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Utf8String>() {});
-        final Function function = new Function("version", inputParam, outputParam);
-        return executeRemoteCallSingleValueReturn(function, String.class);
-    }
-
-    public RemoteCall<String> symbol() {
-        final List<Type> inputParam = Collections.emptyList();
-        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Utf8String>() {});
-        final Function function = new Function("symbol", inputParam, outputParam);
-        return executeRemoteCallSingleValueReturn(function, String.class);
+        final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint256>() {});
+        final Function function = new Function("totalSupply", inputParam, outputParam);
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteCall<RepTransactionReceipt> approveAndCall(String _spender, BigInteger _value, byte[] _extraData) {
