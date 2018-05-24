@@ -1,9 +1,7 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 
 /**
@@ -16,7 +14,7 @@ public class ReadonlyTransactionManager extends TransactionManager {
     }
 
     @Override
-    public HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
+    public Request<?, HucSendRepTransaction> makeReqTransaction(TransactionData txData) {
         throw new UnsupportedOperationException("Only read operations are supported by this transaction manager");
     }
 }

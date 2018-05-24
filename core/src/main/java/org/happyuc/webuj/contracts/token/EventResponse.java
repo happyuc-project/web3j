@@ -33,7 +33,7 @@ public abstract class EventResponse {
 
         @Override
         public String toString() {
-            return "from: " + _from + "\nto: " + _to + "\nvalue: " + _value + "\naddress: " + log.getAddress();
+            return "from: " + _from + "\nto: " + _to + "\nvalue: " + _value + "\ncontract: " + log.getAddress();
         }
     }
 

@@ -1,14 +1,14 @@
 package org.happyuc.webuj.crypto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.happyuc.webuj.rlp.RlpEncoder;
 import org.happyuc.webuj.rlp.RlpList;
 import org.happyuc.webuj.rlp.RlpString;
 import org.happyuc.webuj.rlp.RlpType;
 import org.happyuc.webuj.utils.Bytes;
 import org.happyuc.webuj.utils.Numeric;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Create RLP encoded transaction, implementation as per p4 of the
@@ -18,28 +18,23 @@ public class TransactionEncoder {
 
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
-        Sign.SignatureData signatureData = Sign.signMessage(
-                encodedTransaction, credentials.getEcKeyPair());
+        Sign.SignatureData signatureData = Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
 
         return encode(rawTransaction, signatureData);
     }
 
-    public static byte[] signMessage(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+    public static byte[] signMessage(RawTransaction rawTransaction, byte chainId, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction, chainId);
-        Sign.SignatureData signatureData = Sign.signMessage(
-                encodedTransaction, credentials.getEcKeyPair());
+        Sign.SignatureData signatureData = Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
 
         Sign.SignatureData eip155SignatureData = createEip155SignatureData(signatureData, chainId);
         return encode(rawTransaction, eip155SignatureData);
     }
 
-    public static Sign.SignatureData createEip155SignatureData(
-            Sign.SignatureData signatureData, byte chainId) {
+    public static Sign.SignatureData createEip155SignatureData(Sign.SignatureData signatureData, byte chainId) {
         byte v = (byte) (signatureData.getV() + (chainId << 1) + 8);
 
-        return new Sign.SignatureData(
-                v, signatureData.getR(), signatureData.getS());
+        return new Sign.SignatureData(v, signatureData.getR(), signatureData.getS());
     }
 
     public static byte[] encode(RawTransaction rawTransaction) {
@@ -47,8 +42,7 @@ public class TransactionEncoder {
     }
 
     public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
-        Sign.SignatureData signatureData = new Sign.SignatureData(
-                chainId, new byte[] {}, new byte[] {});
+        Sign.SignatureData signatureData = new Sign.SignatureData(chainId, new byte[]{}, new byte[]{});
         return encode(rawTransaction, signatureData);
     }
 
@@ -58,8 +52,7 @@ public class TransactionEncoder {
         return RlpEncoder.encode(rlpList);
     }
 
-    static List<RlpType> asRlpValues(
-            RawTransaction rawTransaction, Sign.SignatureData signatureData) {
+    static List<RlpType> asRlpValues(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
         List<RlpType> result = new ArrayList<>();
 
         result.add(RlpString.create(rawTransaction.getNonce()));

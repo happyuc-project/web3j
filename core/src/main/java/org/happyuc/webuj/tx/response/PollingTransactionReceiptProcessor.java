@@ -1,11 +1,11 @@
 package org.happyuc.webuj.tx.response;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
+
+import java.io.IOException;
+import java.util.Optional;
 
 /**
  * With each provided transaction hash, poll until we obtain a transaction receipt.
@@ -23,12 +23,10 @@ public class PollingTransactionReceiptProcessor extends TransactionReceiptProces
 
     @Override
     public RepTransactionReceipt waitForTransactionReceipt(String transactionHash) throws IOException, TransactionException {
-
         return getTransactionReceipt(transactionHash, sleepDuration, attempts);
     }
 
     private RepTransactionReceipt getTransactionReceipt(String transactionHash, long sleepDuration, int attempts) throws IOException, TransactionException {
-
         Optional<RepTransactionReceipt> receiptOptional = sendTransactionReceiptRequest(transactionHash);
         for (int i = 0; i < attempts; i++) {
             if (!receiptOptional.isPresent()) {
