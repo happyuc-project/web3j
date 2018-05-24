@@ -1,9 +1,7 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.request.ReqTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
@@ -22,6 +20,19 @@ public class ClientTransactionManager extends TransactionManager {
         this.webuj = webuj;
     }
 
+    @Override
+    public Request<?, HucSendRepTransaction> makeReqTransaction(TransactionData txData) {
+        ReqTransaction reqTransaction = new ReqTransaction(
+                getFromAddress(),
+                null,
+                txData.getGasPrice(),
+                txData.getGasLimit(),
+                txData.getTo(),
+                txData.getValue(),
+                txData.getData());
+        return webuj.hucSendTransaction(reqTransaction);
+    }
+
     public ClientTransactionManager(Webuj webuj, String fromAddress, int attempts, int sleepDuration) {
         super(webuj, attempts, sleepDuration, fromAddress);
         this.webuj = webuj;
@@ -32,11 +43,4 @@ public class ClientTransactionManager extends TransactionManager {
         this.webuj = webuj;
     }
 
-    @Override
-    public HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
-
-        ReqTransaction reqTransaction = new ReqTransaction(getFromAddress(), null, gasPrice, gasLimit, to, value, data);
-
-        return webuj.hucSendTransaction(reqTransaction).send();
-    }
 }

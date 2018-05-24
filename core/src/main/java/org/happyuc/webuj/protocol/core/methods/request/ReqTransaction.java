@@ -1,10 +1,9 @@
 package org.happyuc.webuj.protocol.core.methods.request;
 
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import org.happyuc.webuj.utils.Numeric;
+
+import java.math.BigInteger;
 
 /**
  * ReqTransaction request object used the below methods.
@@ -17,7 +16,7 @@ import org.happyuc.webuj.utils.Numeric;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReqTransaction {
     // default as per https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_sendtransaction
-    public static final BigInteger DEFAULT_GAS = BigInteger.valueOf(9000);
+    public static final BigInteger DEFAULT_GAS = BigInteger.valueOf(90000);
 
     private String from;
     private String to;

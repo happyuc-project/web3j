@@ -57,7 +57,6 @@ public abstract class Contract extends ManagedTransaction {
         super(webuj, transactionManager);
 
         this.contractAddress = ensResolver.resolve(contractAddress);
-
         this.contractBinary = contractBinary;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
@@ -168,7 +167,10 @@ public abstract class Contract extends ManagedTransaction {
      */
     private List<Type> executeCall(Function function) throws IOException {
         String encodedFunction = FunctionEncoder.encode(function);
-        org.happyuc.webuj.protocol.core.methods.response.HucCall hucCall = webuj.hucCall(ReqTransaction.createHucCallTransaction(transactionManager.getFromAddress(), contractAddress, encodedFunction), defaultBlockParameter).send();
+        org.happyuc.webuj.protocol.core.methods.response.HucCall hucCall = webuj.hucCall(ReqTransaction.createHucCallTransaction(
+                transactionManager.getFromAddress(),
+                contractAddress,
+                encodedFunction), defaultBlockParameter).send();
 
         String value = hucCall.getValue();
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
@@ -224,11 +226,12 @@ public abstract class Contract extends ManagedTransaction {
      */
     RepTransactionReceipt executeTransaction(String data, BigInteger weiValue) throws TransactionException, IOException {
         RepTransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
-
         if (receipt.getStatus() != null && !SUCCESSFUL_TRANSACTION_STATUS.equals(receipt.getStatus())) {
-            throw new TransactionException(String.format("ReqTransaction has failed with status: %s. " + "Gas used: %d. (not-enough gas?)", receipt.getStatus(), receipt.getGasUsed()));
+            throw new TransactionException(String.format(
+                    "ReqTransaction has failed with status: %s. " + "Gas used: %d. (not-enough gas?)",
+                    receipt.getStatus(),
+                    receipt.getGasUsed()));
         }
-
         return receipt;
     }
 
@@ -267,7 +270,12 @@ public abstract class Contract extends ManagedTransaction {
 
     protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws TransactionException {
         try {
-            Constructor<T> constructor = type.getDeclaredConstructor(String.class, Webuj.class, Credentials.class, BigInteger.class, BigInteger.class);
+            Constructor<T> constructor = type.getDeclaredConstructor(
+                    String.class,
+                    Webuj.class,
+                    Credentials.class,
+                    BigInteger.class,
+                    BigInteger.class);
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
@@ -283,7 +291,12 @@ public abstract class Contract extends ManagedTransaction {
 
     protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws TransactionException {
         try {
-            Constructor<T> constructor = type.getDeclaredConstructor(String.class, Webuj.class, TransactionManager.class, BigInteger.class, BigInteger.class);
+            Constructor<T> constructor = type.getDeclaredConstructor(
+                    String.class,
+                    Webuj.class,
+                    TransactionManager.class,
+                    BigInteger.class,
+                    BigInteger.class);
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
@@ -336,7 +349,8 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected List<EventValues> extractEventParameters(Event event, RepTransactionReceipt repTransactionReceipt) {
-        return repTransactionReceipt.getLogs().stream().map(log -> extractEventParameters(event, log)).filter(Objects::nonNull).collect(Collectors.toList());
+        return repTransactionReceipt.getLogs().stream().map(log -> extractEventParameters(event, log)).filter(Objects::nonNull).collect(
+                Collectors.toList());
     }
 
     protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
@@ -345,7 +359,9 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected List<EventValuesWithLog> extractEventParametersWithLog(Event event, RepTransactionReceipt repTransactionReceipt) {
-        return repTransactionReceipt.getLogs().stream().map(log -> extractEventParametersWithLog(event, log)).filter(Objects::nonNull).collect(Collectors.toList());
+        return repTransactionReceipt.getLogs().stream().map(log -> extractEventParametersWithLog(
+                event,
+                log)).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     /**
