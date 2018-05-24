@@ -1,6 +1,7 @@
 package org.happyuc.webuj.tx;
 
 import org.happyuc.webuj.protocol.Webuj;
+import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.protocol.exceptions.TransactionException;
@@ -8,7 +9,6 @@ import org.happyuc.webuj.tx.response.PollingTransactionReceiptProcessor;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
 
 import java.io.IOException;
-import java.math.BigInteger;
 
 import static org.happyuc.webuj.protocol.core.JsonRpc2_0Webuj.DEFAULT_BLOCK_TIME;
 
@@ -33,16 +33,17 @@ public abstract class TransactionManager {
         this(new PollingTransactionReceiptProcessor(webu, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH), fromAddress);
     }
 
-    protected TransactionManager(Webuj webuj, int attempts, long sleepDuration, String fromAddress) {
+    protected TransactionManager(Webuj webuj, int attempts, int sleepDuration, String fromAddress) {
         this(new PollingTransactionReceiptProcessor(webuj, sleepDuration, attempts), fromAddress);
     }
 
-    protected RepTransactionReceipt executeTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException, TransactionException {
-        HucSendRepTransaction hucSendRepTransaction = sendTransaction(gasPrice, gasLimit, to, data, value);
+    protected RepTransactionReceipt executeTransaction(TransactionData txData) throws IOException, TransactionException {
+        Request<?, HucSendRepTransaction> req = makeReqTransaction(txData);
+        HucSendRepTransaction hucSendRepTransaction = req.send();
         return processResponse(hucSendRepTransaction);
     }
 
-    public abstract HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException;
+    public abstract Request<?, HucSendRepTransaction> makeReqTransaction(TransactionData txData) throws IOException;
 
     public String getFromAddress() {
         return fromAddress;
@@ -52,11 +53,8 @@ public abstract class TransactionManager {
         if (transactionResponse.hasError()) {
             throw new RuntimeException("Error processing transaction request: " + transactionResponse.getError().getMessage());
         }
-
         String transactionHash = transactionResponse.getTransactionHash();
-
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
     }
-
 
 }

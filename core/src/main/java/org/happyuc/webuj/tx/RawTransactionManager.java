@@ -1,17 +1,18 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.crypto.RawTransaction;
 import org.happyuc.webuj.crypto.TransactionEncoder;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameterName;
+import org.happyuc.webuj.protocol.core.Request;
 import org.happyuc.webuj.protocol.core.methods.response.HucGetRepTransactionCount;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
 import org.happyuc.webuj.utils.Numeric;
+
+import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * TransactionManager implementation using HappyUC wallet file to create and sign transactions
@@ -45,7 +46,7 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
+    public RawTransactionManager(Webuj webuj, Credentials credentials, byte chainId, int attempts, int sleepDuration) {
         super(webuj, attempts, sleepDuration, credentials.getAddress());
 
         this.webuj = webuj;
@@ -63,33 +64,32 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     protected BigInteger getNonce() throws IOException {
-        HucGetRepTransactionCount hucGetRepTransactionCount = webuj.hucGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
-
-        return hucGetRepTransactionCount.getTransactionCount();
+        HucGetRepTransactionCount count = webuj.hucGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        return count.getTransactionCount();
     }
 
     @Override
-    public HucSendRepTransaction sendTransaction(BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value) throws IOException {
-
-        BigInteger nonce = getNonce();
-
-        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
-
-        return signAndSend(rawTransaction);
+    public Request<?, HucSendRepTransaction> makeReqTransaction(TransactionData txData) throws IOException {
+        BigInteger nonce = txData.getNonce();
+        RawTransaction rawTransaction = RawTransaction.createTransaction(
+                nonce != null ? nonce : getNonce(),
+                txData.getGasPrice(),
+                txData.getGasLimit(),
+                txData.getTo(),
+                txData.getValue(),
+                txData.getData());
+        String hexSignTxData = sign(rawTransaction);
+        return webuj.hucSendRawTransaction(hexSignTxData);
     }
 
-    public HucSendRepTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
-
+    public String sign(RawTransaction rawTransaction) {
         byte[] signedMessage;
-
         if (chainId > ChainId.NONE) {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         }
-
-        String hexValue = Numeric.toHexString(signedMessage);
-
-        return webuj.hucSendRawTransaction(hexValue).send();
+        return Numeric.toHexString(signedMessage);
     }
+
 }

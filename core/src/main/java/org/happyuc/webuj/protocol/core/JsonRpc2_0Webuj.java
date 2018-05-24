@@ -98,7 +98,7 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, WebuSha3> webuSha3(String data) {
-        return new Request<>("webu_sha3", Arrays.asList(data), webujService, WebuSha3.class);
+        return new Request<>("webu_sha3", Collections.singletonList(data), webujService, WebuSha3.class);
     }
 
     @Override
@@ -163,47 +163,32 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucGetStorageAt> hucGetStorageAt(String address, BigInteger position, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getStorageAt",
-                             Arrays.asList(address, Numeric.encodeQuantity(position), defaultBlockParameter.getValue()),
-                             webujService,
-                             HucGetStorageAt.class);
+        return new Request<>("huc_getStorageAt", Arrays.asList(address, Numeric.encodeQuantity(position), defaultBlockParameter.getValue()), webujService, HucGetStorageAt.class);
     }
 
     @Override
     public Request<?, HucGetRepTransactionCount> hucGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getTransactionCount",
-                             Arrays.asList(address, defaultBlockParameter.getValue()),
-                             webujService,
-                             HucGetRepTransactionCount.class);
+        return new Request<>("huc_getTransactionCount", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetRepTransactionCount.class);
     }
 
     @Override
     public Request<?, HucGetBlockRepTransactionCountByHash> hucGetBlockTransactionCountByHash(String blockHash) {
-        return new Request<>("huc_getBlockTransactionCountByHash",
-                             Arrays.asList(blockHash),
-                             webujService,
-                             HucGetBlockRepTransactionCountByHash.class);
+        return new Request<>("huc_getBlockTransactionCountByHash", Collections.singletonList(blockHash), webujService, HucGetBlockRepTransactionCountByHash.class);
     }
 
     @Override
     public Request<?, HucGetBlockRepTransactionCountByNumber> hucGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getBlockTransactionCountByNumber",
-                             Arrays.asList(defaultBlockParameter.getValue()),
-                             webujService,
-                             HucGetBlockRepTransactionCountByNumber.class);
+        return new Request<>("huc_getBlockTransactionCountByNumber", Collections.singletonList(defaultBlockParameter.getValue()), webujService, HucGetBlockRepTransactionCountByNumber.class);
     }
 
     @Override
     public Request<?, HucGetUncleCountByBlockHash> hucGetUncleCountByBlockHash(String blockHash) {
-        return new Request<>("huc_getUncleCountByBlockHash", Arrays.asList(blockHash), webujService, HucGetUncleCountByBlockHash.class);
+        return new Request<>("huc_getUncleCountByBlockHash", Collections.singletonList(blockHash), webujService, HucGetUncleCountByBlockHash.class);
     }
 
     @Override
     public Request<?, HucGetUncleCountByBlockNumber> hucGetUncleCountByBlockNumber(DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getUncleCountByBlockNumber",
-                             Arrays.asList(defaultBlockParameter.getValue()),
-                             webujService,
-                             HucGetUncleCountByBlockNumber.class);
+        return new Request<>("huc_getUncleCountByBlockNumber", Collections.singletonList(defaultBlockParameter.getValue()), webujService, HucGetUncleCountByBlockNumber.class);
     }
 
     @Override
@@ -218,31 +203,22 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucSendRepTransaction> hucSendTransaction(ReqTransaction reqTransaction) {
-        return new Request<>("huc_sendTransaction",
-                             Arrays.asList(reqTransaction),
-                             webujService,
-                             HucSendRepTransaction.class);
+        return new Request<>("huc_sendTransaction", Collections.singletonList(reqTransaction), webujService, HucSendRepTransaction.class);
     }
 
     @Override
     public Request<?, HucSendRepTransaction> hucSendRawTransaction(String signedTransactionData) {
-        return new Request<>("huc_sendRawTransaction",
-                             Arrays.asList(signedTransactionData),
-                             webujService,
-                             HucSendRepTransaction.class);
+        return new Request<>("huc_sendRawTransaction", Collections.singletonList(signedTransactionData), webujService, HucSendRepTransaction.class);
     }
 
     @Override
     public Request<?, org.happyuc.webuj.protocol.core.methods.response.HucCall> hucCall(ReqTransaction reqTransaction, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_call",
-                             Arrays.asList(reqTransaction, defaultBlockParameter),
-                             webujService,
-                             org.happyuc.webuj.protocol.core.methods.response.HucCall.class);
+        return new Request<>("huc_call", Arrays.asList(reqTransaction, defaultBlockParameter), webujService, org.happyuc.webuj.protocol.core.methods.response.HucCall.class);
     }
 
     @Override
     public Request<?, HucEstimateGas> hucEstimateGas(ReqTransaction reqTransaction) {
-        return new Request<>("huc_estimateGas", Arrays.asList(reqTransaction), webujService, HucEstimateGas.class);
+        return new Request<>("huc_estimateGas", Collections.singletonList(reqTransaction), webujService, HucEstimateGas.class);
     }
 
     @Override
@@ -252,52 +228,37 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucBlock> hucGetBlockByNumber(DefaultBlockParameter defaultBlockParameter, boolean returnFullTransactionObjects) {
-        return new Request<>("huc_getBlockByNumber",
-                             Arrays.asList(defaultBlockParameter.getValue(), returnFullTransactionObjects),
-                             webujService,
-                             HucBlock.class);
+        return new Request<>("huc_getBlockByNumber", Arrays.asList(defaultBlockParameter.getValue(), returnFullTransactionObjects), webujService, HucBlock.class);
     }
 
     @Override
     public Request<?, HucRepTransaction> hucGetTransactionByHash(String transactionHash) {
-        return new Request<>("huc_getTransactionByHash", Arrays.asList(transactionHash), webujService, HucRepTransaction.class);
+        return new Request<>("huc_getTransactionByHash", Collections.singletonList(transactionHash), webujService, HucRepTransaction.class);
     }
 
     @Override
     public Request<?, HucRepTransaction> hucGetTransactionByBlockHashAndIndex(String blockHash, BigInteger transactionIndex) {
-        return new Request<>("huc_getTransactionByBlockHashAndIndex",
-                             Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)),
-                             webujService,
-                             HucRepTransaction.class);
+        return new Request<>("huc_getTransactionByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucRepTransaction.class);
     }
 
     @Override
     public Request<?, HucRepTransaction> hucGetTransactionByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex) {
-        return new Request<>("huc_getTransactionByBlockNumberAndIndex",
-                             Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(transactionIndex)),
-                             webujService,
-                             HucRepTransaction.class);
+        return new Request<>("huc_getTransactionByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(transactionIndex)), webujService, HucRepTransaction.class);
     }
 
     @Override
     public Request<?, HucGetRepTransactionReceipt> hucGetTransactionReceipt(String transactionHash) {
-        return new Request<>("huc_getTransactionReceipt", Arrays.asList(transactionHash), webujService, HucGetRepTransactionReceipt.class);
+        return new Request<>("huc_getTransactionReceipt", Collections.singletonList(transactionHash), webujService, HucGetRepTransactionReceipt.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetUncleByBlockHashAndIndex(String blockHash, BigInteger transactionIndex) {
-        return new Request<>("huc_getUncleByBlockHashAndIndex",
-                             Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)),
-                             webujService,
-                             HucBlock.class);
+        return new Request<>("huc_getUncleByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucBlock.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetUncleByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger uncleIndex) {
-        return new Request<>("huc_getUncleByBlockNumberAndIndex",
-                             Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(uncleIndex)),
-                             webujService,
-                             HucBlock.class);
+        return new Request<>("huc_getUncleByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(uncleIndex)), webujService, HucBlock.class);
     }
 
     @Override
@@ -307,22 +268,22 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucCompileLLL> hucCompileLLL(String sourceCode) {
-        return new Request<>("huc_compileLLL", Arrays.asList(sourceCode), webujService, HucCompileLLL.class);
+        return new Request<>("huc_compileLLL", Collections.singletonList(sourceCode), webujService, HucCompileLLL.class);
     }
 
     @Override
     public Request<?, HucCompileSolidity> hucCompileSolidity(String sourceCode) {
-        return new Request<>("huc_compileSolidity", Arrays.asList(sourceCode), webujService, HucCompileSolidity.class);
+        return new Request<>("huc_compileSolidity", Collections.singletonList(sourceCode), webujService, HucCompileSolidity.class);
     }
 
     @Override
     public Request<?, HucCompileSerpent> hucCompileSerpent(String sourceCode) {
-        return new Request<>("huc_compileSerpent", Arrays.asList(sourceCode), webujService, HucCompileSerpent.class);
+        return new Request<>("huc_compileSerpent", Collections.singletonList(sourceCode), webujService, HucCompileSerpent.class);
     }
 
     @Override
     public Request<?, HucRepFilter> hucNewFilter(HucReqFilter hucReqFilter) {
-        return new Request<>("huc_newFilter", Arrays.asList(hucReqFilter), webujService, HucRepFilter.class);
+        return new Request<>("huc_newFilter", Collections.singletonList(hucReqFilter), webujService, HucRepFilter.class);
     }
 
     @Override
@@ -337,28 +298,22 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucUninstallFilter> hucUninstallFilter(BigInteger filterId) {
-        return new Request<>("huc_uninstallFilter",
-                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                             webujService,
-                             HucUninstallFilter.class);
+        return new Request<>("huc_uninstallFilter", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucUninstallFilter.class);
     }
 
     @Override
     public Request<?, HucLog> hucGetFilterChanges(BigInteger filterId) {
-        return new Request<>("huc_getFilterChanges",
-                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                             webujService,
-                             HucLog.class);
+        return new Request<>("huc_getFilterChanges", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
     }
 
     @Override
     public Request<?, HucLog> hucGetFilterLogs(BigInteger filterId) {
-        return new Request<>("huc_getFilterLogs", Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
+        return new Request<>("huc_getFilterLogs", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
     }
 
     @Override
     public Request<?, HucLog> hucGetLogs(HucReqFilter hucReqFilter) {
-        return new Request<>("huc_getLogs", Arrays.asList(hucReqFilter), webujService, HucLog.class);
+        return new Request<>("huc_getLogs", Collections.singletonList(hucReqFilter), webujService, HucLog.class);
     }
 
     @Override
@@ -398,10 +353,7 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, ShhRepPost> shhPost(ShhReqPost shhReqPost) {
-        return new Request<>("shh_post",
-                             Arrays.asList(shhReqPost),
-                             webujService,
-                             ShhRepPost.class);
+        return new Request<>("shh_post", Collections.singletonList(shhReqPost), webujService, ShhRepPost.class);
     }
 
     @Override
@@ -416,7 +368,7 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, ShhHasIdentity> shhHasIdentity(String identityAddress) {
-        return new Request<>("shh_hasIdentity", Arrays.asList(identityAddress), webujService, ShhHasIdentity.class);
+        return new Request<>("shh_hasIdentity", Collections.singletonList(identityAddress), webujService, ShhHasIdentity.class);
     }
 
     @Override
@@ -426,36 +378,27 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, ShhAddToGroup> shhAddToGroup(String identityAddress) {
-        return new Request<>("shh_addToGroup", Arrays.asList(identityAddress), webujService, ShhAddToGroup.class);
+        return new Request<>("shh_addToGroup", Collections.singletonList(identityAddress), webujService, ShhAddToGroup.class);
     }
 
     @Override
     public Request<?, ShhNewFilter> shhNewFilter(ShhFilter shhFilter) {
-        return new Request<>("shh_newFilter", Arrays.asList(shhFilter), webujService, ShhNewFilter.class);
+        return new Request<>("shh_newFilter", Collections.singletonList(shhFilter), webujService, ShhNewFilter.class);
     }
 
     @Override
     public Request<?, ShhUninstallFilter> shhUninstallFilter(BigInteger filterId) {
-        return new Request<>("shh_uninstallFilter",
-                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                             webujService,
-                             ShhUninstallFilter.class);
+        return new Request<>("shh_uninstallFilter", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, ShhUninstallFilter.class);
     }
 
     @Override
     public Request<?, ShhMessages> shhGetFilterChanges(BigInteger filterId) {
-        return new Request<>("shh_getFilterChanges",
-                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                             webujService,
-                             ShhMessages.class);
+        return new Request<>("shh_getFilterChanges", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, ShhMessages.class);
     }
 
     @Override
     public Request<?, ShhMessages> shhGetMessages(BigInteger filterId) {
-        return new Request<>("shh_getMessages",
-                             Arrays.asList(Numeric.toHexStringWithPrefixSafe(filterId)),
-                             webujService,
-                             ShhMessages.class);
+        return new Request<>("shh_getMessages", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, ShhMessages.class);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package org.happyuc.webuj.tx;
 
-import java.io.IOException;
-import java.math.BigInteger;
-
 import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.tx.response.TransactionReceiptProcessor;
+
+import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * Simple RawTransactionManager derivative that manages nonces to facilitate multiple transactions
@@ -21,6 +21,11 @@ public class FastRawTransactionManager extends RawTransactionManager {
 
     public FastRawTransactionManager(Webuj webuj, Credentials credentials) {
         super(webuj, credentials);
+    }
+
+
+    public FastRawTransactionManager(Webuj webuj, Credentials credentials, int attempts, int sleepDuration) {
+        super(webuj, credentials, attempts, sleepDuration);
     }
 
     public FastRawTransactionManager(Webuj webuj, Credentials credentials, TransactionReceiptProcessor transactionReceiptProcessor) {
