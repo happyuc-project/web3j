@@ -22,7 +22,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface ERC20BasicInterface {
 
-    RemoteCall<BigInteger> totalSupply();
+    RemoteCall<BigInteger> totalSupply(String _address);
 
     RemoteCall<BigInteger> balanceOf(String who);
 

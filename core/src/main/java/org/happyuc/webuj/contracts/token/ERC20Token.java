@@ -38,8 +38,8 @@ public class ERC20Token extends Contract implements ERC20Interface {
 
     public static final Event APPROVAL_EVENT = new Event("Approval", EMPTY_REFERENCES, Collections.singletonList(new TypeReference<Uint256>() {}));
 
-    public ERC20Token(String contractAddress, Webuj webuj, BigInteger price, BigInteger limit) {
-        super(BINARY, contractAddress, webuj, price, limit);
+    public ERC20Token(String forAddress,String contractAddress, Webuj webuj, BigInteger price, BigInteger limit) {
+        super(forAddress,BINARY, contractAddress, webuj, price, limit);
     }
 
     public ERC20Token(String contractAddress, Webuj webuj, Credentials credentials, BigInteger price, BigInteger limit) {
@@ -57,7 +57,7 @@ public class ERC20Token extends Contract implements ERC20Interface {
      * @return BigInteger
      */
     @Override
-    public RemoteCall<BigInteger> totalSupply() {
+    public RemoteCall<BigInteger> totalSupply(String _address) {
         final List<Type> inputParam = Collections.emptyList();
         final List<TypeReference<?>> outputParam = Collections.singletonList(new TypeReference<Uint256>() {});
         final Function function = new Function("totalSupply", inputParam, outputParam);
@@ -286,8 +286,8 @@ public class ERC20Token extends Contract implements ERC20Interface {
         return deployRemoteCall(ERC20Token.class, webuj, manager, price, limit, BINARY, encodedConstructor);
     }
 
-    public static ERC20Token load(String contractAddress, Webuj webuj) {
-        return new ERC20Token(contractAddress, webuj, GAS_PRICE, GAS_LIMIT);
+    public static ERC20Token load(String forAddress,String contractAddress, Webuj webuj) {
+        return new ERC20Token(forAddress,contractAddress, webuj, GAS_PRICE, GAS_LIMIT);
     }
     public static ERC20Token load(String contractAddress, Webuj webuj, Credentials credentials) {
         return new ERC20Token(contractAddress, webuj, credentials, GAS_PRICE, GAS_LIMIT);

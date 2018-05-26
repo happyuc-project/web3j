@@ -41,6 +41,7 @@ public abstract class Contract extends ManagedTransaction {
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4300000);
 
+    protected String address;
     protected final String contractBinary;
     protected String contractAddress;
     protected BigInteger gasPrice;
@@ -58,14 +59,19 @@ public abstract class Contract extends ManagedTransaction {
         this.gasLimit = gasLimit;
     }
 
-    protected Contract(String contractBinary, String contractAddress, Webuj webuj, BigInteger gasPrice, BigInteger gasLimit) {
+    protected Contract(String forAddress,String contractBinary, String contractAddress, Webuj webuj, BigInteger gasPrice, BigInteger gasLimit) {
         super(webuj);
 
+        this.address = forAddress;
         this.contractAddress = ensResolver.resolve(contractAddress);
 
         this.contractBinary = contractBinary;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
+    }
+
+    protected Contract(String contractBinary,String contractAddress, Webuj web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        this(contractBinary, contractAddress, web3j, new RawTransactionManager(web3j,credentials), gasPrice, gasLimit);
     }
 
     @Deprecated
@@ -92,6 +98,10 @@ public abstract class Contract extends ManagedTransaction {
 
     public String getContractBinary() {
         return contractBinary;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
     }
 
     /**
@@ -159,7 +169,7 @@ public abstract class Contract extends ManagedTransaction {
      */
     private List<Type> executeCall(Function function) throws IOException {
         String encodedFunction = FunctionEncoder.encode(function);
-        HucCall hucCall = webuj.hucCall(ReqTransaction.createHucCallTransaction(transactionManager.getFromAddress(), contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).send();
+        HucCall hucCall = webuj.hucCall(ReqTransaction.createHucCallTransaction(address, contractAddress, encodedFunction), DefaultBlockParameterName.LATEST).send();
 
         String value = hucCall.getValue();
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
