@@ -1,5 +1,6 @@
 package org.happyuc.webuj.tx;
 
+import org.happyuc.webuj.crypto.Credentials;
 import org.happyuc.webuj.ens.EnsResolver;
 import org.happyuc.webuj.protocol.Webuj;
 import org.happyuc.webuj.protocol.core.methods.response.HucGasPrice;
@@ -27,6 +28,19 @@ public abstract class ManagedTransaction {
         this.transactionManager = transactionManager;
         this.webuj = webuj;
         this.ensResolver = new EnsResolver(webuj);
+    }
+
+    protected ManagedTransaction(Webuj webuj) {
+        this.webuj = webuj;
+        this.ensResolver = new EnsResolver(webuj);
+    }
+
+    public void setTransactionManager(TransactionManager transactionManager){
+        this.transactionManager = transactionManager;
+    }
+
+    public void setTransactionManager(Credentials credentials){
+        this.transactionManager = new RawTransactionManager(webuj, credentials);
     }
 
     /**

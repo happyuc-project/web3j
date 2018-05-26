@@ -87,9 +87,7 @@ public class WalletUtils {
         String mnemonic = MnemonicUtils.generateMnemonic(initialEntropy,wordList);
         byte[] seed = MnemonicUtils.generateSeed(mnemonic, password);
         ECKeyPair privateKey = ECKeyPair.create(Hash.sha256(seed));
-
         String walletFile = generateWalletFile(password, privateKey, destinationDirectory, false);
-
         return new Bip39Wallet(walletFile, mnemonic);
     }
 

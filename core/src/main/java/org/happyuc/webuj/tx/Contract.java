@@ -58,8 +58,14 @@ public abstract class Contract extends ManagedTransaction {
         this.gasLimit = gasLimit;
     }
 
-    protected Contract(String contractBinary, String contractAddress, Webuj web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        this(contractBinary, contractAddress, web3j, new RawTransactionManager(web3j, credentials), gasPrice, gasLimit);
+    protected Contract(String contractBinary, String contractAddress, Webuj webuj, BigInteger gasPrice, BigInteger gasLimit) {
+        super(webuj);
+
+        this.contractAddress = ensResolver.resolve(contractAddress);
+
+        this.contractBinary = contractBinary;
+        this.gasPrice = gasPrice;
+        this.gasLimit = gasLimit;
     }
 
     @Deprecated

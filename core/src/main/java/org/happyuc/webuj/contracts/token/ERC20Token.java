@@ -18,6 +18,7 @@ import org.happyuc.webuj.protocol.core.RemoteCall;
 import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
+import org.happyuc.webuj.tx.RawTransactionManager;
 import org.happyuc.webuj.tx.TransactionManager;
 import org.happyuc.webuj.utils.Convert;
 import rx.Observable;
@@ -37,8 +38,12 @@ public class ERC20Token extends Contract implements ERC20Interface {
 
     public static final Event APPROVAL_EVENT = new Event("Approval", EMPTY_REFERENCES, Collections.singletonList(new TypeReference<Uint256>() {}));
 
+    public ERC20Token(String contractAddress, Webuj webuj, BigInteger price, BigInteger limit) {
+        super(BINARY, contractAddress, webuj, price, limit);
+    }
+
     public ERC20Token(String contractAddress, Webuj webuj, Credentials credentials, BigInteger price, BigInteger limit) {
-        super(BINARY, contractAddress, webuj, credentials, price, limit);
+        super(BINARY, contractAddress, webuj, new RawTransactionManager(webuj, credentials), price, limit);
     }
 
     public ERC20Token(String contractAddress, Webuj webuj, TransactionManager transactionManager, BigInteger price, BigInteger limit) {
@@ -281,6 +286,9 @@ public class ERC20Token extends Contract implements ERC20Interface {
         return deployRemoteCall(ERC20Token.class, webuj, manager, price, limit, BINARY, encodedConstructor);
     }
 
+    public static ERC20Token load(String contractAddress, Webuj webuj) {
+        return new ERC20Token(contractAddress, webuj, GAS_PRICE, GAS_LIMIT);
+    }
     public static ERC20Token load(String contractAddress, Webuj webuj, Credentials credentials) {
         return new ERC20Token(contractAddress, webuj, credentials, GAS_PRICE, GAS_LIMIT);
     }
