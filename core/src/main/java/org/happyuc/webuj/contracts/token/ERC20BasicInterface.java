@@ -3,7 +3,6 @@ package org.happyuc.webuj.contracts.token;
 import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 import org.happyuc.webuj.protocol.core.RemoteCall;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
-import org.happyuc.webuj.utils.Convert;
 import rx.Observable;
 
 import java.math.BigInteger;
@@ -26,7 +25,9 @@ public interface ERC20BasicInterface {
 
     RemoteCall<BigInteger> balanceOf(String who);
 
-    RemoteCall<RepTransactionReceipt> transfer(String to, String value, Convert.Unit unit, String remark);
+    RemoteCall<RepTransactionReceipt> transfer(String to, String value, String remark);
+
+    RemoteCall<RepTransactionReceipt> mulTransfer(List<String> dests, List<String> values, List<String> remarks);
 
     <T> List<T> getTransferEvents(RepTransactionReceipt repTransactionReceipt, EventResponse.Rec<T> rec);
 
