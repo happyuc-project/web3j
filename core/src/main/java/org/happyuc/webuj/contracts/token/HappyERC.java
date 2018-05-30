@@ -20,7 +20,7 @@ import org.happyuc.webuj.protocol.core.methods.request.HucReqFilter;
 import org.happyuc.webuj.protocol.core.methods.response.HucSendRepTransaction;
 import org.happyuc.webuj.protocol.core.methods.response.RepTransactionReceipt;
 import org.happyuc.webuj.tx.Contract;
-import org.happyuc.webuj.tx.FastRawTransactionManager;
+import org.happyuc.webuj.tx.RawTransactionManager;
 import org.happyuc.webuj.tx.TransactionData;
 import org.happyuc.webuj.tx.TransactionManager;
 import org.happyuc.webuj.utils.Convert;
@@ -33,6 +33,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.happyuc.webuj.protocol.core.methods.request.ReqTransaction.DEFAULT_GAS;
 
 public class HappyERC extends Contract implements ERC20Interface {
 
@@ -319,9 +321,7 @@ public class HappyERC extends Contract implements ERC20Interface {
     }
 
     public static RemoteCall<HappyERC> deploy(Webuj webuj, Credentials credentials, BigInteger price, BigInteger limit, BigInteger amount, String name, String symbol) {
-        List<Type> param = Arrays.asList(new Uint256(amount), new Utf8String(name), new Utf8String(symbol));
-        String encodedConstructor = FunctionEncoder.encodeConstructor(param);
-        return deployRemoteCall(HappyERC.class, webuj, credentials, price, limit, BINARY, encodedConstructor);
+        return deploy(webuj, new RawTransactionManager(webuj, credentials), price, limit, amount, name, symbol);
     }
 
     public static RemoteCall<HappyERC> deploy(Webuj webuj, TransactionManager manager, BigInteger price, BigInteger limit, BigInteger amount, String name, String symbol) {
@@ -331,11 +331,11 @@ public class HappyERC extends Contract implements ERC20Interface {
     }
 
     public static HappyERC load(String contractAddress, Webuj webuj, Credentials credentials) {
-        return load(contractAddress, webuj, new FastRawTransactionManager(webuj, credentials));
+        return load(contractAddress, webuj, new RawTransactionManager(webuj, credentials));
     }
 
     public static HappyERC load(String contractAddress, Webuj webuj, TransactionManager transactionManager) {
-        return new HappyERC(contractAddress, webuj, transactionManager, GAS_PRICE, GAS_LIMIT);
+        return new HappyERC(contractAddress, webuj, transactionManager, GAS_PRICE, DEFAULT_GAS);
     }
 
 }
