@@ -42,7 +42,8 @@ import java.util.stream.Collectors;
 public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/happyuc/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
-    public static final BigInteger GAS_LIMIT = BigInteger.valueOf(2_700_000);
+    public static final BigInteger GAS_LIMIT_DEPLOY = BigInteger.valueOf(4_300_000);
+    public static final BigInteger GAS_LIMIT = ReqTransaction.DEFAULT_GAS;
     public static final String SUCCESSFUL_TRANSACTION_STATUS = "0x1";
 
     protected final String contractBinary;
@@ -214,8 +215,12 @@ public abstract class Contract extends ManagedTransaction {
      * @throws IOException          if the call to the node fails
      * @throws TransactionException if the transaction was not mined while waiting
      */
-    RepTransactionReceipt executeTransaction(String data, BigInteger weiValue) throws TransactionException, IOException {
-        RepTransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, GAS_LIMIT);
+    protected RepTransactionReceipt executeTransaction(String data, BigInteger weiValue) throws TransactionException, IOException {
+        return executeTransaction(data, weiValue, this.gasPrice, this.gasLimit);
+    }
+
+    protected RepTransactionReceipt executeTransaction(String data, BigInteger weiValue, BigInteger gasPrice, BigInteger gasLimit) throws TransactionException, IOException {
+        RepTransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
         if (receipt.getStatus() != null && !SUCCESSFUL_TRANSACTION_STATUS.equals(receipt.getStatus())) {
             throw new TransactionException(String.format(
                     "ReqTransaction has failed with status: %s. " + "Gas used: %d. (not-enough gas?)",
@@ -245,8 +250,8 @@ public abstract class Contract extends ManagedTransaction {
         return new RemoteCall<>(() -> executeTransaction(function, weiValue));
     }
 
-    private static <T extends Contract> T create(T contract, String binary, String encodedConstructor, BigInteger value) throws IOException, TransactionException {
-        RepTransactionReceipt repTransactionReceipt = contract.executeTransaction(binary + encodedConstructor, value);
+    private static <T extends Contract> T create(T contract, String binary, String encodedConstructor, BigInteger value, BigInteger gasPrice, BigInteger gasLimit) throws IOException, TransactionException {
+        RepTransactionReceipt repTransactionReceipt = contract.executeTransaction(binary + encodedConstructor, value, gasPrice, gasLimit);
 
         String contractAddress = repTransactionReceipt.getContractAddress();
         if (contractAddress == null) {
@@ -273,8 +278,8 @@ public abstract class Contract extends ManagedTransaction {
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
-            T contract = constructor.newInstance(null, webuj, txManager, gasPrice, gasLimit);
-            return create(contract, binary, encodedConstructor, value);
+            T contract = constructor.newInstance(null, webuj, txManager, GAS_PRICE, GAS_LIMIT);
+            return create(contract, binary, encodedConstructor, value, gasPrice, gasLimit);
         } catch (TransactionException e) {
             throw e;
         } catch (Exception e) {

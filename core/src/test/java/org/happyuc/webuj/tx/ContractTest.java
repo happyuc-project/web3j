@@ -68,7 +68,7 @@ public class ContractTest extends ManagedReqRepTransactionTester {
     public void setUp() throws Exception {
         super.setUp();
 
-        contract = new TestContract(ADDRESS, webuj, SampleKeys.CREDENTIALS, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+        contract = new TestContract(ADDRESS, webuj, SampleKeys.CREDENTIALS, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT_DEPLOY);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class ContractTest extends ManagedReqRepTransactionTester {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(new Uint256(BigInteger.TEN)));
 
         try {
-            TestContract.deployRemoteCall(TestContract.class, webuj, SampleKeys.CREDENTIALS, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT, "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
+            TestContract.deployRemoteCall(TestContract.class, webuj, SampleKeys.CREDENTIALS, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT_DEPLOY, "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
         } catch (InterruptedException e) {
             throw e;
         } catch (ExecutionException e) {
@@ -250,7 +250,7 @@ public class ContractTest extends ManagedReqRepTransactionTester {
 
         TransactionManager transactionManager = new RawTransactionManager(webuj, SampleKeys.CREDENTIALS, 1, 1);
 
-        contract = new TestContract(ADDRESS, webuj, transactionManager, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT);
+        contract = new TestContract(ADDRESS, webuj, transactionManager, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT_DEPLOY);
 
         testErrorScenario();
     }
@@ -364,7 +364,7 @@ public class ContractTest extends ManagedReqRepTransactionTester {
 
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.asList(new Uint256(BigInteger.TEN)));
 
-        return TestContract.deployRemoteCall(TestContract.class, webuj, SampleKeys.CREDENTIALS, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT, "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
+        return TestContract.deployRemoteCall(TestContract.class, webuj, SampleKeys.CREDENTIALS, ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT_DEPLOY, "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
     }
 
     @SuppressWarnings("unchecked")
