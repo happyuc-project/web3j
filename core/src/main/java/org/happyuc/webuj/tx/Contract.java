@@ -66,16 +66,6 @@ public abstract class Contract extends ManagedTransaction {
         this(contractBinary, contractAddress, webuj, new RawTransactionManager(webuj, credentials), gasPrice, gasLimit);
     }
 
-    @Deprecated
-    protected Contract(String contractAddress, Webuj webuj, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
-        this("", contractAddress, webuj, transactionManager, gasPrice, gasLimit);
-    }
-
-    @Deprecated
-    protected Contract(String contractAddress, Webuj webuj, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        this("", contractAddress, webuj, new RawTransactionManager(webuj, credentials), gasPrice, gasLimit);
-    }
-
     public void setContractAddress(String contractAddress) {
         this.contractAddress = contractAddress;
     }
@@ -225,7 +215,7 @@ public abstract class Contract extends ManagedTransaction {
      * @throws TransactionException if the transaction was not mined while waiting
      */
     RepTransactionReceipt executeTransaction(String data, BigInteger weiValue) throws TransactionException, IOException {
-        RepTransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, gasLimit);
+        RepTransactionReceipt receipt = send(contractAddress, data, weiValue, gasPrice, GAS_LIMIT);
         if (receipt.getStatus() != null && !SUCCESSFUL_TRANSACTION_STATUS.equals(receipt.getStatus())) {
             throw new TransactionException(String.format(
                     "ReqTransaction has failed with status: %s. " + "Gas used: %d. (not-enough gas?)",
@@ -269,27 +259,10 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws TransactionException {
-        try {
-            Constructor<T> constructor = type.getDeclaredConstructor(
-                    String.class,
-                    Webuj.class,
-                    Credentials.class,
-                    BigInteger.class,
-                    BigInteger.class);
-            constructor.setAccessible(true);
-
-            // we want to use null here to ensure that "to" parameter on message is not populated
-            T contract = constructor.newInstance(null, webuj, credentials, gasPrice, gasLimit);
-
-            return create(contract, binary, encodedConstructor, value);
-        } catch (TransactionException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return deploy(type, webuj, new RawTransactionManager(webuj, credentials), gasPrice, gasLimit, binary, encodedConstructor, value);
     }
 
-    protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws TransactionException {
+    protected static <T extends Contract> T deploy(Class<T> type, Webuj webuj, TransactionManager txManager, BigInteger gasPrice, BigInteger gasLimit, String binary, String encodedConstructor, BigInteger value) throws TransactionException {
         try {
             Constructor<T> constructor = type.getDeclaredConstructor(
                     String.class,
@@ -300,7 +273,7 @@ public abstract class Contract extends ManagedTransaction {
             constructor.setAccessible(true);
 
             // we want to use null here to ensure that "to" parameter on message is not populated
-            T contract = constructor.newInstance(null, webuj, transactionManager, gasPrice, gasLimit);
+            T contract = constructor.newInstance(null, webuj, txManager, gasPrice, gasLimit);
             return create(contract, binary, encodedConstructor, value);
         } catch (TransactionException e) {
             throw e;
