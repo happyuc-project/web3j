@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_gasPrice.
+ * irc_gasPrice.
  */
 public class HucGasPrice extends Response<String> {
     public BigInteger getGasPrice() {

@@ -14,7 +14,7 @@ import org.happyuc.webuj.protocol.ObjectMapperFactory;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * huc_syncing.
+ * irc_syncing.
  *
  * <p>Returns an object with data about the sync status or false.
  */

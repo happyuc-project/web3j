@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_blockNumber.
+ * irc_blockNumber.
  */
 public class HucBlockNumber extends Response<String> {
     public BigInteger getBlockNumber() {

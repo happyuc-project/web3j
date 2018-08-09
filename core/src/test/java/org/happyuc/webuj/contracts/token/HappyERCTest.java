@@ -25,19 +25,15 @@ public class HappyERCTest {
     private Credentials credentials1;
     private Credentials credentials2;
     private Credentials credentials3;
-    private Credentials credentials4;
-    private Credentials credentials5;
+    public static String CONTRACT_ADDR = "0xe1ff0eab3b4fe5c0741eab7635314935b9a6ecd1";
 
-    public static final String NODE_URL = "http://112.74.96.198:8545";
-    public static final String PRIVATE_KEY = "";
-    public static String CONTRACT_ADDR = "0x318F54081a8706AA3B66b97eE173AE750D1B6C38";
-
-    public static final String KEYSTOREDIR = "/home/ldc/blockchain/hucdev/data0/keystore/";
-    public static final String SOURCE1 = KEYSTOREDIR + "UTC--2018-04-11T04-07-53.751740912Z--82a85ec8b94779ae96e8fdfa752aa7ac3932252d";
-    public static final String SOURCE2 = KEYSTOREDIR + "UTC--2018-04-23T13-48-37.872576165Z--d0ca89a6d9435a6a4857c1083f165af01fbfda7d";
-    public static final String SOURCE3 = KEYSTOREDIR + "UTC--2018-04-23T13-48-42.528788235Z--b3f1507591583ebf14b5b31d134d700c83c20fa1";
-    public static final String SOURCE4 = KEYSTOREDIR + "UTC--2018-04-25T09-45-45.144366258Z--7a61b41e166d165c18b23a31b0506d95576c974a";
-    public static final String SOURCE5 = KEYSTOREDIR + "UTC--2018-04-25T09-45-45.144366258Z--7a61b41e166d165c18b23a31b0506d95576c974a";
+    public static final String KEYSTOREDIR = "/home/ldc/blockchain/ircdev/data0/keystore/";
+    public static final String SOURCE1 = KEYSTOREDIR + "UTC--2018-04-11T04-07-53" +
+            ".751740912Z--82a85ec8b94779ae96e8fdfa752aa7ac3932252d";
+    public static final String SOURCE2 = KEYSTOREDIR + "UTC--2018-04-23T13-48-37" +
+            ".872576165Z--d0ca89a6d9435a6a4857c1083f165af01fbfda7d";
+    public static final String SOURCE3 = KEYSTOREDIR + "UTC--2018-04-23T13-48-42" +
+            ".528788235Z--b3f1507591583ebf14b5b31d134d700c83c20fa1";
 
     @Before
     public void setUp() throws IOException, CipherException {
@@ -45,19 +41,22 @@ public class HappyERCTest {
         credentials1 = WalletUtils.loadCredentials("123456", SOURCE1);
         credentials2 = WalletUtils.loadCredentials("123456", SOURCE2);
         credentials3 = WalletUtils.loadCredentials("123456", SOURCE3);
-        credentials4 = WalletUtils.loadCredentials("123456", SOURCE4);
-        credentials4 = WalletUtils.loadCredentials("123456", SOURCE5);
     }
 
     @Test
     public void deploy() throws Exception {
         Credentials credentials = credentials3;
-        String name = "Token(Test)";
-        String symbol = "Token";
         BigInteger price = Contract.GAS_PRICE;
         BigInteger limit = Contract.GAS_LIMIT_DEPLOY;
-        BigInteger amount = BigInteger.valueOf(1000000);
-        HappyERC contract = HappyERC.deploy(webuj, credentials, price, limit, amount, name, symbol).send();
+        String name = "Token(Test)";
+        String symbol = "Token";
+        long supply = 1000000L;
+        long costmin = 1L;
+        long costmax = 1000L;
+        long costpc = 1L;
+        boolean extend = false;
+        HappyERC contract = HappyERC.deploy(webuj, credentials, price, limit, BigInteger.valueOf(100),
+                name, symbol, supply, costmin, costmax, costpc, extend).send();
         assertTrue("Create deploy failed", contract.isValid());
         System.out.println(contract.getContractAddress());
     }

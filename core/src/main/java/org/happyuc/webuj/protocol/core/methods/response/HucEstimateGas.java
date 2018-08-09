@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_estimateGas.
+ * irc_estimateGas.
  */
 public class HucEstimateGas extends Response<String> {
     public BigInteger getAmountUsed() {

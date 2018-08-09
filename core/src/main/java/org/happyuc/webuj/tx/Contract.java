@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/happyuc/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
-    public static final BigInteger GAS_LIMIT_DEPLOY = BigInteger.valueOf(4_300_000);
+    public static final BigInteger GAS_LIMIT_DEPLOY = BigInteger.valueOf(2_700_000);
     public static final BigInteger GAS_LIMIT = ReqTransaction.DEFAULT_GAS;
     public static final String SUCCESSFUL_TRANSACTION_STATUS = "0x1";
 
@@ -106,7 +106,7 @@ public abstract class Contract extends ManagedTransaction {
      * is in fact the contract you believe it is.
      *
      * <p>This method uses the
-     * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_getcode">huc_getCode</a> method
+     * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_getcode">irc_getCode</a> method
      * to get the contract byte code and validates it against the byte code stored in this smart
      * contract wrapper.
      *

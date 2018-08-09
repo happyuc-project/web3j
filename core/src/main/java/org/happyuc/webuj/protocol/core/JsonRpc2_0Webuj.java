@@ -118,217 +118,217 @@ public class JsonRpc2_0Webuj implements Webuj {
 
     @Override
     public Request<?, HucProtocolVersion> hucProtocolVersion() {
-        return new Request<>("huc_protocolVersion", Collections.<String>emptyList(), webujService, HucProtocolVersion.class);
+        return new Request<>("irc_protocolVersion", Collections.<String>emptyList(), webujService, HucProtocolVersion.class);
     }
 
     @Override
     public Request<?, HucCoinbase> hucCoinbase() {
-        return new Request<>("huc_coinbase", Collections.<String>emptyList(), webujService, HucCoinbase.class);
+        return new Request<>("irc_coinbase", Collections.<String>emptyList(), webujService, HucCoinbase.class);
     }
 
     @Override
     public Request<?, HucSyncing> hucSyncing() {
-        return new Request<>("huc_syncing", Collections.<String>emptyList(), webujService, HucSyncing.class);
+        return new Request<>("irc_syncing", Collections.<String>emptyList(), webujService, HucSyncing.class);
     }
 
     @Override
     public Request<?, HucMining> hucMining() {
-        return new Request<>("huc_mining", Collections.<String>emptyList(), webujService, HucMining.class);
+        return new Request<>("irc_mining", Collections.<String>emptyList(), webujService, HucMining.class);
     }
 
     @Override
     public Request<?, HucHashrate> hucHashrate() {
-        return new Request<>("huc_hashrate", Collections.<String>emptyList(), webujService, HucHashrate.class);
+        return new Request<>("irc_hashrate", Collections.<String>emptyList(), webujService, HucHashrate.class);
     }
 
     @Override
     public Request<?, HucGasPrice> hucGasPrice() {
-        return new Request<>("huc_gasPrice", Collections.<String>emptyList(), webujService, HucGasPrice.class);
+        return new Request<>("irc_gasPrice", Collections.<String>emptyList(), webujService, HucGasPrice.class);
     }
 
     @Override
     public Request<?, HucAccounts> hucAccounts() {
-        return new Request<>("huc_accounts", Collections.<String>emptyList(), webujService, HucAccounts.class);
+        return new Request<>("irc_accounts", Collections.<String>emptyList(), webujService, HucAccounts.class);
     }
 
     @Override
     public Request<?, HucBlockNumber> hucBlockNumber() {
-        return new Request<>("huc_blockNumber", Collections.<String>emptyList(), webujService, HucBlockNumber.class);
+        return new Request<>("irc_blockNumber", Collections.<String>emptyList(), webujService, HucBlockNumber.class);
     }
 
     @Override
     public Request<?, HucGetBalance> hucGetBalance(String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getBalance", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetBalance.class);
+        return new Request<>("irc_getBalance", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetBalance.class);
     }
 
     @Override
     public Request<?, HucGetStorageAt> hucGetStorageAt(String address, BigInteger position, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getStorageAt", Arrays.asList(address, Numeric.encodeQuantity(position), defaultBlockParameter.getValue()), webujService, HucGetStorageAt.class);
+        return new Request<>("irc_getStorageAt", Arrays.asList(address, Numeric.encodeQuantity(position), defaultBlockParameter.getValue()), webujService, HucGetStorageAt.class);
     }
 
     @Override
     public Request<?, HucGetRepTransactionCount> hucGetTransactionCount(String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getTransactionCount", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetRepTransactionCount.class);
+        return new Request<>("irc_getTransactionCount", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetRepTransactionCount.class);
     }
 
     @Override
     public Request<?, HucGetBlockRepTransactionCountByHash> hucGetBlockTransactionCountByHash(String blockHash) {
-        return new Request<>("huc_getBlockTransactionCountByHash", Collections.singletonList(blockHash), webujService, HucGetBlockRepTransactionCountByHash.class);
+        return new Request<>("irc_getBlockTransactionCountByHash", Collections.singletonList(blockHash), webujService, HucGetBlockRepTransactionCountByHash.class);
     }
 
     @Override
     public Request<?, HucGetBlockRepTransactionCountByNumber> hucGetBlockTransactionCountByNumber(DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getBlockTransactionCountByNumber", Collections.singletonList(defaultBlockParameter.getValue()), webujService, HucGetBlockRepTransactionCountByNumber.class);
+        return new Request<>("irc_getBlockTransactionCountByNumber", Collections.singletonList(defaultBlockParameter.getValue()), webujService, HucGetBlockRepTransactionCountByNumber.class);
     }
 
     @Override
     public Request<?, HucGetUncleCountByBlockHash> hucGetUncleCountByBlockHash(String blockHash) {
-        return new Request<>("huc_getUncleCountByBlockHash", Collections.singletonList(blockHash), webujService, HucGetUncleCountByBlockHash.class);
+        return new Request<>("irc_getUncleCountByBlockHash", Collections.singletonList(blockHash), webujService, HucGetUncleCountByBlockHash.class);
     }
 
     @Override
     public Request<?, HucGetUncleCountByBlockNumber> hucGetUncleCountByBlockNumber(DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getUncleCountByBlockNumber", Collections.singletonList(defaultBlockParameter.getValue()), webujService, HucGetUncleCountByBlockNumber.class);
+        return new Request<>("irc_getUncleCountByBlockNumber", Collections.singletonList(defaultBlockParameter.getValue()), webujService, HucGetUncleCountByBlockNumber.class);
     }
 
     @Override
     public Request<?, HucGetCode> hucGetCode(String address, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_getCode", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetCode.class);
+        return new Request<>("irc_getCode", Arrays.asList(address, defaultBlockParameter.getValue()), webujService, HucGetCode.class);
     }
 
     @Override
     public Request<?, HucSign> hucSign(String address, String sha3HashOfDataToSign) {
-        return new Request<>("huc_sign", Arrays.asList(address, sha3HashOfDataToSign), webujService, HucSign.class);
+        return new Request<>("irc_sign", Arrays.asList(address, sha3HashOfDataToSign), webujService, HucSign.class);
     }
 
     @Override
     public Request<?, HucSendRepTransaction> hucSendTransaction(ReqTransaction reqTransaction) {
-        return new Request<>("huc_sendTransaction", Collections.singletonList(reqTransaction), webujService, HucSendRepTransaction.class);
+        return new Request<>("irc_sendTransaction", Collections.singletonList(reqTransaction), webujService, HucSendRepTransaction.class);
     }
 
     @Override
     public Request<?, HucSendRepTransaction> hucSendRawTransaction(String signedTransactionData) {
-        return new Request<>("huc_sendRawTransaction", Collections.singletonList(signedTransactionData), webujService, HucSendRepTransaction.class);
+        return new Request<>("irc_sendRawTransaction", Collections.singletonList(signedTransactionData), webujService, HucSendRepTransaction.class);
     }
 
     @Override
     public Request<?, org.happyuc.webuj.protocol.core.methods.response.HucCall> hucCall(ReqTransaction reqTransaction, DefaultBlockParameter defaultBlockParameter) {
-        return new Request<>("huc_call", Arrays.asList(reqTransaction, defaultBlockParameter), webujService, org.happyuc.webuj.protocol.core.methods.response.HucCall.class);
+        return new Request<>("irc_call", Arrays.asList(reqTransaction, defaultBlockParameter), webujService, org.happyuc.webuj.protocol.core.methods.response.HucCall.class);
     }
 
     @Override
     public Request<?, HucEstimateGas> hucEstimateGas(ReqTransaction reqTransaction) {
-        return new Request<>("huc_estimateGas", Collections.singletonList(reqTransaction), webujService, HucEstimateGas.class);
+        return new Request<>("irc_estimateGas", Collections.singletonList(reqTransaction), webujService, HucEstimateGas.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetBlockByHash(String blockHash, boolean returnFullTransactionObjects) {
-        return new Request<>("huc_getBlockByHash", Arrays.asList(blockHash, returnFullTransactionObjects), webujService, HucBlock.class);
+        return new Request<>("irc_getBlockByHash", Arrays.asList(blockHash, returnFullTransactionObjects), webujService, HucBlock.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetBlockByNumber(DefaultBlockParameter defaultBlockParameter, boolean returnFullTransactionObjects) {
-        return new Request<>("huc_getBlockByNumber", Arrays.asList(defaultBlockParameter.getValue(), returnFullTransactionObjects), webujService, HucBlock.class);
+        return new Request<>("irc_getBlockByNumber", Arrays.asList(defaultBlockParameter.getValue(), returnFullTransactionObjects), webujService, HucBlock.class);
     }
 
     @Override
     public Request<?, HucRepTransaction> hucGetTransactionByHash(String transactionHash) {
-        return new Request<>("huc_getTransactionByHash", Collections.singletonList(transactionHash), webujService, HucRepTransaction.class);
+        return new Request<>("irc_getTransactionByHash", Collections.singletonList(transactionHash), webujService, HucRepTransaction.class);
     }
 
     @Override
     public Request<?, HucRepTransaction> hucGetTransactionByBlockHashAndIndex(String blockHash, BigInteger transactionIndex) {
-        return new Request<>("huc_getTransactionByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucRepTransaction.class);
+        return new Request<>("irc_getTransactionByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucRepTransaction.class);
     }
 
     @Override
     public Request<?, HucRepTransaction> hucGetTransactionByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger transactionIndex) {
-        return new Request<>("huc_getTransactionByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(transactionIndex)), webujService, HucRepTransaction.class);
+        return new Request<>("irc_getTransactionByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(transactionIndex)), webujService, HucRepTransaction.class);
     }
 
     @Override
     public Request<?, HucGetRepTransactionReceipt> hucGetTransactionReceipt(String transactionHash) {
-        return new Request<>("huc_getTransactionReceipt", Collections.singletonList(transactionHash), webujService, HucGetRepTransactionReceipt.class);
+        return new Request<>("irc_getTransactionReceipt", Collections.singletonList(transactionHash), webujService, HucGetRepTransactionReceipt.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetUncleByBlockHashAndIndex(String blockHash, BigInteger transactionIndex) {
-        return new Request<>("huc_getUncleByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucBlock.class);
+        return new Request<>("irc_getUncleByBlockHashAndIndex", Arrays.asList(blockHash, Numeric.encodeQuantity(transactionIndex)), webujService, HucBlock.class);
     }
 
     @Override
     public Request<?, HucBlock> hucGetUncleByBlockNumberAndIndex(DefaultBlockParameter defaultBlockParameter, BigInteger uncleIndex) {
-        return new Request<>("huc_getUncleByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(uncleIndex)), webujService, HucBlock.class);
+        return new Request<>("irc_getUncleByBlockNumberAndIndex", Arrays.asList(defaultBlockParameter.getValue(), Numeric.encodeQuantity(uncleIndex)), webujService, HucBlock.class);
     }
 
     @Override
     public Request<?, HucGetCompilers> hucGetCompilers() {
-        return new Request<>("huc_getCompilers", Collections.<String>emptyList(), webujService, HucGetCompilers.class);
+        return new Request<>("irc_getCompilers", Collections.<String>emptyList(), webujService, HucGetCompilers.class);
     }
 
     @Override
     public Request<?, HucCompileLLL> hucCompileLLL(String sourceCode) {
-        return new Request<>("huc_compileLLL", Collections.singletonList(sourceCode), webujService, HucCompileLLL.class);
+        return new Request<>("irc_compileLLL", Collections.singletonList(sourceCode), webujService, HucCompileLLL.class);
     }
 
     @Override
     public Request<?, HucCompileSolidity> hucCompileSolidity(String sourceCode) {
-        return new Request<>("huc_compileSolidity", Collections.singletonList(sourceCode), webujService, HucCompileSolidity.class);
+        return new Request<>("irc_compileSolidity", Collections.singletonList(sourceCode), webujService, HucCompileSolidity.class);
     }
 
     @Override
     public Request<?, HucCompileSerpent> hucCompileSerpent(String sourceCode) {
-        return new Request<>("huc_compileSerpent", Collections.singletonList(sourceCode), webujService, HucCompileSerpent.class);
+        return new Request<>("irc_compileSerpent", Collections.singletonList(sourceCode), webujService, HucCompileSerpent.class);
     }
 
     @Override
     public Request<?, HucRepFilter> hucNewFilter(HucReqFilter hucReqFilter) {
-        return new Request<>("huc_newFilter", Collections.singletonList(hucReqFilter), webujService, HucRepFilter.class);
+        return new Request<>("irc_newFilter", Collections.singletonList(hucReqFilter), webujService, HucRepFilter.class);
     }
 
     @Override
     public Request<?, HucRepFilter> hucNewBlockFilter() {
-        return new Request<>("huc_newBlockFilter", Collections.<String>emptyList(), webujService, HucRepFilter.class);
+        return new Request<>("irc_newBlockFilter", Collections.<String>emptyList(), webujService, HucRepFilter.class);
     }
 
     @Override
     public Request<?, HucRepFilter> hucNewPendingTransactionFilter() {
-        return new Request<>("huc_newPendingTransactionFilter", Collections.<String>emptyList(), webujService, HucRepFilter.class);
+        return new Request<>("irc_newPendingTransactionFilter", Collections.<String>emptyList(), webujService, HucRepFilter.class);
     }
 
     @Override
     public Request<?, HucUninstallFilter> hucUninstallFilter(BigInteger filterId) {
-        return new Request<>("huc_uninstallFilter", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucUninstallFilter.class);
+        return new Request<>("irc_uninstallFilter", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucUninstallFilter.class);
     }
 
     @Override
     public Request<?, HucLog> hucGetFilterChanges(BigInteger filterId) {
-        return new Request<>("huc_getFilterChanges", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
+        return new Request<>("irc_getFilterChanges", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
     }
 
     @Override
     public Request<?, HucLog> hucGetFilterLogs(BigInteger filterId) {
-        return new Request<>("huc_getFilterLogs", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
+        return new Request<>("irc_getFilterLogs", Collections.singletonList(Numeric.toHexStringWithPrefixSafe(filterId)), webujService, HucLog.class);
     }
 
     @Override
     public Request<?, HucLog> hucGetLogs(HucReqFilter hucReqFilter) {
-        return new Request<>("huc_getLogs", Collections.singletonList(hucReqFilter), webujService, HucLog.class);
+        return new Request<>("irc_getLogs", Collections.singletonList(hucReqFilter), webujService, HucLog.class);
     }
 
     @Override
     public Request<?, HucGetWork> hucGetWork() {
-        return new Request<>("huc_getWork", Collections.<String>emptyList(), webujService, HucGetWork.class);
+        return new Request<>("irc_getWork", Collections.<String>emptyList(), webujService, HucGetWork.class);
     }
 
     @Override
     public Request<?, HucSubmitWork> hucSubmitWork(String nonce, String headerPowHash, String mixDigest) {
-        return new Request<>("huc_submitWork", Arrays.asList(nonce, headerPowHash, mixDigest), webujService, HucSubmitWork.class);
+        return new Request<>("irc_submitWork", Arrays.asList(nonce, headerPowHash, mixDigest), webujService, HucSubmitWork.class);
     }
 
     @Override
     public Request<?, HucSubmitHashrate> hucSubmitHashrate(String hashrate, String clientId) {
-        return new Request<>("huc_submitHashrate", Arrays.asList(hashrate, clientId), webujService, HucSubmitHashrate.class);
+        return new Request<>("irc_submitHashrate", Arrays.asList(hashrate, clientId), webujService, HucSubmitHashrate.class);
     }
 
     @Override

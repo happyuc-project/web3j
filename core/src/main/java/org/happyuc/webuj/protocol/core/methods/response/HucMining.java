@@ -3,7 +3,7 @@ package org.happyuc.webuj.protocol.core.methods.response;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * huc_mining.
+ * irc_mining.
  */
 public class HucMining extends Response<Boolean> {
     public boolean isMining() {

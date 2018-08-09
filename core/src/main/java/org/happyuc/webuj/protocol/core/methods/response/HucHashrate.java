@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_hashrate.
+ * irc_hashrate.
  */
 public class HucHashrate extends Response<String> {
     public BigInteger getHashrate() {

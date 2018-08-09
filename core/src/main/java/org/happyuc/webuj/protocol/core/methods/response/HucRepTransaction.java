@@ -15,15 +15,15 @@ import org.happyuc.webuj.protocol.core.Response;
 /**
  * ReqTransaction object returned by:
  * <ul>
- * <li>huc_getTransactionByHash</li>
- * <li>huc_getTransactionByBlockHashAndIndex</li>
- * <li>huc_getTransactionByBlockNumberAndIndex</li>
+ * <li>irc_getTransactionByHash</li>
+ * <li>irc_getTransactionByBlockHashAndIndex</li>
+ * <li>irc_getTransactionByBlockNumberAndIndex</li>
  * </ul>
  *
  * <p>This differs slightly from the request {@link HucSendRepTransaction} ReqTransaction object.</p>
  *
  * <p>See
- * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_gettransactionbyhash">docs</a>
+ * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_gettransactionbyhash">docs</a>
  * for further details.</p>
  */
 public class HucRepTransaction extends Response<RepTransaction> {

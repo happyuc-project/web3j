@@ -1,16 +1,16 @@
 package org.happyuc.webuj.protocol.core.methods.response;
 
+import org.happyuc.webuj.utils.Numeric;
+
 import java.math.BigInteger;
 import java.util.List;
-
-import org.happyuc.webuj.utils.Numeric;
 
 /**
  * <p>Log object used by {@link HucLog} and {@link HucGetRepTransactionReceipt}.</p>
  * <p>It's not clear in the
- * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_newfilter">docs</a>
- * If only a list of hashes are returned for filters created with huc_newBlockFilter or
- * huc_newPendingTransactionFilter.</p>
+ * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_newfilter">docs</a>
+ * If only a list of hashes are returned for filters created with irc_newBlockFilter or
+ * irc_newPendingTransactionFilter.</p>
  */
 public class Log {
     private boolean removed;

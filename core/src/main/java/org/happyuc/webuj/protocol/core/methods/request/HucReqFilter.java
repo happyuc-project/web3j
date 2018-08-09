@@ -7,7 +7,7 @@ import org.happyuc.webuj.protocol.core.DefaultBlockParameter;
 
 /**
  * Filter implementation as per
- * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_newfilter">docs</a>.
+ * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_newfilter">docs</a>.
  */
 public class HucReqFilter extends Filter<HucReqFilter> {
     private DefaultBlockParameter fromBlock;  // optional, params - defaults to latest for both

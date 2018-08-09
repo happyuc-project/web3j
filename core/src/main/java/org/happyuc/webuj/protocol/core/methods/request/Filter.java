@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Filter implementation as per <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_newfilter">docs</a>
+ * Filter implementation as per <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_newfilter">docs</a>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class Filter<T extends Filter> {

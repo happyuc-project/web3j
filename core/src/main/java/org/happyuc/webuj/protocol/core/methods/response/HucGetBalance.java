@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_getBalance.
+ * irc_getBalance.
  */
 public class HucGetBalance extends Response<String> {
     public BigInteger getBalance() {

@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_getUncleCountByBlockNumber.
+ * irc_getUncleCountByBlockNumber.
  */
 public class HucGetUncleCountByBlockNumber extends Response<String> {
     public BigInteger getUncleCount() {

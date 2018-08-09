@@ -1,7 +1,7 @@
 package org.happyuc.webuj.protocol.core.methods.request;
 
 /**
- * Filter implementation as per <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_newfilter">docs</a>
+ * Filter implementation as per <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_newfilter">docs</a>
  */
 public class ShhFilter extends Filter<ShhFilter> {
     private String to;

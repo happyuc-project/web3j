@@ -8,14 +8,14 @@ import java.math.BigInteger;
 /**
  * ReqTransaction request object used the below methods.
  * <ol>
- * <li>huc_call</li>
- * <li>huc_sendTransaction</li>
- * <li>huc_estimateGas</li>
+ * <li>irc_call</li>
+ * <li>irc_sendTransaction</li>
+ * <li>irc_estimateGas</li>
  * </ol>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReqTransaction {
-    // default as per https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_sendtransaction
+    // default as per https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_sendtransaction
     public static final BigInteger DEFAULT_GAS = BigInteger.valueOf(90000);
 
     private String from;
@@ -24,7 +24,7 @@ public class ReqTransaction {
     private BigInteger gasPrice;
     private BigInteger value;
     private String data;
-    private BigInteger nonce;  // nonce field is not present on huc_call/huc_estimateGas
+    private BigInteger nonce;  // nonce field is not present on irc_call/irc_estimateGas
 
     public ReqTransaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String data) {
         this.from = from;

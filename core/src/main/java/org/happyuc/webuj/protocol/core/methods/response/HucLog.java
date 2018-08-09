@@ -18,13 +18,13 @@ import org.happyuc.webuj.protocol.core.Response;
 /**
  * Log object returned by:
  * <ul>
- * <li>huc_getFilterChanges</li>
- * <li>huc_getFilterLogs</li>
- * <li>huc_getLogs</li>
+ * <li>irc_getFilterChanges</li>
+ * <li>irc_getFilterLogs</li>
+ * <li>irc_getLogs</li>
  * </ul>
  *
  * <p>See
- * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_getfilterchanges">docs</a>
+ * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_getfilterchanges">docs</a>
  * for further details.</p>
  */
 public class HucLog extends Response<List<HucLog.LogResult>> {

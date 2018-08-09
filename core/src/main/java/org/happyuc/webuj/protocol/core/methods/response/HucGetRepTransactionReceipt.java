@@ -13,7 +13,7 @@ import org.happyuc.webuj.protocol.ObjectMapperFactory;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * huc_getTransactionReceipt.
+ * irc_getTransactionReceipt.
  */
 public class HucGetRepTransactionReceipt extends Response<RepTransactionReceipt> {
 

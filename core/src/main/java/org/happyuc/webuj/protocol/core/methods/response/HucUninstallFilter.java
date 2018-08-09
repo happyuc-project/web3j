@@ -3,7 +3,7 @@ package org.happyuc.webuj.protocol.core.methods.response;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * huc_uninstallFilter.
+ * irc_uninstallFilter.
  */
 public class HucUninstallFilter extends Response<Boolean> {
     public boolean isUninstalled() {

@@ -5,7 +5,7 @@ import java.util.List;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * huc_accounts.
+ * irc_accounts.
  */
 public class HucAccounts extends Response<List<String>> {
     public List<String> getAccounts() {

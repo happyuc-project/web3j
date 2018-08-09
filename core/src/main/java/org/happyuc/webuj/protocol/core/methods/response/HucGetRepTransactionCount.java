@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_getTransactionCount.
+ * irc_getTransactionCount.
  */
 public class HucGetRepTransactionCount extends Response<String> {
     public BigInteger getTransactionCount() {

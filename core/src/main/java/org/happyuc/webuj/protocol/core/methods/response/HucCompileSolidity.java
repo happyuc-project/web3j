@@ -7,7 +7,7 @@ import java.util.Map;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * huc_compileSolidity.
+ * irc_compileSolidity.
  */
 public class HucCompileSolidity extends Response<Map<String, HucCompileSolidity.Code>> {
 
@@ -211,7 +211,7 @@ public class HucCompileSolidity extends Response<Map<String, HucCompileSolidity.
 
     public static class Documentation {
         // No documentation available
-        // See https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_compilesolidity
+        // See https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_compilesolidity
         private Map<String, String> methods;  // unknown object type
 
         public Documentation() {

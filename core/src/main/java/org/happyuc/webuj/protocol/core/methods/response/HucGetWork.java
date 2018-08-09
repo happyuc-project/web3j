@@ -5,7 +5,7 @@ import java.util.List;
 import org.happyuc.webuj.protocol.core.Response;
 
 /**
- * huc_getWork.
+ * irc_getWork.
  */
 public class HucGetWork extends Response<List<String>> {
 

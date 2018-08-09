@@ -20,14 +20,14 @@ import org.happyuc.webuj.utils.Numeric;
 /**
  * Block object returned by:
  * <ul>
- * <li>huc_getBlockByHash</li>
- * <li>huc_getBlockByNumber</li>
- * <li>huc_getUncleByBlockHashAndIndex</li>
- * <li>huc_getUncleByBlockNumberAndIndex</li>
+ * <li>irc_getBlockByHash</li>
+ * <li>irc_getBlockByNumber</li>
+ * <li>irc_getUncleByBlockHashAndIndex</li>
+ * <li>irc_getUncleByBlockNumberAndIndex</li>
  * </ul>
  *
  * <p>See
- * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#huc_gettransactionbyhash">docs</a>
+ * <a href="https://github.com/happyuc-project/wiki/wiki/JSON-RPC#irc_gettransactionbyhash">docs</a>
  * for further details.</p>
  *
  * <p>See the following <a href="https://github.com/huccore/parity/issues/2401">issue</a> for

@@ -6,7 +6,7 @@ import org.happyuc.webuj.protocol.core.Response;
 import org.happyuc.webuj.utils.Numeric;
 
 /**
- * huc_newFilter.
+ * irc_newFilter.
  */
 public class HucRepFilter extends Response<String> {
     public BigInteger getFilterId() {
